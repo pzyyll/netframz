@@ -8,13 +8,14 @@
 #include <sys/epoll.h>
 
 class nf_epoll {
-  typedef struct epoll_event* ep_evs_type;
+  typedef struct epoll_event ev_type;
+  typedef ev_type* evs_type;
  public:
 
  private:
   int m_epfd;
   int m_timeout;
-  ep_evs_type m_evs;
+  evs_type m_evs;
   size_t m_maxevs;
 };
 
