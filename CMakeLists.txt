@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.7)
 project(netframz)
 
-include_directories(E:\\LIB\\linux_std_include\\include)
+include_directories(E:\\linux_inc\\include)
 
 set(CMAKE_CXX_STANDARD 11)
 

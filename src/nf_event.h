@@ -6,6 +6,9 @@
 #define NETFRAMZ_NF_EVENT_H
 
 //#include <sys/epoll.h>
+#ifdef LINUX_EPOLL
+#include "nf_epoll.h"
+#endif
 
 class EventLoop {
  public:
