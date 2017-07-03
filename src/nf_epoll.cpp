@@ -57,7 +57,7 @@ int Epoll::ModEvent(int fd, Epoll::data_type data, int mask) {
   return CtlEvent(fd, EPOLL_CTL_MOD, data, mask);
 }
 
-int Epoll::WaitEvent(std::vector<FiredTask> &fires) {
+int Epoll::WaitEvent(std::deque<FiredTask> &fires) {
   int nfds = 0;
   nfds = epoll_wait(m_epfd, m_evs, static_cast<int>(m_maxevs), m_timeout);
   if (nfds > 0) {

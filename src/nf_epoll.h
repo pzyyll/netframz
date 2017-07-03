@@ -8,8 +8,7 @@
 #include <sys/epoll.h>
 #include <cstddef>
 #include <string>
-#include <vector>
-
+#include <queue>
 #include "nf_event_config.h"
 #include "nf_event_task.h"
 
@@ -33,7 +32,7 @@ class Epoll {
   int AddEvent(int fd, data_type data, int mask);
   int DelEvent(int fd);
   int ModEvent(int fd, data_type data, int mask);
-  int WaitEvent(std::vector<FiredTask> &fires);
+  int WaitEvent(std::deque<FiredTask> &fires);
   int Resize(const size_t maxevs);
 
   std::string get_err();
