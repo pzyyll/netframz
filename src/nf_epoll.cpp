@@ -3,6 +3,7 @@
 //
 
 #include <cstring>
+#include <cstdarg>
 #include <unistd.h>
 
 #include "nf_epoll.h"
