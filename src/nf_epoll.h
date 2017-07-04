@@ -29,6 +29,7 @@ class Epoll {
   ~Epoll();
 
   int Init(const int timeout = DEFAULT_TIMEOUT, const int maxevs = DEFAULT_MAXEVS);
+  int Deinit();
   int AddEvent(int fd, data_type data, int mask);
   int DelEvent(int fd);
   int ModEvent(int fd, data_type data, int mask);
