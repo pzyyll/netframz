@@ -26,6 +26,8 @@ class Epoll {
 
  public:
   Epoll();
+  Epoll(const Epoll &rhs);
+  Epoll &operator=(const Epoll &rhs);
   ~Epoll();
 
   int Init(const int timeout = DEFAULT_TIMEOUT, const int maxevs = DEFAULT_MAXEVS);

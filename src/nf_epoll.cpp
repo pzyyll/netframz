@@ -16,6 +16,27 @@ Epoll::Epoll()
 
 }
 
+Epoll::Epoll(const Epoll &rhs)
+    : epfd_(rhs.epfd_),
+      timeout_(rhs.timeout_),
+      maxevs_(rhs.maxevs_) {
+  ev_pointer new_ptr = static_cast<ev_pointer>(malloc(rhs.maxevs_ * sizeof(ev_type)));
+  memcpy(new_ptr, rhs.evs_, rhs.maxevs_);
+  evs_ = new_ptr;
+  strncpy(err_, rhs.err_, sizeof(err_));
+}
+
+Epoll &Epoll::operator=(const Epoll &rhs) {
+  epfd_ = rhs.epfd_;
+  timeout_ = rhs.timeout_;
+  maxevs_ = rhs.maxevs_;
+  ev_pointer new_ptr = static_cast<ev_pointer>(malloc(rhs.maxevs_ * sizeof(ev_type)));
+  memcpy(new_ptr, rhs.evs_, rhs.maxevs_);
+  evs_ = new_ptr;
+  strncpy(err_, rhs.err_, sizeof(err_));
+  return *this;
+}
+
 Epoll::~Epoll() {
   Deinit();
 }
@@ -132,4 +153,6 @@ int Epoll::CtlEvent(int fd, int op, Epoll::data_type data, int mask) {
   }
   return RET::RET_SUCCESS;
 }
+
+
 
