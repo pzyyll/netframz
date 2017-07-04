@@ -8,36 +8,36 @@
 #include "nf_epoll.h"
 
 Epoll::Epoll()
-    : m_epfd(-1),
-      m_timeout(DEFAULT_TIMEOUT),
-      m_evs(NULL),
-      m_maxevs(DEFAULT_MAXEVS) {
+    : epfd_(-1),
+      timeout_(DEFAULT_TIMEOUT),
+      evs_(NULL),
+      maxevs_(DEFAULT_MAXEVS) {
 
 }
 
 Epoll::~Epoll() {
-  if (m_epfd > 0) {
-    close(m_epfd);
+  if (epfd_ > 0) {
+    close(epfd_);
   }
-  if (m_evs != NULL) {
-    free(m_evs);
+  if (evs_ != NULL) {
+    free(evs_);
   }
-  m_epfd = -1;
-  m_evs = NULL;
+  epfd_ = -1;
+  evs_ = NULL;
 }
 
 int Epoll::Init(const int timeout, const size_t maxevs) {
-  m_timeout = timeout;
+  timeout_ = timeout;
 
-  m_evs = static_cast<ev_pointer >(malloc(maxevs * sizeof(ev_type)));
-  if (NULL == m_evs) {
+  evs_ = static_cast<ev_pointer >(malloc(maxevs * sizeof(ev_type)));
+  if (NULL == evs_) {
     set_err("Alloc memory to events array fail.");
     return RET::RET_FAIL;
   }
-  m_maxevs = maxevs;
+  maxevs_ = maxevs;
 
-  m_epfd = epoll_create1(EPOLL_CLOEXEC);
-  if (m_epfd < 0) {
+  epfd_ = epoll_create1(EPOLL_CLOEXEC);
+  if (epfd_ < 0) {
     set_err("Try to create epoll fd fail|err=%s", strerror(errno));
     return RET::RET_FAIL;
   }
@@ -59,11 +59,11 @@ int Epoll::ModEvent(int fd, Epoll::data_type data, int mask) {
 
 int Epoll::WaitEvent(std::deque<FiredTask> &fires) {
   int nfds = 0;
-  nfds = epoll_wait(m_epfd, m_evs, static_cast<int>(m_maxevs), m_timeout);
+  nfds = epoll_wait(epfd_, evs_, static_cast<int>(maxevs_), timeout_);
   if (nfds > 0) {
     for (int i = 0; i < nfds; ++i) {
       FiredTask task = {0, 0};
-      ev_pointer pev = m_evs + i;
+      ev_pointer pev = evs_ + i;
       task.id = pev->data.u32;
       if (pev->events & EPOLLIN) task.mask |= EVSTAT::EV_READABLE;
       if (pev->events & EPOLLOUT) task.mask |= EVSTAT::EV_WRITEABLE;
@@ -75,35 +75,35 @@ int Epoll::WaitEvent(std::deque<FiredTask> &fires) {
     }
   }
 
-  return RET::RET_SUCCESS;
+  return nfds;
 }
 
 int Epoll::Resize(const size_t maxevs) {
   if (maxevs > 0) {
-    ev_pointer pevs = static_cast<ev_pointer >(realloc(m_evs, maxevs));
+    ev_pointer pevs = static_cast<ev_pointer >(realloc(evs_, maxevs));
     if (pevs) {
-      m_evs = pevs;
-      m_maxevs = maxevs;
+      evs_ = pevs;
+      maxevs_ = maxevs;
     }
   }
   return 0;
 }
 
 std::string Epoll::get_err() {
-  return std::string(m_err);
+  return std::string(err_);
 }
 
 void Epoll::set_err(const char *s, ...) {
   va_list args;
   va_start(args, s);
-  vsnprintf(m_err, sizeof(m_err), s, args);
+  vsnprintf(err_, sizeof(err_), s, args);
   va_end(args);
 }
 
 int Epoll::CtlEvent(int fd, int op, Epoll::data_type data, int mask) {
   switch (op) {
     case EPOLL_CTL_DEL: {
-      if (epoll_ctl(m_epfd, EPOLL_CTL_DEL, fd, NULL) < 0) {
+      if (epoll_ctl(epfd_, EPOLL_CTL_DEL, fd, NULL) < 0) {
         set_err("Epoll del event fail|%s", strerror(errno));
         return RET::RET_FAIL;
       }
@@ -115,7 +115,7 @@ int Epoll::CtlEvent(int fd, int op, Epoll::data_type data, int mask) {
       ev.data.u32 = data;
       ev.events |= mask | EPOLLET | EPOLLRDHUP;
 
-      if (epoll_ctl(m_epfd, op, fd, &ev) < 0) {
+      if (epoll_ctl(epfd_, op, fd, &ev) < 0) {
         set_err("Epoll ctl op(%d) fail|%s", op, strerror(errno));
         return RET::RET_FAIL;
       }

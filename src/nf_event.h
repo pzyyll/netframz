@@ -10,8 +10,8 @@
 
 #include <unordered_map>
 #include <queue>
+#include <string>
 
-#define LINUX_EPOLL
 #ifdef LINUX_EPOLL
 #include "nf_epoll.h"
 #endif
@@ -24,14 +24,20 @@ class EventLoop {
   typedef std::unordered_map<int, TaskPtr> TaskMap;
 
  public:
+  EventLoop();
+
   void Run();
 
   int SetIOTask(IOTask &task);
-  int DelIOTask(IOTask &task);
+  int DelIOTask(int fd);
+
+  //todo add timer
+
+  const std::string& get_err_msg();
 
  private:
-  template <typename T>
-  std::shared_ptr<T> FindTask(T &task_map);
+  TaskPtr FindTask(int fd);
+  void set_err_msg(std::string msg);
 
  private:
   bool stop_;
@@ -39,6 +45,8 @@ class EventLoop {
   TaskMap file_tasks_;
 
   poll_type poll_;
+
+  std::string err_msg_;
 };
 
 #endif //NETFRAMZ_NF_EVENT_H

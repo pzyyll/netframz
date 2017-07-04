@@ -42,11 +42,11 @@ class Epoll {
   void set_err(const char *s, ...);
 
  private:
-  int m_epfd;
-  int m_timeout;
-  size_t m_maxevs;
-  ev_pointer m_evs;
-  char m_err[256];
+  int epfd_;
+  int timeout_;
+  size_t maxevs_;
+  ev_pointer evs_;
+  char err_ [256];
 };
 
 typedef Epoll poll_type;

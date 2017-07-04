@@ -19,11 +19,15 @@ class EventLoop;
 
 class IOTask;
 
-typedef void (*FileRwCb)(EventLoop &loop, Task &io_task, int mask);
+typedef std::shared_ptr<IOTask> TaskPtr;
+
+typedef void (*FileRwCb)(EventLoop &loop, IOTask &io_task, int mask);
 
 class IOTask {
   friend class EventLoop;
-  typedef Handle FileRwCb;
+
+ public:
+  typedef FileRwCb Handle;
 
  public:
   IOTask(int fd, int mask, Handle op) : fd_(fd), mask_(mask),op_(op) { }
@@ -36,8 +40,10 @@ class IOTask {
   int get_mask() { return mask_; }
   Handle get_cb() { return op_; }
 
+  //todo
   static void Start(EventLoop &loop, IOTask &io_task);
   static void Stop(EventLoop &loop, IOTask &io_task);
+  static TaskPtr make_task(int fd, int mask, Handle op);
 
  protected:
   void Process(EventLoop &loop, IOTask &io_task, int mask);
@@ -47,7 +53,5 @@ class IOTask {
   int mask_;
   Handle op_;
 };
-
-typedef std::shared_ptr<IOTask> TaskPtr;
 
 #endif //NETFRAMZ_NF_EVENT_TASK_H
