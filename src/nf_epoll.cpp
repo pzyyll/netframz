@@ -17,14 +17,7 @@ Epoll::Epoll()
 }
 
 Epoll::~Epoll() {
-  if (epfd_ > 0) {
-    close(epfd_);
-  }
-  if (evs_ != NULL) {
-    free(evs_);
-  }
-  epfd_ = -1;
-  evs_ = NULL;
+  Deinit();
 }
 
 int Epoll::Init(const int timeout, const int maxevs) {
@@ -44,6 +37,17 @@ int Epoll::Init(const int timeout, const int maxevs) {
   }
 
   return RET::RET_SUCCESS;
+}
+
+int Epoll::Deinit() {
+  if (epfd_ > 0) {
+    ::close(epfd_);
+  }
+  if (evs_ != NULL) {
+    free(evs_);
+  }
+  epfd_ = -1;
+  evs_ = NULL;
 }
 
 int Epoll::AddEvent(int fd, Epoll::data_type data, int mask) {
