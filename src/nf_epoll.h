@@ -21,8 +21,8 @@ class Epoll {
   typedef struct epoll_event* ev_pointer;
   typedef unsigned int data_type;
 
-  const size_t DEFAULT_MAXEVS = 1024;
-  const int DEFAULT_TIMEOUT = 10;
+  const static size_t DEFAULT_MAXEVS = 1024;
+  const static int DEFAULT_TIMEOUT = 10;
 
  public:
   Epoll();
