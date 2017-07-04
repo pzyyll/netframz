@@ -27,7 +27,7 @@ Epoll::~Epoll() {
   evs_ = NULL;
 }
 
-int Epoll::Init(const int timeout, const size_t maxevs) {
+int Epoll::Init(const int timeout, const int maxevs) {
   timeout_ = timeout;
 
   evs_ = static_cast<ev_pointer >(malloc(maxevs * sizeof(ev_type)));
