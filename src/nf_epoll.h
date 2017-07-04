@@ -21,14 +21,14 @@ class Epoll {
   typedef struct epoll_event* ev_pointer;
   typedef unsigned int data_type;
 
-  const static size_t DEFAULT_MAXEVS = 1024;
+  const static int DEFAULT_MAXEVS = 1024;
   const static int DEFAULT_TIMEOUT = 10;
 
  public:
   Epoll();
   ~Epoll();
 
-  int Init(const int timeout = DEFAULT_TIMEOUT, const size_t maxevs = DEFAULT_MAXEVS);
+  int Init(const int timeout = DEFAULT_TIMEOUT, const int maxevs = DEFAULT_MAXEVS);
   int AddEvent(int fd, data_type data, int mask);
   int DelEvent(int fd);
   int ModEvent(int fd, data_type data, int mask);
@@ -44,7 +44,7 @@ class Epoll {
  private:
   int epfd_;
   int timeout_;
-  size_t maxevs_;
+  int maxevs_;
   ev_pointer evs_;
   char err_ [256];
 };

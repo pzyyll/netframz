@@ -11,8 +11,8 @@
 Epoll::Epoll()
     : epfd_(-1),
       timeout_(DEFAULT_TIMEOUT),
-      evs_(NULL),
-      maxevs_(DEFAULT_MAXEVS) {
+      maxevs_(DEFAULT_MAXEVS), 
+      evs_(NULL) {
 
 }
 
@@ -60,7 +60,7 @@ int Epoll::ModEvent(int fd, Epoll::data_type data, int mask) {
 
 int Epoll::WaitEvent(std::deque<FiredTask> &fires) {
   int nfds = 0;
-  nfds = epoll_wait(epfd_, evs_, static_cast<int>(maxevs_), timeout_);
+  nfds = epoll_wait(epfd_, evs_, maxevs_, timeout_);
   if (nfds > 0) {
     for (int i = 0; i < nfds; ++i) {
       FiredTask task = {0, 0};
@@ -114,7 +114,7 @@ int Epoll::CtlEvent(int fd, int op, Epoll::data_type data, int mask) {
     case EPOLL_CTL_MOD: {
       ev_type ev;
       ev.data.u32 = data;
-      ev.events |= mask | EPOLLET | EPOLLRDHUP;
+      ev.events = mask | EPOLLET | EPOLLRDHUP;
 
       if (epoll_ctl(epfd_, op, fd, &ev) < 0) {
         set_err("Epoll ctl op(%d) fail|%s", op, strerror(errno));
