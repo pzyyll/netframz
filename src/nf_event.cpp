@@ -18,33 +18,33 @@ void EventLoop::Run() {
       FiredTask &fire = fires.back();
       TaskPtr find = FindTask(fire.id);
       if (find) {
-        find->Process(*this, *find, fire.mask);
+        find->Process(*this, find, fire.mask);
       }
       fires.pop_back();
     }
   }
 }
 
-int EventLoop::SetIOTask(IOTask &task) {
+int EventLoop::SetIOTask(TaskPtr task) {
   int ret = RET::RET_SUCCESS;
 
-  TaskPtr find = FindTask(task.get_fd());
+  TaskPtr find = FindTask(task->get_fd());
   if (find) {
-    ret = poll_.ModEvent(task.get_fd(), task.get_fd(), task.get_mask());
+    ret = poll_.ModEvent(task->get_fd(), task->get_fd(), task->get_mask());
     if (ret != RET::RET_SUCCESS) {
       set_err_msg(poll_.get_err());
       return ret;
     }
-    file_tasks_[task.get_fd()] = TaskPtr(&task);
+    file_tasks_[task->get_fd()] = task;
     return ret;
   }
 
-  ret = poll_.AddEvent(task.get_fd(), task.get_fd(), task.get_mask());
+  ret = poll_.AddEvent(task->get_fd(), task->get_fd(), task->get_mask());
   if (ret != RET::RET_SUCCESS) {
     set_err_msg(poll_.get_err());
     return ret;
   }
-  file_tasks_[task.get_fd()] = TaskPtr(&task);
+  file_tasks_[task->get_fd()] = task;
 
   return RET_SUCCESS;
 }

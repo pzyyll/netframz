@@ -11,7 +11,7 @@ void cbfunc(EventLoop &loop, IOTask &task, int mask) {
 int main() {
   EventLoop loop;
   TaskPtr ptr = IOTask::make_task(STDIN_FILENO, EV_POLLIN, cbfunc);
-  IOTask::Start(loop, *ptr);
+  IOTask::Start(loop, ptr);
   loop.Run();
   return 0;
 }

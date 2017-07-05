@@ -21,7 +21,7 @@ class IOTask;
 
 typedef std::shared_ptr<IOTask> TaskPtr;
 
-typedef void (*FileRwCb)(EventLoop &loop, IOTask &io_task, int mask);
+typedef void (*FileRwCb)(EventLoop &loop, TaskPtr io_task, int mask);
 
 class IOTask {
   friend class EventLoop;
@@ -41,12 +41,12 @@ class IOTask {
   Handle get_cb() { return op_; }
 
   //todo
-  static void Start(EventLoop &loop, IOTask &io_task);
-  static void Stop(EventLoop &loop, IOTask &io_task);
+  static void Start(EventLoop &loop, TaskPtr io_task);
+  static void Stop(EventLoop &loop, TaskPtr io_task);
   static TaskPtr make_task(int fd, int mask, Handle op);
 
  protected:
-  void Process(EventLoop &loop, IOTask &io_task, int mask);
+  void Process(EventLoop &loop, TaskPtr io_task, int mask);
 
  private:
   int fd_;
