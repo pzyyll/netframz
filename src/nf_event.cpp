@@ -16,7 +16,7 @@ void EventLoop::Run() {
     int nds = poll_.WaitEvent(fires);
     while (!fires.empty() && nds > 0) {
       FiredTask &fire = fires.back();
-      TaskPtr find = FindTask(fire.id);
+      IOTaskPtr find = FindTask(fire.id);
       if (find) {
         find->Process(*this, find, fire.mask);
       }
@@ -25,10 +25,10 @@ void EventLoop::Run() {
   }
 }
 
-int EventLoop::SetIOTask(TaskPtr task) {
+int EventLoop::SetIOTask(IOTaskPtr task) {
   int ret = RET::RET_SUCCESS;
 
-  TaskPtr find = FindTask(task->get_fd());
+  IOTaskPtr find = FindTask(task->get_fd());
   if (find) {
     ret = poll_.ModEvent(task->get_fd(), task->get_fd(), task->get_mask());
     if (ret != RET::RET_SUCCESS) {
@@ -52,7 +52,7 @@ int EventLoop::SetIOTask(TaskPtr task) {
 int EventLoop::DelIOTask(int fd) {
   int ret = RET::RET_FAIL;
 
-  TaskPtr find = FindTask(fd);
+  IOTaskPtr find = FindTask(fd);
   if (find) {
     ret = poll_.DelEvent(fd);
     if (ret != RET::RET_SUCCESS) {
@@ -67,7 +67,7 @@ int EventLoop::DelIOTask(int fd) {
   return ret;
 }
 
-TaskPtr EventLoop::FindTask(int fd) {
+IOTaskPtr EventLoop::FindTask(int fd) {
   TaskMap::iterator itr = file_tasks_.find(fd);
   if (itr != file_tasks_.end())
     return itr->second;

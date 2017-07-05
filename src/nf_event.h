@@ -21,14 +21,14 @@
 class EventLoop {
   friend class IOTask;
 
-  typedef std::unordered_map<int, TaskPtr> TaskMap;
+  typedef std::unordered_map<int, IOTaskPtr> TaskMap;
 
  public:
   EventLoop();
 
   void Run();
 
-  int SetIOTask(IOTask &task);
+  int SetIOTask(IOTaskPtr task);
   int DelIOTask(int fd);
 
   //todo add timer
@@ -36,7 +36,7 @@ class EventLoop {
   const std::string& get_err_msg();
  
  private:
-  TaskPtr FindTask(int fd);
+  IOTaskPtr FindTask(int fd);
   void set_err_msg(std::string msg);
 
  private:
