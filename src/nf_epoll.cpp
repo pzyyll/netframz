@@ -39,7 +39,7 @@ Epoll &Epoll::operator=(const Epoll &rhs) {
 }
 
 Epoll::~Epoll() {
-  //Deinit();
+  Deinit();
 }
 
 int Epoll::Init(const int timeout, const int maxevs) {
@@ -62,7 +62,7 @@ int Epoll::Init(const int timeout, const int maxevs) {
   return RET::RET_SUCCESS;
 }
 
-int Epoll::Deinit() {
+void Epoll::Deinit() {
   if (epfd_ > 0) {
     ::close(epfd_);
   }

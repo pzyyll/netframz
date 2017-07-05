@@ -71,7 +71,7 @@ IOTaskPtr EventLoop::FindTask(int fd) {
   TaskMap::iterator itr = file_tasks_.find(fd);
   if (itr != file_tasks_.end())
     return itr->second;
-  return TaskPtr();
+  return IOTaskPtr();
 }
 const std::string &EventLoop::get_err_msg() {
   return err_msg_;
