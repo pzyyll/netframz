@@ -3,8 +3,9 @@
 
 #include <glog/logging.h>
 
-google::InitGoogleLogging("Debug");  
-FLAGS_log_dir = "./";
+#define BEGINLOG \
+    google::InitGoogleLogging("Debug"); \
+    FLAGS_log_dir = "./";
 
 //LOG(INFO) << ...;
 

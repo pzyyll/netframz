@@ -12,9 +12,9 @@
 Epoll::Epoll()
     : epfd_(-1),
       timeout_(DEFAULT_TIMEOUT),
-      maxevs_(DEFAULT_MAXEVS), 
+      maxevs_(DEFAULT_MAXEVS),
       evs_(NULL) {
-
+    BEGINLOG
 }
 
 Epoll::Epoll(const Epoll &rhs)
@@ -39,7 +39,7 @@ Epoll &Epoll::operator=(const Epoll &rhs) {
 }
 
 Epoll::~Epoll() {
-  Deinit();
+  //Deinit();
 }
 
 int Epoll::Init(const int timeout, const int maxevs) {
