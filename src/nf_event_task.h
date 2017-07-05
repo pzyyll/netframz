@@ -7,7 +7,7 @@
 #define NETFRAMZ_NF_EVENT_TASK_H
 
 #include <memory>
-
+#include <functional>
 #include "nf_event_config.h"
 
 struct FiredTask {
@@ -21,7 +21,8 @@ class IOTask;
 
 typedef std::shared_ptr<IOTask> IOTaskPtr;
 
-typedef void (*FileRwCb)(EventLoop &loop, IOTaskPtr io_task, int mask);
+//typedef void (*FileRwCb)(EventLoop &loop, IOTaskPtr io_task, int mask);
+typedef std::function<void (EventLoop&, IOTaskPtr, int)> FileRwCb;
 
 class IOTask {
   friend class EventLoop;
@@ -30,7 +31,12 @@ class IOTask {
   typedef FileRwCb Handle;
 
  public:
-  IOTask(int fd, int mask, Handle op) : fd_(fd), mask_(mask),op_(op) { }
+  IOTask(int fd, int mask) : fd_(fd), mask_(mask) { }
+  IOTask(int fd, int mask, Handle op) : fd_(fd), mask_(mask), op_(op) { }
+
+  template <typename Func, typename Obj>
+  void Bind(Func &&func, Obj &&obj);
+  void Bind(Handle handle);
 
   void set_fd(int fd) { fd_ = fd; }
   void set_mask(int mask) { mask_ = mask; }

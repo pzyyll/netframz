@@ -21,3 +21,12 @@ IOTaskPtr IOTask::make_task(int fd, int mask, Handle op) {
 void IOTask::Process(EventLoop &loop, IOTaskPtr io_task, int mask) {
   op_(loop, io_task, mask);
 }
+
+template<typename Func, typename Obj>
+void IOTask::Bind(Func &&func, Obj &&obj) {
+  op_ = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+}
+
+void IOTask::Bind(IOTask::Handle handle) {
+  op_ = handle;
+}
