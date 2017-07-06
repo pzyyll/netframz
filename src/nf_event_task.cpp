@@ -1,6 +1,6 @@
 //
 // @Created by CaiZhili on 2017/6/30.
-// @bref 
+// @bref
 //
 
 #include "nf_event_task.h"
@@ -19,5 +19,6 @@ void IOTask::Bind(IOTask::Handle handle) {
 }
 
 void IOTask::Process(EventLoop &loop, IOTask &io_task, int mask) {
-  op_(loop, io_task, mask);
+  if (op_)
+    op_(loop, io_task, mask);
 }

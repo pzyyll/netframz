@@ -7,14 +7,12 @@
 #include <unistd.h>
 
 #include "nf_epoll.h"
-#include "log.h"
 
 Epoll::Epoll()
     : epfd_(-1),
       timeout_(DEFAULT_TIMEOUT),
       maxevs_(DEFAULT_MAXEVS),
       evs_(NULL) {
-    BEGINLOG
 }
 
 Epoll::Epoll(const Epoll &rhs)
@@ -51,7 +49,6 @@ int Epoll::Init(const int timeout, const int maxevs) {
     return RET::RET_FAIL;
   }
   maxevs_ = maxevs;
-  LOG(INFO) << "Alloc :" << (void *)evs_ << "|" << maxevs_ << std::endl;
 
   epfd_ = epoll_create1(EPOLL_CLOEXEC);
   if (epfd_ < 0) {
@@ -67,7 +64,7 @@ void Epoll::Deinit() {
     ::close(epfd_);
   }
   if (evs_ != NULL) {
-    LOG(INFO) << "Free :" << (void *)evs_ << std::endl;
+
     free(evs_);
   }
   epfd_ = -1;
