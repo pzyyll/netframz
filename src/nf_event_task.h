@@ -60,4 +60,9 @@ class IOTask {
   Handle op_;
 };
 
+template<typename Func, typename Obj>
+void IOTask::Bind(Func &&func, Obj &&obj) {
+  op_ = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+}
+
 #endif //NETFRAMZ_NF_EVENT_TASK_H
