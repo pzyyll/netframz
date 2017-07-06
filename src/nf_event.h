@@ -30,6 +30,7 @@ class EventLoop {
   void Run();
 
   const std::string& get_err_msg();
+  
  protected:
   int SetIOTask(IOTask &task);
   int DelIOTask(int fd);
