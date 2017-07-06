@@ -29,7 +29,7 @@ class EventLoop {
 
   void Run();
 
-  int SetIOTask(const IOTask &task);
+  int SetIOTask(IOTask &task);
   int DelIOTask(int fd);
 
   //todo add timer

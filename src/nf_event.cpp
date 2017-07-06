@@ -25,7 +25,7 @@ void EventLoop::Run() {
   }
 }
 
-int EventLoop::SetIOTask(const IOTask &task) {
+int EventLoop::SetIOTask(IOTask &task) {
   int ret = RET::RET_SUCCESS;
 
   IOTask find;
