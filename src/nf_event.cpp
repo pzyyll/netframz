@@ -11,13 +11,11 @@ EventLoop::EventLoop() : stop_(false) {
 }
 
 void EventLoop::Run() {
-  bool had_iotask = true;
-  bool had_timer = false;
   do {
-    
-    !file_tasks_.empty() ? HandleIOEvent() : had_iotask = false;
+   
+    if (HaveIOEvent()) HandleIOEvent();
 
-  } while (!stop_ && (had_iotask || had_timer));
+  } while (!stop_ && (HaveIOEvent()));
 }
 
 int EventLoop::SetIOTask(IOTask &task) {
@@ -78,6 +76,9 @@ void EventLoop::HandleIOEvent() {
   }
 }
 
+bool EventLoop::HaveIOEvent() {
+  return (!file_tasks_.empty() ? true : false);
+}
 
 bool EventLoop::FindTask(const int fd, IOTask &find) {
   TaskMapItr itr = file_tasks_.find(fd);

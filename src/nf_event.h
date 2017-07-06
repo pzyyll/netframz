@@ -37,6 +37,7 @@ class EventLoop {
     
  private:
   void HandleIOEvent();
+  bool HaveIOEvent();
   bool FindTask(const int fd, IOTask &find);
   void set_err_msg(std::string msg);
 
