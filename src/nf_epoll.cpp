@@ -83,12 +83,12 @@ int Epoll::ModEvent(int fd, Epoll::data_type data, int mask) {
   return CtlEvent(fd, EPOLL_CTL_MOD, data, mask);
 }
 
-int Epoll::WaitEvent(std::deque<FiredTask> &fires) {
+int Epoll::WaitEvent(std::deque<FiredEvent> &fires) {
   int nfds = 0;
   nfds = epoll_wait(epfd_, evs_, maxevs_, timeout_);
   if (nfds > 0) {
     for (int i = 0; i < nfds; ++i) {
-      FiredTask task = {0, 0};
+      FiredEvent task = {0, 0};
       ev_pointer pev = evs_ + i;
       task.id = pev->data.u32;
       if (pev->events & EPOLLIN) task.mask |= EVSTAT::EV_READABLE;
