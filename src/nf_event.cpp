@@ -16,44 +16,54 @@ void EventLoop::Run() {
     int nds = poll_.WaitEvent(fires);
     while (!fires.empty() && nds > 0) {
       FiredTask &fire = fires.back();
-      IOTaskPtr find = FindTask(fire.id);
-      if (find) {
-        find->Process(*this, find, fire.mask);
+      IOTask task;
+      if (FindTask(fire.id, task)) {
+        task.Process(*this, task, fire.mask);
       }
       fires.pop_back();
     }
   }
 }
 
-int EventLoop::SetIOTask(IOTaskPtr task) {
+int EventLoop::SetIOTask(IOTask &task) {
   int ret = RET::RET_SUCCESS;
 
-  IOTaskPtr find = FindTask(task->get_fd());
-  if (find) {
-    ret = poll_.ModEvent(task->get_fd(), task->get_fd(), task->get_mask());
+  IOTask find;
+  if (FindTask(task.get_fd(), find)) {
+    ret = poll_.ModEvent(task.get_fd(), task.get_fd(), task.get_mask());
     if (ret != RET::RET_SUCCESS) {
       set_err_msg(poll_.get_err());
       return ret;
     }
-    file_tasks_[task->get_fd()] = task;
+    file_tasks_[task.get_fd()] = task;
     return ret;
   }
 
-  ret = poll_.AddEvent(task->get_fd(), task->get_fd(), task->get_mask());
+  ret = poll_.AddEvent(task.get_fd(), task.get_fd(), task.get_mask());
   if (ret != RET::RET_SUCCESS) {
     set_err_msg(poll_.get_err());
     return ret;
   }
-  file_tasks_[task->get_fd()] = task;
+  file_tasks_[task.get_fd()] = task;
 
   return RET_SUCCESS;
 }
 
+bool EventLoop::FindTask(const int fd, IOTask &find) {
+  TaskMapItr itr = file_tasks_.find(fd);
+  if (itr != file_tasks_.end()) {
+     find = itr->second;
+     return true;
+  }
+  return false;
+}
+
+
 int EventLoop::DelIOTask(int fd) {
   int ret = RET::RET_FAIL;
 
-  IOTaskPtr find = FindTask(fd);
-  if (find) {
+  IOTask find;
+  if (FindTask(fd, find)) {
     ret = poll_.DelEvent(fd);
     if (ret != RET::RET_SUCCESS) {
       set_err_msg(poll_.get_err());
@@ -67,12 +77,6 @@ int EventLoop::DelIOTask(int fd) {
   return ret;
 }
 
-IOTaskPtr EventLoop::FindTask(int fd) {
-  TaskMap::iterator itr = file_tasks_.find(fd);
-  if (itr != file_tasks_.end())
-    return itr->second;
-  return IOTaskPtr();
-}
 const std::string &EventLoop::get_err_msg() {
   return err_msg_;
 }

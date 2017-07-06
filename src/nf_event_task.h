@@ -22,7 +22,7 @@ class IOTask;
 typedef std::shared_ptr<IOTask> IOTaskPtr;
 
 //typedef void (*FileRwCb)(EventLoop &loop, IOTaskPtr io_task, int mask);
-typedef std::function<void (EventLoop&, IOTaskPtr, int)> FileRwCb;
+typedef std::function<void (EventLoop&, IOTask&, int)> FileRwCb;
 
 class IOTask {
   friend class EventLoop;
@@ -40,19 +40,17 @@ class IOTask {
 
   void set_fd(int fd) { fd_ = fd; }
   void set_mask(int mask) { mask_ = mask; }
-  void set_cb(Handle cb) { op_ = cb; }
 
   int get_fd() { return fd_; }
   int get_mask() { return mask_; }
   Handle get_cb() { return op_; }
 
   //todo
-  static void Start(EventLoop &loop, IOTaskPtr io_task);
-  static void Stop(EventLoop &loop, IOTaskPtr io_task);
-  static IOTaskPtr make_task(int fd, int mask, Handle op);
+  void Start(EventLoop &loop);
+  void Stop(EventLoop &loop);
 
  protected:
-  void Process(EventLoop &loop, IOTaskPtr io_task, int mask);
+  void Process(EventLoop &loop, IOTask &io_task, int mask);
 
  private:
   int fd_;
