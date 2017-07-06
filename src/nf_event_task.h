@@ -10,18 +10,10 @@
 #include <functional>
 #include "nf_event_config.h"
 
-struct FiredTask {
-  int id;
-  int mask;
-};
-
 class EventLoop;
 
 class IOTask;
 
-typedef std::shared_ptr<IOTask> IOTaskPtr;
-
-//typedef void (*FileRwCb)(EventLoop &loop, IOTaskPtr io_task, int mask);
 typedef std::function<void (EventLoop&, IOTask&, int)> FileRwCb;
 
 class IOTask {
@@ -40,13 +32,13 @@ class IOTask {
   void Bind(Handle handle);
 
   void set_fd(int fd) { fd_ = fd; }
-  void set_mask(int mask) { mask_ = mask; }
-
   int get_fd() { return fd_; }
+
+  void set_mask(int mask) { mask_ = mask; }
   int get_mask() { return mask_; }
+  
   Handle get_cb() { return op_; }
 
-  //todo
   void Start(EventLoop &loop);
   void Stop(EventLoop &loop);
 

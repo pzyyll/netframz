@@ -10,10 +10,14 @@
 #include <string>
 #include <queue>
 #include "nf_event_config.h"
-#include "nf_event_task.h"
 
 #define EV_POLLIN EPOLLIN
 #define EV_POLLOUT EPOLLOUT
+
+struct FiredEvent {
+  int id;
+  int mask;
+};
 
 class Epoll {
  public:
@@ -35,7 +39,7 @@ class Epoll {
   int AddEvent(int fd, data_type data, int mask);
   int DelEvent(int fd);
   int ModEvent(int fd, data_type data, int mask);
-  int WaitEvent(std::deque<FiredTask> &fires);
+  int WaitEvent(std::deque<FiredEvent> &fires);
   int Resize(const size_t maxevs);
 
   std::string get_err();

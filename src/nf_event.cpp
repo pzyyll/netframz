@@ -12,10 +12,10 @@ EventLoop::EventLoop() : stop_(false) {
 
 void EventLoop::Run() {
   while (!stop_ && !file_tasks_.empty()) {
-    std::deque<FiredTask> fires;
+    std::deque<FiredEvent> fires;
     int nds = poll_.WaitEvent(fires);
     while (!fires.empty() && nds > 0) {
-      FiredTask &fire = fires.back();
+      FiredEvent &fire = fires.back();
       IOTask task;
       if (FindTask(fire.id, task)) {
         task.Process(*this, task, fire.mask);
