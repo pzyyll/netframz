@@ -31,6 +31,7 @@ class IOTask {
   typedef FileRwCb Handle;
 
  public:
+  IOTask() : fd_(-1), mask_(0) { }
   IOTask(int fd, int mask) : fd_(fd), mask_(mask) { }
   IOTask(int fd, int mask, Handle op) : fd_(fd), mask_(mask), op_(op) { }
 
