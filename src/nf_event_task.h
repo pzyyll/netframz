@@ -23,21 +23,19 @@ class IOTask {
   typedef FileRwCb Handle;
 
  public:
-  IOTask() : fd_(-1), mask_(0) { }
-  IOTask(int fd, int mask) : fd_(fd), mask_(mask) { }
-  IOTask(int fd, int mask, Handle op) : fd_(fd), mask_(mask), op_(op) { }
+  IOTask();
+  IOTask(int fd, int mask);
+  IOTask(int fd, int mask, Handle op);
 
   template <typename Func, typename Obj>
   void Bind(Func &&func, Obj &&obj);
   void Bind(Handle handle);
 
-  void set_fd(int fd) { fd_ = fd; }
-  int get_fd() { return fd_; }
+  void set_fd(int fd);
+  int get_fd();
 
-  void set_mask(int mask) { mask_ = mask; }
-  int get_mask() { return mask_; }
-  
-  Handle get_cb() { return op_; }
+  void set_mask(int mask);
+  int get_mask();
 
   void Start(EventLoop &loop);
   void Stop(EventLoop &loop);

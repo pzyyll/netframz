@@ -40,7 +40,8 @@ class Timer {
   struct timeval begin_;
   //ms, expire time = begin_ + exprie_
   unsigned long expire_;
-  
+
+  bool stop_;
   bool is_loop_;
   Handle op_;
 };
