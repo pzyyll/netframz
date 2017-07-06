@@ -11,18 +11,13 @@ EventLoop::EventLoop() : stop_(false) {
 }
 
 void EventLoop::Run() {
-  while (!stop_ && !file_tasks_.empty()) {
-    std::deque<FiredEvent> fires;
-    int nds = poll_.WaitEvent(fires);
-    while (!fires.empty() && nds > 0) {
-      FiredEvent &fire = fires.back();
-      IOTask task;
-      if (FindTask(fire.id, task)) {
-        task.Process(*this, task, fire.mask);
-      }
-      fires.pop_back();
-    }
-  }
+  bool had_iotask = true;
+  bool had_timer = false;
+  do {
+    
+    !file_tasks_.empty() ? HandleIOEvent() : had_iotask = false;
+
+  } while (!stop_ && (had_iotask || had_timer));
 }
 
 int EventLoop::SetIOTask(IOTask &task) {
@@ -49,16 +44,6 @@ int EventLoop::SetIOTask(IOTask &task) {
   return RET_SUCCESS;
 }
 
-bool EventLoop::FindTask(const int fd, IOTask &find) {
-  TaskMapItr itr = file_tasks_.find(fd);
-  if (itr != file_tasks_.end()) {
-     find = itr->second;
-     return true;
-  }
-  return false;
-}
-
-
 int EventLoop::DelIOTask(int fd) {
   int ret = RET::RET_FAIL;
 
@@ -75,6 +60,32 @@ int EventLoop::DelIOTask(int fd) {
 
   set_err_msg("Not Find Task!");
   return ret;
+}
+
+
+void EventLoop::HandleIOEvent() {
+  int nds = poll_.WaitEvent(fires);
+
+  //todo asyn or limit
+  while (!fires.empty() && nds > 0) {
+    FiredEvent &fire = fires.back();
+    IOTask task;
+    if (FindTask(fire.id, task)) {
+      //Callback
+      task.Process(*this, task, fire.mask);
+    }
+    fires.pop_back();
+  }
+}
+
+
+bool EventLoop::FindTask(const int fd, IOTask &find) {
+  TaskMapItr itr = file_tasks_.find(fd);
+  if (itr != file_tasks_.end()) {
+     find = itr->second;
+     return true;
+  }
+  return false;
 }
 
 const std::string &EventLoop::get_err_msg() {

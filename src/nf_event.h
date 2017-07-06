@@ -29,14 +29,14 @@ class EventLoop {
 
   void Run();
 
+  const std::string& get_err_msg();
+ protected:
   int SetIOTask(IOTask &task);
   int DelIOTask(int fd);
-
   //todo add timer
-
-  const std::string& get_err_msg();
- 
+    
  private:
+  void HandleIOEvent();
   bool FindTask(const int fd, IOTask &find);
   void set_err_msg(std::string msg);
 
@@ -46,6 +46,8 @@ class EventLoop {
   TaskMap file_tasks_;
 
   poll_type poll_;
+
+  std::deque<FiredEvent> fires;
 
   std::string err_msg_;
 };
