@@ -12,6 +12,8 @@ EventLoop::EventLoop() : stop_(false) {
 
 void EventLoop::Run() {
   do {
+
+    HandleAllTimerTask();
    
     if (HaveIOEvent()) HandleIOEvent();
 
@@ -60,7 +62,6 @@ int EventLoop::DelIOTask(int fd) {
   return ret;
 }
 
-
 void EventLoop::HandleIOEvent() {
   int nds = poll_.WaitEvent(fires);
 
@@ -96,3 +97,25 @@ const std::string &EventLoop::get_err_msg() {
 void EventLoop::set_err_msg(std::string msg) {
   err_msg_ = msg;
 }
+
+int EventLoop::AddTimerTask(Timer &timer) {
+  return timer_mng_.AddTimer(timer);
+}
+
+void EventLoop::HandleAllTimerTask() {
+  std::vector<Timer> fire_timers;
+  timer_mng_.GetFiredTimers(fire_timers);
+
+  for (int i = 0; i < fire_timers.size(); ++i) {
+    Timer &timer = fires_timers[i];
+    timer.Process(*this, timer, 0);
+    if (timer.get_is_loop()) {
+      struct timeval now;
+      gettimeofday(&now, NULL);
+      timer.set_begin(now);
+      AddTimer(timer);
+    }
+  }
+}
+
+

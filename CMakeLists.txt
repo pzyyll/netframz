@@ -7,7 +7,13 @@ add_definitions(-DLINUX_EPOLL -W -Wall)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp src/nf_event.cpp src/nf_epoll.cpp src/nf_event_task.cpp src/nf_event_timer_implv1.cpp src/nf_event_timer_implv1.h)
+set(SOURCE_FILES main.cpp
+        src/nf_event.cpp
+        src/nf_epoll.cpp
+        src/nf_event_task.cpp
+        src/nf_event_timer_heap.cpp
+        src/nf_event_timer.cpp
+        src/nf_event_timer_mng.cpp)
 add_executable(netframz ${SOURCE_FILES})
 
 #target_link_libraries(netframz -lboostsystem)

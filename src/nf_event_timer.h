@@ -11,7 +11,7 @@
 
 class EventLoop;
 
-typedef function<void (EventLoop&, Timer&, int)> TimerCb;
+typedef std::function<void (EventLoop&, Timer&, int)> TimerCb;
 
 class Timer {
   typedef TimerCb Handle;
@@ -25,10 +25,16 @@ class Timer {
   void Bind(Handle handle);
 
   void Start(EventLoop &loop);
-  void Restart(EventLoop &loop);
+  void StopLoop(); 
+
+  struct timeval GetExpireTime();
 
   void set_id(id_type id) { id_ = id; }
   id_type get_id() { return id_; }
+
+  void set_begin(struct timeval begin) { begin_ = begin; }
+
+  bool get_is_loop() { return is_loop_; };
   
  protected:
   void Process(EventLoop &loop, Timer &timer, int);
@@ -38,16 +44,16 @@ class Timer {
   id_type id_;
   
   struct timeval begin_;
-  //ms, expire time = begin_ + exprie_
-  unsigned long expire_;
-
-  bool stop_;
+  
+  //ms, expire time = begin_ + interval_;
+  unsigned long interval_;
+  
   bool is_loop_;
   Handle op_;
 };
 
 template<typename Func, typename Obj>
-void IOTask::Bind(Func &&func, Obj &&obj) {
+void Timer::Bind(Func &&func, Obj &&obj) {
   op_ = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 }
 

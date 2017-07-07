@@ -17,6 +17,7 @@
 #endif
 
 #include "nf_event_task.h"
+#include "nf_event_timer_mng.h"
 
 class EventLoop {
   friend class IOTask;
@@ -34,12 +35,17 @@ class EventLoop {
  protected:
   int SetIOTask(IOTask &task);
   int DelIOTask(int fd);
+  
   //todo add timer
-    
+  int AddTimerTask(Timer &timer);
+  
  private:
   void HandleIOEvent();
   bool HaveIOEvent();
   bool FindTask(const int fd, IOTask &find);
+
+  void HandleAllTimerTask();
+  
   void set_err_msg(std::string msg);
 
  private:
@@ -50,6 +56,8 @@ class EventLoop {
   poll_type poll_;
 
   std::deque<FiredEvent> fires;
+
+  TimerMng timer_mng_;
 
   std::string err_msg_;
 };
