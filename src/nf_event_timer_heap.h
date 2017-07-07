@@ -78,6 +78,10 @@ class TimerHeap {
     return all_timer.size();
   }
 
+  unsigned long GetTimerSize() {
+    return timer_heap_.size();
+  }
+
  private:
   heap_type timer_heap_;
 };

@@ -13,5 +13,8 @@ int TimerMng::AddTimer(timer_type timer) {
 void TimerMng::GetFiredTimers(std::vector<timer_type> &fired_timers) {
   timers_.GetTimer(fired_timers);
 }
+unsigned long TimerMng::GetTimerSize() {
+  return timers_.GetTimerSize();
+}
 
 

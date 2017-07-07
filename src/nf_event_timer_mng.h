@@ -19,7 +19,7 @@ class TimerMng {
  public:
   int AddTimer(timer_type timer);
   void GetFiredTimers(std::vector<timer_type> &fired_timers);
-
+  unsigned long GetTimerSize();
  private:
   timers_type timers_;
 };

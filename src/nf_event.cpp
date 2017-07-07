@@ -13,11 +13,11 @@ EventLoop::EventLoop() : stop_(false) {
 void EventLoop::Run() {
   do {
 
-    HandleAllTimerTask();
+    if (HaveTimerTask()) HandleAllTimerTask();
    
     if (HaveIOEvent()) HandleIOEvent();
 
-  } while (!stop_ && (HaveIOEvent()));
+  } while (!stop_ && (HaveIOEvent() || HaveTimerTask()));
 }
 
 int EventLoop::SetIOTask(IOTask &task) {
@@ -118,4 +118,6 @@ void EventLoop::HandleAllTimerTask() {
   }
 }
 
-
+bool EventLoop::HaveTimerTask() {
+  return (timer_mng_.GetTimerSize() > 0);
+}

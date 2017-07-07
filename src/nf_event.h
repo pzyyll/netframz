@@ -46,6 +46,7 @@ class EventLoop {
   bool FindTask(const int fd, IOTask &find);
 
   void HandleAllTimerTask();
+  bool HaveTimerTask();
   
   void set_err_msg(std::string msg);
 
