@@ -106,14 +106,14 @@ void EventLoop::HandleAllTimerTask() {
   std::vector<Timer> fire_timers;
   timer_mng_.GetFiredTimers(fire_timers);
 
-  for (int i = 0; i < fire_timers.size(); ++i) {
-    Timer &timer = fires_timers[i];
+  for (int i = 0; i < (int)fire_timers.size(); ++i) {
+    Timer &timer = fire_timers[i];
     timer.Process(*this, timer, 0);
     if (timer.get_is_loop()) {
       struct timeval now;
       gettimeofday(&now, NULL);
       timer.set_begin(now);
-      AddTimer(timer);
+      AddTimerTask(timer);
     }
   }
 }

@@ -10,10 +10,12 @@
 #include <sys/time.h>
 
 class EventLoop;
+class Timer;
 
 typedef std::function<void (EventLoop&, Timer&, int)> TimerCb;
 
 class Timer {
+  friend class EventLoop;
   typedef TimerCb Handle;
  public:
   typedef unsigned long long id_type;

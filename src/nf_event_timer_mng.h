@@ -22,6 +22,6 @@ class TimerMng {
 
  private:
   timers_type timers_;
-}
+};
 
 #endif //NETFRAMZ_NF_EVENT_TIMER_MNG_H
