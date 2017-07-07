@@ -21,6 +21,7 @@
 
 class EventLoop {
   friend class IOTask;
+  friend class Timer;
 
   typedef std::unordered_map<int, IOTask> TaskMap;
   typedef TaskMap::iterator TaskMapItr;

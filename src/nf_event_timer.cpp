@@ -4,7 +4,7 @@
 //
 
 #include <sys/time.h>
-
+#include "nf_event.h"
 #include "nf_event_timer.h"
 
 
@@ -18,7 +18,7 @@ void Timer::Bind(Handle handle) {
 }
 
 void Timer::Start(EventLoop &loop) {
-  loop.AddTimerTask(*timer);
+  loop.AddTimerTask(*this);
 }
 
 void Timer::StopLoop() {
@@ -33,4 +33,11 @@ struct timeval Timer::GetExpireTime() {
     expire.tv_sec += expire.tv_usec / 1000000;
     expire.tv_usec = expire.tv_usec % 1000000;
   }
+
+  return expire;
+}
+
+void Timer::Process(EventLoop &loop, Timer &timer, int mask) {
+  if (op_)
+    op_(loop, timer, mask);
 }

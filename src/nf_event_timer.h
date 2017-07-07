@@ -37,7 +37,7 @@ class Timer {
   bool get_is_loop() { return is_loop_; };
   
  protected:
-  void Process(EventLoop &loop, Timer &timer, int);
+  void Process(EventLoop &loop, Timer &timer, int mask);
  
  private:
   //default = 0
@@ -56,6 +56,7 @@ template<typename Func, typename Obj>
 void Timer::Bind(Func &&func, Obj &&obj) {
   op_ = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 }
+
 
 #endif //NETFRAMZ_NF_EVENT_TIMER_IMPLV1_H_
 

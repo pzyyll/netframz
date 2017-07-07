@@ -3,7 +3,7 @@
 // @bref 
 //
 
-#include "nf_event_timer_mng.cpp"
+#include "nf_event_timer_mng.h"
 
 int TimerMng::AddTimer(timer_type timer) {
   struct timeval expire = timer.GetExpireTime();
