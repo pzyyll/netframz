@@ -25,7 +25,7 @@ inline int CompareTime(const struct timeval &tv1, const struct timeval &tv2){
 
 class TimerHeap {
  public:
-  typedef Timer TimerDataType;
+  typedef Timer timer_type;
 
   enum EIXTSTATUS {
     FAIL = -1,
@@ -34,7 +34,7 @@ class TimerHeap {
 
   struct TimerNode {
     struct timeval expire_time;
-    TimerDataType timer_data;
+    timer_type timer_data;
   };
 
   class LtTimerNode {
@@ -47,7 +47,7 @@ class TimerHeap {
   typedef std::priority_queue<TimerNode, std::vector<TimerNode>, LtTimerNode> heap_type;
 
  public:
-  int AddTimer(struct timeval expire, const TimerDataType &timer_data) {
+  int AddTimer(struct timeval expire, const timer_type &timer_data) {
     expire.tv_usec = GET_PRECISION_USEC(expire.tv_usec);
     struct timeval now;
     gettimeofday(&now, NULL);
@@ -62,7 +62,7 @@ class TimerHeap {
   }
 
   //放到主循环去获取，粒度依据循环的精度，最小是 PRECISION_USEC
-  int GetTimer(std::vector<TimerDataType> &all_timer) {
+  int GetTimer(std::vector<timer_type> &all_timer) {
     struct timeval now;
     gettimeofday(&now, NULL);
     now.tv_usec = GET_PRECISION_USEC(now.tv_usec);
