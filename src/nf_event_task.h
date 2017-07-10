@@ -37,6 +37,9 @@ class IOTask {
   void set_mask(int mask);
   int get_mask();
 
+  void set_data(task_data_t data);
+  task_data_t get_data();
+
   void Start(EventLoop &loop);
   void Stop(EventLoop &loop);
 
@@ -47,6 +50,7 @@ class IOTask {
   int fd_;
   int mask_;
   Handle op_;
+  task_data_t data_;
 };
 
 template<typename Func, typename Obj>

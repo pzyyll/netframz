@@ -22,4 +22,12 @@ enum EVSTAT {
   EV_ERR         = 0X100,
 };
 
+struct task_data_t {
+  union {
+    void *ptr;
+    int id;
+    unsigned long ul;
+  } data; 
+}
+
 #endif //NETFRAMZ_NF_EVENT_CONFIG_H

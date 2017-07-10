@@ -52,6 +52,7 @@ class Timer {
   
   bool is_loop_;
   Handle op_;
+  task_data_t data_;
 };
 
 template<typename Func, typename Obj>

@@ -38,6 +38,14 @@ int IOTask::get_mask() {
   return mask_;
 }
 
+void IOTask::set_data(task_data_t data) {
+  data_ = data;
+}
+
+task_data_t IOTask::get_data() {
+  return data_;
+}
+
 void IOTask::Start(EventLoop &loop) {
   loop.SetIOTask(*this);
 }

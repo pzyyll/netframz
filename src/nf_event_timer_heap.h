@@ -6,8 +6,8 @@
 //       但是实际情况根据内核精度确定，100 ms 的话基本都可以确定
 //
 
-#ifndef NETFRAMZ_NF_EVENT_TIMER_IMPLV1_H
-#define NETFRAMZ_NF_EVENT_TIMER_IMPLV1_H
+#ifndef NETFRAMZ_NF_EVENT_TIMER_HEAP_H
+#define NETFRAMZ_NF_EVENT_TIMER_HEAP_H
 
 #include <queue>
 #include <vector>
@@ -15,7 +15,7 @@
 #include "nf_event_timer.h"
 
 #define PRECISION_USEC 100000
-#define GET_PRECISION_USEC(_usec) (_usec / PRECISION_USEC * PRECISION_USEC)
+#define GET_PRECISION_USEC(_usec) (_usec - _usec % PRECISION_USEC)
 
 inline int CompareTime(const struct timeval &tv1, const struct timeval &tv2){
   if (tv1.tv_sec > tv2.tv_sec) return 1;
