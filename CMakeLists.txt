@@ -3,7 +3,7 @@ project(netframz)
 
 include_directories(E:\\linux_inc\\include)
 
-add_definitions(-DLINUX_EPOLL -W -Wall)
+add_definitions(-DLINUX_EPOLL -W -Wall -DNF_TIMER_WHEEL)
 
 set(CMAKE_CXX_STANDARD 11)
 

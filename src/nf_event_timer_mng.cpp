@@ -1,9 +1,13 @@
 //
 // @Created by CaiZhili on 2017/7/6.
-// @bref 
+// @bref
 //
 
 #include "nf_event_timer_mng.h"
+
+TimerMng::TimerMng() {
+    timers_.Init();
+}
 
 int TimerMng::AddTimer(timer_type timer) {
   struct timeval expire = timer.GetExpireTime();

@@ -2,7 +2,7 @@
 // @Created by CaiZhili on 2017/7/6.
 // @bref Timer implement by min-heap
 //       这个定时器只提供添加和获取
-//       定时器精度定为 100 ms 吧，虽然可以精确到 1 us, 
+//       定时器精度定为 100 ms 吧，虽然可以精确到 1 us,
 //       但是实际情况根据内核精度确定，100 ms 的话基本都可以确定
 //
 
@@ -47,6 +47,8 @@ class TimerHeap {
   typedef std::priority_queue<TimerNode, std::vector<TimerNode>, LtTimerNode> heap_type;
 
  public:
+  void Init() {}
+
   int AddTimer(struct timeval expire, const timer_type &timer_data) {
     expire.tv_usec = GET_PRECISION_USEC(expire.tv_usec);
     struct timeval now;
