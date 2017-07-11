@@ -9,11 +9,17 @@
 #include <vector>
 
 #include "nf_event_timer.h"
+
+#ifdef NF_TIMER_WHEEL
+#include "nf_event_timer_wheel.h"
+typedef TimerWheel timers_type;
+#else 
 #include "nf_event_timer_heap.h"
+typedef TimerHeap timers_type;
+#endif //NF_TIMER_WHEEL
 
 class TimerMng {
  public:
-  typedef TimerHeap timers_type;
   typedef Timer timer_type;
   
  public:
