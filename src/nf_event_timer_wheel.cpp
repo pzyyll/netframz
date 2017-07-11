@@ -12,7 +12,7 @@ void TimerWheel::Init() {
   base_.clk = _GetDeafaultJiffers();
 }
 
-int TimerWheel::AddTimer(const struct timeval &expire, const timer_type &timer_data) {
+int TimerWheel::AddTimer(const struct timeval &expire, const tdata_type &timer_data) {
   unsigned long expires_clk = _GetJiffersFromTime(expire);
   timer_node_t tnode = {expires_clk, timer_data};
 
@@ -90,7 +90,7 @@ int TimerWheel::_TimerRun(timer_vec_type &all_timer, unsigned long jiffers) {
     for (timer_list_t::iterator itr = work_list.begin();
          itr != work_list.end();
          ++itr) {
-      all_timer.push_back(itr->timer);
+      all_timer.push_back(itr->timer_data);
     }
   }
 

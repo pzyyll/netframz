@@ -37,7 +37,7 @@ class EventLoop {
   int SetIOTask(IOTask &task);
   int DelIOTask(int fd);
   
-  //todo add timer
+  //todo add timer_data
   int AddTimerTask(Timer &timer);
   
  private:

@@ -22,12 +22,14 @@
 #define NFTVR_MASK (NFTVR_SIZE - 1)
 #define PRECISION_USEC (1e5)
 
+typedef Timer data_type;
+
 typedef struct TimerNode {
   unsigned long expires;
-  Timer timer;
+  data_type timer_data;
 } timer_node_t;
 
-typedef std::list<TimerNode> timer_list_t;
+typedef std::list<timer_node_t> timer_list_t;
 
 typedef struct NFTvecRoot {
   timer_list_t vec[NFTVR_SIZE];
@@ -39,13 +41,13 @@ typedef struct NFTvec {
 
 class TimerWheel {
  public:
-  typedef Timer timer_type;
-  typedef std::vector<timer_type> timer_vec_type;
+  typedef data_type tdata_type;
+  typedef std::vector<tdata_type> timer_vec_type;
 
  public:
   void Init();
 
-  int AddTimer(const struct timeval &expire, const timer_type &timer_data);
+  int AddTimer(const struct timeval &expire, const tdata_type &timer_data);
 
   //放到主循环去获取，粒度依据循环的精度，最小是 PRECISION_USEC
   int GetTimer(timer_vec_type &all_timer);
