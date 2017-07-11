@@ -1,6 +1,6 @@
 //
 // @Created by CaiZhili on 2017/7/6.
-// @bref 
+// @bref
 //
 
 #ifndef NETFRAMZ_NF_EVENT_TIMER_H_
@@ -8,8 +8,10 @@
 
 #include <functional>
 #include <sys/time.h>
+#include "nf_event_config.h"
 
 class EventLoop;
+
 class Timer;
 
 typedef std::function<void (EventLoop&, Timer&, int)> TimerCb;
@@ -27,7 +29,7 @@ class Timer {
   void Bind(Handle handle);
 
   void Start(EventLoop &loop);
-  void StopLoop(); 
+  void StopLoop();
 
   struct timeval GetExpireTime();
 
@@ -37,19 +39,19 @@ class Timer {
   void set_begin(struct timeval begin) { begin_ = begin; }
 
   bool get_is_loop() { return is_loop_; };
-  
+
  protected:
   void Process(EventLoop &loop, Timer &timer, int mask);
- 
+
  private:
   //default = 0
   id_type id_;
-  
+
   struct timeval begin_;
-  
+
   //ms, expire time = begin_ + interval_;
   unsigned long interval_;
-  
+
   bool is_loop_;
   Handle op_;
   task_data_t data_;

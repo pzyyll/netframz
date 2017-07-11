@@ -109,7 +109,7 @@ int TimerWheel::_Cascade(nftv_t *tv, int index) {
   return index;
 }
 
-static inline unsigned long TimerWheel::_IndexOfTvn(unsigned long clk, unsigned int n) {
+inline unsigned long TimerWheel::_IndexOfTvn(unsigned long clk, unsigned int n) {
   if (n <= 0) {
     return (clk & NFTVR_MASK);
   } else if (n <= 4) {
@@ -119,13 +119,13 @@ static inline unsigned long TimerWheel::_IndexOfTvn(unsigned long clk, unsigned 
   return (unsigned long)0-1;
 }
 
-static inline unsigned long TimerWheel::_GetJiffersFromTime(const struct timeval &t)
+inline unsigned long TimerWheel::_GetJiffersFromTime(const struct timeval &t)
 {
   return (t.tv_sec * (unsigned long)(1e6 / PRECISION_USEC)
       + t.tv_usec / (unsigned long)PRECISION_USEC);
 }
 
-static inline unsigned long TimerWheel::_GetDeafaultJiffers() {
+inline unsigned long TimerWheel::_GetDeafaultJiffers() {
   struct timeval now;
   gettimeofday(&now, NULL);
   return _GetJiffersFromTime(now);

@@ -1,6 +1,6 @@
 //
 // @Created by CaiZhili on 2017/6/30.
-// @bref 
+// @bref
 //
 
 #ifndef NETFRAMZ_NF_EVENT_CONFIG_H
@@ -27,7 +27,7 @@ struct task_data_t {
     void *ptr;
     int id;
     unsigned long ul;
-  } data; 
-}
+  } data;
+};
 
 #endif //NETFRAMZ_NF_EVENT_CONFIG_H
