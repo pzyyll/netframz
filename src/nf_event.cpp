@@ -102,6 +102,14 @@ int EventLoop::AddTimerTask(Timer &timer) {
   return timer_mng_.AddTimer(timer);
 }
 
+int EventLoop::DelTimerTask(const unsigned long id) {
+  return timer_mng_.DelTimer(id);
+}
+
+int EventLoop::ResetTimerTask(Timer &timer) {
+  return timer_mng_.ModTimer(timer);
+}
+
 void EventLoop::HandleAllTimerTask() {
   std::vector<Timer> fire_timers;
   timer_mng_.GetFiredTimers(fire_timers);

@@ -39,6 +39,8 @@ class EventLoop {
   
   //todo add timer_data
   int AddTimerTask(Timer &timer);
+  int DelTimerTask(const unsigned long id);
+  int ResetTimerTask(Timer &timer);
   
  private:
   void HandleIOEvent();

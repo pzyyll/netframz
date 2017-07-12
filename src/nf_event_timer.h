@@ -17,11 +17,13 @@ class Timer;
 typedef std::function<void (EventLoop&, Timer&, int)> TimerCb;
 
 class Timer {
+  friend class TimerMng;
   friend class EventLoop;
   typedef TimerCb Handle;
  public:
   typedef unsigned long long id_type;
  public:
+  Timer();
   Timer(const unsigned long expire, bool loop);
 
   template <typename Func, typename Obj>
@@ -29,11 +31,12 @@ class Timer {
   void Bind(Handle handle);
 
   void Start(EventLoop &loop);
+  void Restart(EventLoop &loop);
+  void Stop(EventLoop &loop);
   void StopLoop();
 
   struct timeval GetExpireTime();
 
-  void set_id(id_type id) { id_ = id; }
   id_type get_id() { return id_; }
 
   void set_begin(struct timeval begin) { begin_ = begin; }
@@ -41,6 +44,7 @@ class Timer {
   bool get_is_loop() { return is_loop_; };
 
  protected:
+  void set_id(id_type id) { id_ = id; }
   void Process(EventLoop &loop, Timer &timer, int mask);
 
  private:
