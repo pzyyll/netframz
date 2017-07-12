@@ -44,3 +44,8 @@ struct timeval Timer::GetExpireTime() {
 
   return expire;
 }
+
+void Timer::Process(EventLoop &loop, Timer &timer, int mask) {
+  if (op_)
+    op_(loop, timer, mask);
+}
