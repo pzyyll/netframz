@@ -40,8 +40,10 @@ void TimerMng::GetFiredTimers(std::vector<timer_type> &fired_timers) {
 
   for (vec_iterator itr = fire_ids.begin(); itr != fire_ids.end(); ++itr) {
     timer_type find;
-    if (_FindTimer(*itr, &find))
+    if (_FindTimer(*itr, &find)) {
       fired_timers.push_back(find);
+      _DelTimer(*itr);
+    }
   }
 }
 
