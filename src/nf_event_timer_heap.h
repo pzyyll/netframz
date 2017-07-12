@@ -23,9 +23,10 @@ inline int CompareTime(const struct timeval &tv1, const struct timeval &tv2){
   return static_cast<int>(tv1.tv_usec - tv2.tv_usec);
 }
 
+template <typename T>
 class TimerHeap {
  public:
-  typedef Timer timer_type;
+  typedef T timer_type;
 
   enum EIXTSTATUS {
     FAIL = -1,

@@ -12,10 +12,10 @@
 
 #ifdef NF_TIMER_WHEEL
 #include "nf_event_timer_wheel.h"
-typedef TimerWheel timers_type;
+typedef TimerWheel<Timer> timers_type;
 #else
 #include "nf_event_timer_heap.h"
-typedef TimerHeap timers_type;
+typedef TimerHeap<Timer> timers_type;
 #endif //NF_TIMER_WHEEL
 
 class TimerMng {
@@ -27,6 +27,7 @@ class TimerMng {
   int AddTimer(timer_type timer);
   void GetFiredTimers(std::vector<timer_type> &fired_timers);
   unsigned long GetTimerSize();
+
  private:
   timers_type timers_;
 };
