@@ -151,9 +151,26 @@ class TimerWheel {
     return index;
   }
 
-  static inline unsigned long _IndexOfTvn(unsigned long clk, unsigned int n);
-  static inline unsigned long _GetJiffersFromTime(const struct timeval &t);
-  static inline unsigned long _GetDeafaultJiffers();
+  static inline unsigned long _IndexOfTvn(unsigned long clk, unsigned int n) {
+    if (n <= 0) {
+      return (clk & NFTVR_MASK);
+    } else if (n <= 4) {
+      return ((clk >> LV_SHIFT(n - 1)) & NFTVN_MASK);
+    }
+
+    return (unsigned long)0-1;
+  }
+
+  static inline unsigned long _GetJiffersFromTime(const struct timeval &t) {
+    return (t.tv_sec * (unsigned long)(1e6 / PRECISION_USEC)
+        + t.tv_usec / (unsigned long)PRECISION_USEC);
+  }
+
+  static inline unsigned long _GetDeafaultJiffers() {
+    struct timeval now;
+    gettimeofday(&now, NULL);
+    return _GetJiffersFromTime(now);
+  }
 
  private:
   struct TvBase {
@@ -167,28 +184,6 @@ class TimerWheel {
     nftv_t tv4;
   } base_;
 };
-
-inline unsigned long TimerWheel::_IndexOfTvn(unsigned long clk, unsigned int n) {
-  if (n <= 0) {
-    return (clk & NFTVR_MASK);
-  } else if (n <= 4) {
-    return ((clk >> LV_SHIFT(n - 1)) & NFTVN_MASK);
-  }
-
-  return (unsigned long)0-1;
-}
-
-inline unsigned long TimerWheel::_GetJiffersFromTime(const struct timeval &t)
-{
-  return (t.tv_sec * (unsigned long)(1e6 / PRECISION_USEC)
-      + t.tv_usec / (unsigned long)PRECISION_USEC);
-}
-
-inline unsigned long TimerWheel::_GetDeafaultJiffers() {
-  struct timeval now;
-  gettimeofday(&now, NULL);
-  return _GetJiffersFromTime(now);
-}
 
 #endif //NETFRAMZ_NF_EVENT_TIMER_WHEEL_H
 
