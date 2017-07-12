@@ -116,13 +116,13 @@ void EventLoop::HandleAllTimerTask() {
 
   for (int i = 0; i < (int)fire_timers.size(); ++i) {
     Timer &timer = fire_timers[i];
-    timer.Process(*this, timer, 0);
     if (timer.get_is_loop()) {
       struct timeval now;
       gettimeofday(&now, NULL);
       timer.set_begin(now);
       AddTimerTask(timer);
     }
+    timer.Process(*this, timer, 0);
   }
 }
 
