@@ -32,10 +32,11 @@ struct TimerNode {
 template <typename T>
 class TimerWheel {
  public:
-  typedef T                       tdata_type;
-  typedef std::vector<tdata_type> timer_vec_type;
-  typedef TimerNode<T>            timer_node_t;
-  typedef std::list<timer_node_t> timer_list_t;
+  typedef T                        tdata_type;
+  typedef std::vector<tdata_type>  timer_vec_type;
+  typedef TimerNode<T>             timer_node_t;
+  typedef std::list<timer_node_t>  timer_list_t;
+  typedef typename std::list<timer_node_t>::iterator tl_iterator;
 
   typedef struct NFTvecRoot {
     timer_list_t vec[NFTVR_SIZE];
@@ -128,7 +129,7 @@ class TimerWheel {
       timer_list_t &curr_tick_list = base_.tv.vec[tvr_idx];
       work_list.splice(work_list.begin(), curr_tick_list);
       base_.size -= work_list.size();
-      for (timer_list_t::iterator itr = work_list.begin();
+      for (tl_iterator itr = work_list.begin();
            itr != work_list.end();
            ++itr) {
         all_timer.push_back(itr->timer_data);
@@ -141,7 +142,7 @@ class TimerWheel {
   int _Cascade(nftv_t *tv, int index) {
     //当节拍走完当前层的一轮时间后重新搬迁下一层中 tick 链中的定时器。
     timer_list_t &tv_list = tv->vec[index];
-    for (timer_list_t::iterator itr = tv_list.begin(); itr != tv_list.end(); ++itr) {
+    for (tl_iterator itr = tv_list.begin(); itr != tv_list.end(); ++itr) {
       _InnerAddTimer(*itr);
     }
     //统一清除搬迁后的定时器链。
