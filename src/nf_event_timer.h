@@ -9,26 +9,20 @@
 #include <functional>
 #include <sys/time.h>
 #include "nf_event_config.h"
+#include "impl/nf_operator.h"
 
 class EventLoop;
 
 class Timer;
 
-typedef std::function<void (EventLoop&, Timer&, int)> TimerCb;
-
-class Timer {
+class Timer : public Operator {
   friend class TimerMng;
   friend class EventLoop;
-  typedef TimerCb Handle;
  public:
   typedef unsigned long long id_type;
  public:
   Timer();
   Timer(const unsigned long expire, bool loop);
-
-  template <typename Func, typename Obj>
-  void Bind(Func &&func, Obj &&obj);
-  void Bind(Handle handle);
 
   void Start(EventLoop &loop);
   void Restart(EventLoop &loop);
@@ -45,7 +39,7 @@ class Timer {
 
  protected:
   void set_id(id_type id) { id_ = id; }
-  void Process(EventLoop &loop, Timer &timer, int mask);
+  //void Process(EventLoop &loop, Timer &timer, int mask);
 
  private:
   //default = 0
@@ -57,14 +51,8 @@ class Timer {
   unsigned long interval_;
 
   bool is_loop_;
-  Handle op_;
   task_data_t data_;
 };
-
-template<typename Func, typename Obj>
-void Timer::Bind(Func &&func, Obj &&obj) {
-  op_ = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-}
 
 
 #endif //NETFRAMZ_NF_EVENT_TIMER_IMPLV1_H_

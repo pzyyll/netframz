@@ -13,7 +13,7 @@ set(SOURCE_FILES main.cpp
         src/nf_event_task.cpp
         src/nf_event_timer.cpp
         src/nf_event_timer_mng.cpp
-        src/impl/nf_event_timer_impl.cpp)
+        src/nf_operator.cpp src/impl/nf_operator.h src/nf_event_timer_task.cpp src/nf_event_timer_task.h)
 add_executable(netframz ${SOURCE_FILES})
 
 #target_link_libraries(netframz -lboostsystem)

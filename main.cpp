@@ -1,6 +1,8 @@
 #include <iostream>
 #include <unistd.h>
 #include "src/nf_event.h"
+#include <boost/asio.hpp>
+#include <functional>
 
 void cbfunc(EventLoop &loop, Timer &task, int mask) {
   std::cout << "Timer no class: " <<  mask << std::endl;

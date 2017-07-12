@@ -17,10 +17,6 @@ Timer::Timer(const unsigned long expire, bool loop)
   gettimeofday(&begin_, NULL);
 }
 
-void Timer::Bind(Handle handle) {
-  op_ = handle;
-}
-
 void Timer::Start(EventLoop &loop) {
   loop.AddTimerTask(*this);
 }
@@ -47,9 +43,4 @@ struct timeval Timer::GetExpireTime() {
   }
 
   return expire;
-}
-
-void Timer::Process(EventLoop &loop, Timer &timer, int mask) {
-  if (op_)
-    op_(loop, timer, mask);
 }
