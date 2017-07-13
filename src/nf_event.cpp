@@ -98,7 +98,7 @@ void EventLoop::set_err_msg(std::string msg) {
   err_msg_ = msg;
 }
 
-int EventLoop::AddTimerTask(Timer &timer) {
+int EventLoop::AddTimerTask(Timer *timer) {
   return timer_mng_.AddTimer(timer);
 }
 
@@ -106,21 +106,21 @@ int EventLoop::DelTimerTask(const unsigned long id) {
   return timer_mng_.DelTimer(id);
 }
 
-int EventLoop::ResetTimerTask(Timer &timer) {
+int EventLoop::ResetTimerTask(Timer *timer) {
   return timer_mng_.ModTimer(timer);
 }
 
 void EventLoop::HandleAllTimerTask() {
-  std::vector<Timer> fire_timers;
+  std::vector<Timer*> fire_timers;
   timer_mng_.GetFiredTimers(fire_timers);
 
   for (int i = 0; i < (int)fire_timers.size(); ++i) {
-    Timer &timer = fire_timers[i];
+    Timer &timer = *fire_timers[i];
     if (timer.get_is_loop()) {
       struct timeval now;
       gettimeofday(&now, NULL);
       timer.set_begin(now);
-      AddTimerTask(timer);
+      AddTimerTask(&timer);
     }
     timer.Process(*this, timer, 0);
   }

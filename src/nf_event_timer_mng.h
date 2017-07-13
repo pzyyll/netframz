@@ -21,10 +21,11 @@ typedef TimerHeap<unsigned long> timers_type;
 
 class TimerMng {
  public:
-  typedef Timer                                         timer_type;
-  typedef std::unordered_map<unsigned long, timer_type> timer_map_t;
-  typedef std::vector<unsigned long>                    vec_type;
-  typedef vec_type::iterator                            vec_iterator;
+  typedef Timer                                          timer_type;
+  typedef std::vector<timer_type*>                       fires_vec_type;
+  typedef std::unordered_map<unsigned long, timer_type*> timer_map_t;
+  typedef std::vector<unsigned long>                     vec_type;
+  typedef vec_type::iterator                             vec_iterator;
 
   enum RET_STAT {
     FAIL = -1,
@@ -33,16 +34,16 @@ class TimerMng {
 
  public:
   TimerMng();
-  int AddTimer(timer_type &timer);
-  int ModTimer(timer_type &timer);
+  int AddTimer(timer_type *timer);
+  int ModTimer(timer_type *timer);
   int DelTimer(const unsigned long id);
-  void GetFiredTimers(std::vector<timer_type> &fired_timers);
+  void GetFiredTimers(fires_vec_type &fired_timers);
   unsigned long GetTimerSize();
   std::string GetErrMsg();
 
  private:
-  bool _FindTimer(const unsigned long id, timer_type *timer);
-  void _InnerAddTimer(timer_type &timer);
+  bool _FindTimer(const unsigned long id, timer_type **timer);
+  void _InnerAddTimer(timer_type *timer);
   int _DelTimer(const unsigned long id);
   unsigned long _GetDistId();
 
