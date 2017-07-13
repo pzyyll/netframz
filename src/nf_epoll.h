@@ -30,8 +30,6 @@ class Epoll {
 
  public:
   Epoll();
-  Epoll(const Epoll &rhs);
-  Epoll &operator=(const Epoll &rhs);
   ~Epoll();
 
   int Init(const int timeout = DEFAULT_TIMEOUT, const int maxevs = DEFAULT_MAXEVS);
@@ -43,6 +41,10 @@ class Epoll {
   int Resize(const size_t maxevs);
 
   std::string get_err();
+
+ private:
+  Epoll(const Epoll&);
+  Epoll& operator=(const Epoll&);
 
  private:
   int CtlEvent(int fd, int op, data_type data, int mask);

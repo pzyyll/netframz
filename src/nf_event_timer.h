@@ -17,6 +17,7 @@ class Timer;
 typedef std::function<void (EventLoop&, Timer&, int)> TimerCb;
 
 class Timer {
+  //破坏封装
   friend class TimerMng;
   friend class EventLoop;
   typedef TimerCb Handle;
@@ -47,6 +48,8 @@ class Timer {
   void Process(EventLoop &loop, Timer &timer, int mask);
 
  private:
+  EventLoop &loop_;
+
   //default = 0
   id_type id_;
 
@@ -55,7 +58,6 @@ class Timer {
   //ms, expire time = begin_ + interval_;
   unsigned long interval_;
 
-  EventLoop &loop_;
   bool is_loop_;
   Handle op_;
   task_data_t data_;

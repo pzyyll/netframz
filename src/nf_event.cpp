@@ -14,41 +14,63 @@ void EventLoop::Run() {
   do {
 
     if (HaveTimerTask()) HandleAllTimerTask();
-   
+
     if (HaveIOEvent()) HandleIOEvent();
 
   } while (!stop_ && (HaveIOEvent() || HaveTimerTask()));
 }
 
-int EventLoop::SetIOTask(IOTask &task) {
+int EventLoop::SetIOTask(IOTask *task) {
   int ret = RET::RET_SUCCESS;
 
-  IOTask find;
-  if (FindTask(task.get_fd(), find)) {
-    ret = poll_.ModEvent(task.get_fd(), task.get_fd(), task.get_mask());
-    if (ret != RET::RET_SUCCESS) {
-      set_err_msg(poll_.get_err());
-      return ret;
-    }
-    file_tasks_[task.get_fd()] = task;
-    return ret;
+  if (NULL == task) {
+    set_err_msg("task ptr is null");
+    return RET_FAIL;
   }
 
-  ret = poll_.AddEvent(task.get_fd(), task.get_fd(), task.get_mask());
+  if (FindTask(task->get_fd(), NULL)) {
+    set_err_msg("task is exit.");
+    return RET_FAIL;
+  }
+
+  ret = poll_.AddEvent(task->get_fd(), task->get_fd(), task->get_mask());
   if (ret != RET::RET_SUCCESS) {
     set_err_msg(poll_.get_err());
     return ret;
   }
-  file_tasks_[task.get_fd()] = task;
+  file_tasks_[task->get_fd()] = task;
 
-  return RET_SUCCESS;
+  return ret;
+}
+
+int EventLoop::ResetIOTask(IOTask *task) {
+    int ret = RET_SUCCESS;
+
+    if (NULL == task) {
+        set_err_msg("ResetIOTask: task ptr is null.");
+        return RET_FAIL;
+    }
+
+    int fd = task->get_fd();
+    if (!FindTask(fd, NULL)) {
+        set_err_msg("ResetIOTask: task is not exit.");
+        return RET_FAIL;
+    }
+
+    ret = poll_.ModEvent(fd, fd, task->get_mask());
+    if (ret != RET::RET_SUCCESS) {
+        set_err_msg(poll_.get_err());
+        return ret;
+    }
+    file_tasks_[fd] = task;
+
+    return ret;
 }
 
 int EventLoop::DelIOTask(int fd) {
   int ret = RET::RET_FAIL;
 
-  IOTask find;
-  if (FindTask(fd, find)) {
+  if (FindTask(fd, NULL)) {
     ret = poll_.DelEvent(fd);
     if (ret != RET::RET_SUCCESS) {
       set_err_msg(poll_.get_err());
@@ -68,10 +90,10 @@ void EventLoop::HandleIOEvent() {
   //todo asyn or limit
   while (!fires.empty() && nds > 0) {
     FiredEvent &fire = fires.back();
-    IOTask task;
-    if (FindTask(fire.id, task)) {
+    IOTask *task = NULL;
+    if (FindTask(fire.id, &task)) {
       //Callback
-      task.Process(*this, task, fire.mask);
+      task->Process(*this, *task, fire.mask);
     }
     fires.pop_back();
   }
@@ -81,10 +103,11 @@ bool EventLoop::HaveIOEvent() {
   return (!file_tasks_.empty() ? true : false);
 }
 
-bool EventLoop::FindTask(const int fd, IOTask &find) {
+bool EventLoop::FindTask(const int fd, IOTask **find) {
   TaskMapItr itr = file_tasks_.find(fd);
   if (itr != file_tasks_.end()) {
-     find = itr->second;
+     if (find)
+       *find = itr->second;
      return true;
   }
   return false;

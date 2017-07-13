@@ -5,7 +5,7 @@
 void cbfunc(EventLoop &loop, IOTask &task, int mask) {
   std::cout << task.get_fd() << std::endl;
   std::cout << mask << std::endl;
-  task.Stop(loop);
+  task.Stop();
 }
 
 class Cb {
@@ -14,7 +14,7 @@ class Cb {
          std::cout << task.get_fd() << std::endl;
          std::cout << mask << std::endl;
          std::cout << "i=" << i << std::endl;
-         task.Stop(loop);
+         task.Stop();
      }
 
      int i;
@@ -22,15 +22,15 @@ class Cb {
 
 int main() {
   EventLoop loop;
-  IOTask task(STDIN_FILENO, EV_POLLIN);
+  IOTask task(loop, STDIN_FILENO, EV_POLLIN);
   task.Bind(cbfunc);
-  task.Start(loop);
+  task.Start();
 
   Cb cb;
   cb.i = 33;
-  IOTask taskout(STDOUT_FILENO, EV_POLLOUT);
+  IOTask taskout(loop, STDOUT_FILENO, EV_POLLOUT);
   taskout.Bind(&Cb::CbFunc, cb);
-  taskout.Start(loop);
+  taskout.Start();
   loop.Run();
   return 0;
 }

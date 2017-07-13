@@ -1,6 +1,6 @@
 //
 // @Created by CaiZhili on 2017/6/30.
-// @bref 
+// @bref
 //
 
 #ifndef NETFRAMZ_NF_EVENT_TASK_H
@@ -23,14 +23,20 @@ class IOTask {
   typedef FileRwCb Handle;
 
  public:
-  IOTask();
-  IOTask(int fd, int mask);
-  IOTask(int fd, int mask, Handle op);
+  IOTask(EventLoop &loop);
+  IOTask(EventLoop &loop, const int fd, const int mask);
+  IOTask(EventLoop &loop, const int fd, const int mask, Handle op);
+  ~IOTask();
 
   template <typename Func, typename Obj>
   void Bind(Func &&func, Obj &&obj);
   void Bind(Handle handle);
 
+  void Start();
+  void Restart();
+  void Stop();
+
+ public:
   void set_fd(int fd);
   int get_fd();
 
@@ -40,13 +46,11 @@ class IOTask {
   void set_data(task_data_t data);
   task_data_t get_data();
 
-  void Start(EventLoop &loop);
-  void Stop(EventLoop &loop);
-
  protected:
   void Process(EventLoop &loop, IOTask &io_task, int mask);
 
  private:
+  EventLoop &loop_;
   int fd_;
   int mask_;
   Handle op_;

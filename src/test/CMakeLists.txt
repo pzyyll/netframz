@@ -19,6 +19,7 @@ set(SOURCE_FILES
 
 add_executable(iotask iotask.cpp ${SOURCE_FILES})
 add_executable(timer timer.cpp ${SOURCE_FILES})
+add_executable(echo_server echo_server.cpp ${SOURCE_FILES})
 
 #target_link_libraries(netframz -lboostsystem)
 target_link_libraries(iotask -lglog)
