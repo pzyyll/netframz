@@ -23,16 +23,16 @@ class Timer {
  public:
   typedef unsigned long long id_type;
  public:
-  Timer();
-  Timer(const unsigned long expire, bool loop);
+  Timer(EventLoop &loop, const unsigned long expire, bool is_loop);
+  ~Timer();
 
   template <typename Func, typename Obj>
   void Bind(Func &&func, Obj &&obj);
   void Bind(Handle handle);
 
-  void Start(EventLoop &loop);
-  void Restart(EventLoop &loop);
-  void Stop(EventLoop &loop);
+  void Start();
+  void Restart();
+  void Stop();
 
   struct timeval GetExpireTime();
 
@@ -55,6 +55,7 @@ class Timer {
   //ms, expire time = begin_ + interval_;
   unsigned long interval_;
 
+  EventLoop &loop_;
   bool is_loop_;
   Handle op_;
   task_data_t data_;

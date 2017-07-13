@@ -1,36 +1,35 @@
 //
 // @Created by CaiZhili on 2017/7/6.
-// @bref 
+// @bref
 //
 
 #include <sys/time.h>
 #include "nf_event.h"
 #include "nf_event_timer.h"
 
-
-Timer::Timer() : id_(0), interval_(0), is_loop_(0) {
+Timer::Timer(EventLoop &loop, const unsigned long expire, bool is_loop)
+    : loop_(loop), id_(0), interval_(expire), is_loop_(is_loop) {
   gettimeofday(&begin_, NULL);
 }
 
-Timer::Timer(const unsigned long expire, bool loop)
-    : id_(0), interval_(expire), is_loop_(loop) {
-  gettimeofday(&begin_, NULL);
+Timer::~Timer() {
+  Stop();
 }
 
 void Timer::Bind(Handle handle) {
   op_ = handle;
 }
 
-void Timer::Start(EventLoop &loop) {
-  loop.AddTimerTask(*this);
+void Timer::Start() {
+  loop_.AddTimerTask(this);
 }
 
-void Timer::Restart(EventLoop &loop) {
-  loop.ResetTimerTask(*this);
+void Timer::Restart() {
+  loop_.ResetTimerTask(this);
 }
 
-void Timer::Stop(EventLoop &loop) {
-  loop.DelTimerTask(id_);
+void Timer::Stop() {
+  loop_.DelTimerTask(id_);
 }
 
 struct timeval Timer::GetExpireTime() {
