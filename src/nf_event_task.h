@@ -14,24 +14,20 @@ class EventLoop;
 
 class IOTask;
 
-typedef std::function<void (EventLoop&, IOTask&, int)> FileRwCb;
 
 class IOTask {
   friend class EventLoop;
 
  public:
-  typedef FileRwCb Handle;
+  typedef std::function<void (EventLoop&, IOTask&, int)> handle_t;
 
  public:
   IOTask(EventLoop &loop);
   IOTask(EventLoop &loop, const int fd, const int mask);
-  IOTask(EventLoop &loop, const int fd, const int mask, Handle op);
+  IOTask(EventLoop &loop, const int fd, const int mask, handle_t op);
   ~IOTask();
 
-  template <typename Func, typename Obj>
-  void Bind(Func &&func, Obj &&obj);
-  void Bind(Handle handle);
-
+  void Bind(handle_t handle);
   void Start();
   void Restart();
   void Stop();
@@ -53,13 +49,8 @@ class IOTask {
   EventLoop &loop_;
   int fd_;
   int mask_;
-  Handle op_;
+  handle_t op_;
   task_data_t data_;
 };
-
-template<typename Func, typename Obj>
-void IOTask::Bind(Func &&func, Obj &&obj) {
-  op_ = std::bind(func, obj, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-}
 
 #endif //NETFRAMZ_NF_EVENT_TASK_H

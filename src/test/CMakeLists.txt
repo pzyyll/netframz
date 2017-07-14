@@ -13,7 +13,8 @@ set(SOURCE_FILES
         ../nf_event.cpp
         ../nf_epoll.cpp
         ../nf_event_task.cpp
-        ../nf_event_timer.cpp
+        ../nf_event_timer_task.cpp
+        ../nf_event_timer_impl.cpp
         ../nf_event_timer_mng.cpp
         )
 

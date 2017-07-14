@@ -16,7 +16,7 @@ IOTask::IOTask(EventLoop &loop, const int fd, const int mask)
 
 }
 
-IOTask::IOTask(EventLoop &loop, const int fd, const int mask, Handle op)
+IOTask::IOTask(EventLoop &loop, const int fd, const int mask, handle_t op)
     : loop_(loop), fd_(fd), mask_(mask), op_(op) {
 
 }
@@ -25,7 +25,7 @@ IOTask::~IOTask() {
   loop_.DelIOTask(fd_);
 }
 
-void IOTask::Bind(IOTask::Handle handle) {
+void IOTask::Bind(handle_t handle) {
   op_ = handle;
 }
 

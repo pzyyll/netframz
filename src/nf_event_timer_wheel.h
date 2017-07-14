@@ -12,7 +12,6 @@
 #include <vector>
 
 #include <sys/time.h>
-#include "nf_event_timer.h"
 
 #define NFTVN_BITS (6)
 #define NFTVR_BITS (8)

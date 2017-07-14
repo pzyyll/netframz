@@ -9,7 +9,7 @@
 
 #include "nf_event.h"
 #include "nf_event_task.h"
-#include "nf_event_timer.h"
+#include "nf_event_timer_task.h"
 
 using namespace std;
 
@@ -76,7 +76,7 @@ void write_cb(EventLoop &loop, IOTask &task, int mask) {
 
 }
 
-void tick_cb(EventLoop &loop, Timer &timer, int mask) {
+void tick_cb(EventLoop &loop, TimerTask &timer, int mask) {
 
 }
 

@@ -5,9 +5,14 @@
 #include <type_traits>
 
 #include "nf_event.h"
+#include "nf_event_timer_impl.h"
 
 EventLoop::EventLoop() : stop_(false) {
   poll_.Init();
+}
+
+EventLoop::~EventLoop() {
+
 }
 
 void EventLoop::Run() {
@@ -20,7 +25,7 @@ void EventLoop::Run() {
   } while (!stop_ && (HaveIOEvent() || HaveTimerTask()));
 }
 
-int EventLoop::SetIOTask(IOTask *task) {
+int EventLoop::SetIOTask(iotask_pointer task) {
   int ret = RET::RET_SUCCESS;
 
   if (NULL == task) {
@@ -43,7 +48,7 @@ int EventLoop::SetIOTask(IOTask *task) {
   return ret;
 }
 
-int EventLoop::ResetIOTask(IOTask *task) {
+int EventLoop::ResetIOTask(iotask_pointer task) {
     int ret = RET_SUCCESS;
 
     if (NULL == task) {
@@ -103,7 +108,7 @@ bool EventLoop::HaveIOEvent() {
   return (!file_tasks_.empty() ? true : false);
 }
 
-bool EventLoop::FindTask(const int fd, IOTask **find) {
+bool EventLoop::FindTask(const int fd, iotask_pointer *find) {
   TaskMapItr itr = file_tasks_.find(fd);
   if (itr != file_tasks_.end()) {
      if (find)
@@ -121,7 +126,7 @@ void EventLoop::set_err_msg(std::string msg) {
   err_msg_ = msg;
 }
 
-int EventLoop::AddTimerTask(Timer *timer) {
+int EventLoop::AddTimerTask(timer_pointer timer) {
   return timer_mng_.AddTimer(timer);
 }
 
@@ -129,23 +134,23 @@ int EventLoop::DelTimerTask(const unsigned long id) {
   return timer_mng_.DelTimer(id);
 }
 
-int EventLoop::ResetTimerTask(Timer *timer) {
+int EventLoop::ResetTimerTask(timer_pointer timer) {
   return timer_mng_.ModTimer(timer);
 }
 
 void EventLoop::HandleAllTimerTask() {
-  std::vector<Timer*> fire_timers;
+  std::vector<TimerImpl*> fire_timers;
   timer_mng_.GetFiredTimers(fire_timers);
 
   for (int i = 0; i < (int)fire_timers.size(); ++i) {
-    Timer &timer = *fire_timers[i];
+    TimerImpl &timer = *fire_timers[i];
     if (timer.get_is_loop()) {
       struct timeval now;
       gettimeofday(&now, NULL);
       timer.set_begin(now);
       AddTimerTask(&timer);
     }
-    timer.Process(*this, timer, 0);
+    timer.Process(*this, 0);
   }
 }
 

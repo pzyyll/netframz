@@ -6,8 +6,6 @@
 #ifndef NETFRAMZ_NF_EVENT_H
 #define NETFRAMZ_NF_EVENT_H
 
-//#include <sys/epoll.h>
-
 #include <unordered_map>
 #include <queue>
 #include <string>
@@ -21,27 +19,30 @@
 
 class EventLoop {
   friend class IOTask;
-  friend class Timer;
+  friend class TimerTask;
 
+ public:
+  typedef IOTask* iotask_pointer;
+  typedef TimerImpl* timer_pointer;
   typedef std::unordered_map<int, IOTask*> TaskMap;
   typedef TaskMap::iterator TaskMapItr;
 
  public:
   EventLoop();
+  ~EventLoop();
 
   void Run();
 
   const std::string& get_err_msg();
 
  protected:
-  int SetIOTask(IOTask *task);
-  int ResetIOTask(IOTask *task);
+  int SetIOTask(iotask_pointer task);
+  int ResetIOTask(iotask_pointer task);
   int DelIOTask(int fd);
 
-  //todo add timer_data
-  int AddTimerTask(Timer *timer);
+  int AddTimerTask(timer_pointer timer);
   int DelTimerTask(const unsigned long id);
-  int ResetTimerTask(Timer *timer);
+  int ResetTimerTask(timer_pointer timer);
 
  private:
   void HandleIOEvent();

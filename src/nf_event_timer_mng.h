@@ -9,7 +9,6 @@
 #include <vector>
 #include <unordered_map>
 #include <string>
-#include "nf_event_timer.h"
 
 #ifdef NF_TIMER_WHEEL
 #include "nf_event_timer_wheel.h"
@@ -19,9 +18,11 @@ typedef TimerWheel<unsigned long> timers_type;
 typedef TimerHeap<unsigned long> timers_type;
 #endif //NF_TIMER_WHEEL
 
+class TimerImpl;
+
 class TimerMng {
  public:
-  typedef Timer                                          timer_type;
+  typedef TimerImpl/*Timer*/                             timer_type;
   typedef std::vector<timer_type*>                       fires_vec_type;
   typedef std::unordered_map<unsigned long, timer_type*> timer_map_t;
   typedef std::vector<unsigned long>                     vec_type;

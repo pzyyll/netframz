@@ -25,8 +25,8 @@ enum EVSTAT {
 struct task_data_t {
   union {
     void *ptr;
-    int id;
-    unsigned long ul;
+    int fd;
+    unsigned long id;
   } data;
 };
 

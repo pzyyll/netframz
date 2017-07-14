@@ -5,6 +5,7 @@
 
 #include <cstdio>
 #include "nf_event_timer_mng.h"
+#include "nf_event_timer_impl.h"
 
 #define return_val_fail(x, ret) \
 if (!(x)) { \

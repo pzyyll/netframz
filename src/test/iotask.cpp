@@ -1,6 +1,9 @@
 #include <iostream>
+#include <functional>
 #include <unistd.h>
 #include "nf_event.h"
+
+using namespace std::placeholders;
 
 void cbfunc(EventLoop &loop, IOTask &task, int mask) {
   std::cout << task.get_fd() << std::endl;
@@ -29,7 +32,7 @@ int main() {
   Cb cb;
   cb.i = 33;
   IOTask taskout(loop, STDOUT_FILENO, EV_POLLOUT);
-  taskout.Bind(&Cb::CbFunc, cb);
+  taskout.Bind(std::bind(&Cb::CbFunc, cb, _1, _2, _3));
   taskout.Start();
   loop.Run();
   return 0;
