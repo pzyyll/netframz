@@ -16,14 +16,21 @@ class EventLoop;
 class TimerTask {
   typedef TimerImpl impl_type;
  public:
-  typedef std::function<void (EventLoop&, TimerTask&, int)> handle_t;
+  typedef std::function<void (EventLoop*, task_data_t, int)> handle_t;
  public:
-  TimerTask(EventLoop &loop, const unsigned long expire, bool is_loop);
+  TimerTask(EventLoop &loop, const unsigned long interval, bool is_loop);
   ~TimerTask();
 
+  // 绑定回调函数
   void Bind(handle_t handle);
+
+  // 开始定时器
   void Start();
+
+  // 重新开始
   void Restart();
+
+  // 提前停止
   void Stop();
 
   void SetPrivateData(task_data_t data);

@@ -28,7 +28,6 @@ void TimerTask::Start() {
     struct timeval now = {0, 0};
     gettimeofday(&now, NULL);
     impl_->set_begin(now);
-    impl_->set_ptask(this);
 
     loop_.AddTimerTask(impl_);
 }
@@ -37,7 +36,6 @@ void TimerTask::Restart() {
     struct timeval now = {0, 0};
     gettimeofday(&now, NULL);
     impl_->set_begin(now);
-    impl_->set_ptask(this);
 
     loop_.ResetTimerTask(impl_);
 }

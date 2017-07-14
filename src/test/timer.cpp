@@ -11,18 +11,15 @@ struct PriData {
     unsigned long expired;
 } data_test;
 
-void cbfunc(EventLoop &loop, TimerTask &task, int mask) {
+void cbfunc(EventLoop *loop, task_data_t data, int mask) {
   std::cout << "Timer no class: " <<  mask << std::endl;
 }
 
 class Cb {
  public:
-  void cbfunc(EventLoop &loop, TimerTask &task, int mask) {
-    std::cout << "Timer: " <<  mask << i++ << std::endl;
-    if (105 == i)
-      task.Stop();
+  void cbfunc(EventLoop *loop, task_data_t data, int mask) {
 
-    PriData *d = (PriData *)(task.GetPrivateData().data.ptr);
+    PriData *d = (PriData *)data.data.ptr;
     std::cout << "pri: " << d->fd << std::endl;
   }
 
@@ -48,7 +45,7 @@ int main() {
 
   Cb cb4;
   cb4.i = 1000;
-  TimerTask timer4(loop, 4000, 1);
+  TimerTask timer4(loop, 4000, 0);
   timer4.Bind(std::bind(&Cb::cbfunc, cb4, _1, _2, _3));
   task_data_t data4;
   data_test.fd = 13;

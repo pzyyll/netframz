@@ -150,7 +150,7 @@ void EventLoop::HandleAllTimerTask() {
       timer.set_begin(now);
       AddTimerTask(&timer);
     }
-    timer.Process(*this, 0);
+    timer.Process(this, 0);
   }
 }
 
