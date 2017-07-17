@@ -8,7 +8,7 @@
 #include <signal.h>
 
 #include "nf_event.h"
-#include "nf_event_task.h"
+#include "nf_event_iotask.h"
 #include "nf_event_timer_task.h"
 
 using namespace std;
@@ -62,11 +62,15 @@ static int InitServers() {
     return listen_fd;
 }
 
-void read_cb(EventLoop &loop, IOTask &task, int mask) {
-    int cli_fd = task.get_fd();
+void read_cb(EventLoop *loop, task_data_t data, int mask) {
+    int cli_fd = data.data.fd;
     if (mask & EVSTAT::EV_RDHUP) {
         cout << "cli exit: " << cli_fd << endl;
-        task.Stop();
+        IOTask *task = task_map[cli_fd];
+        task->Stop();
+        close(cli_fd);
+        delete task;
+        task = NULL;
         task_map.erase(cli_fd);
         return;
     }
@@ -93,7 +97,7 @@ void read_cb(EventLoop &loop, IOTask &task, int mask) {
     last_time_map[cli_fd] = now.tv_sec;
 }
 
-void write_cb(EventLoop &loop, IOTask &task, int mask) {
+void write_cb(EventLoop *loop, task_data_t *task, int mask) {
 
 }
 
@@ -130,18 +134,23 @@ void tick_cb(EventLoop *loop, task_data_t data, int mask) {
     timer->Restart();
 }
 
-void accept_cb(EventLoop &loop, IOTask &task, int mask) {
+void accept_cb(EventLoop *loop, task_data_t data, int mask) {
+    IOTask &task = *((IOTask *)data.data.ptr);
+
     struct sockaddr_in addr;
     bzero(&addr, sizeof(addr));
     socklen_t len = sizeof(addr);
-    int cli_fd = accept(task.get_fd(), (struct sockaddr *)&addr, &len);
+    int cli_fd = accept(task.GetFd(), (struct sockaddr *)&addr, &len);
     if (cli_fd < 0) {
         printf ("accept fail cli_fd %d\n", cli_fd);
         return;
     }
 
     printf("cli fd : %d \n", cli_fd);
-    IOTask *cli_task = new IOTask(loop, cli_fd, EVSTAT::EV_READABLE);
+    IOTask *cli_task = new IOTask(*loop, cli_fd, EVSTAT::EV_READABLE);
+    task_data_t iodata;
+    iodata.data.fd = cli_fd;
+    cli_task->SetPrivateData(iodata);
     cli_task->Bind(read_cb);
     cli_task->Start();
     task_map[cli_fd] = cli_task;
@@ -150,14 +159,15 @@ void accept_cb(EventLoop &loop, IOTask &task, int mask) {
     gettimeofday(&now, NULL);
     last_time_map[cli_fd] = now.tv_sec;
 
-    TimerTask *timer = new TimerTask(loop, 10000, 0);
+    // Timer
+    TimerTask *timer = new TimerTask(*loop, 10000, 0);
     timer->Bind(tick_cb);
     TimerPriData *sdata = new TimerPriData;
     sdata->fd = cli_fd;
     sdata->timer = timer;
-    task_data_t data;
-    data.data.ptr = sdata;
-    timer->SetPrivateData(data);
+    task_data_t timerdata;
+    timerdata.data.ptr = sdata;
+    timer->SetPrivateData(timerdata);
     timer->Start();
 }
 
@@ -172,6 +182,9 @@ int main(int argc, char **argv) {
 
     EventLoop loop;
     IOTask accept_task(loop, fd, EVSTAT::EV_READABLE);
+    task_data_t data;
+    data.data.ptr = &accept_task;
+    accept_task.SetPrivateData(data);
     accept_task.Bind(accept_cb);
     accept_task.Start();
 

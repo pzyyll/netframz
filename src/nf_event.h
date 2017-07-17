@@ -14,17 +14,16 @@
 #include "nf_epoll.h"
 #endif
 
-#include "nf_event_task.h"
+//#include "nf_event_task.h"
 #include "nf_event_timer_mng.h"
 
-class EventLoop {
-  friend class IOTask;
-  friend class TimerTask;
+class IOTaskImpl;
 
+class EventLoop {
  public:
-  typedef IOTask* iotask_pointer;
+  typedef IOTaskImpl* iotask_pointer;
   typedef TimerImpl* timer_pointer;
-  typedef std::unordered_map<int, IOTask*> TaskMap;
+  typedef std::unordered_map<int, iotask_pointer> TaskMap;
   typedef TaskMap::iterator TaskMapItr;
 
  public:
@@ -35,7 +34,7 @@ class EventLoop {
 
   const std::string& get_err_msg();
 
- protected:
+// protected:
   int SetIOTask(iotask_pointer task);
   int ResetIOTask(iotask_pointer task);
   int DelIOTask(int fd);
@@ -47,7 +46,7 @@ class EventLoop {
  private:
   void HandleIOEvent();
   bool HaveIOEvent();
-  bool FindTask(const int fd, IOTask **find);
+  bool FindTask(const int fd, iotask_pointer *find);
 
   void HandleAllTimerTask();
   bool HaveTimerTask();

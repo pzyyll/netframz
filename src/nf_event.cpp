@@ -6,6 +6,7 @@
 
 #include "nf_event.h"
 #include "nf_event_timer_impl.h"
+#include "nf_event_iotask_impl.h"
 
 EventLoop::EventLoop() : stop_(false) {
   poll_.Init();
@@ -95,10 +96,10 @@ void EventLoop::HandleIOEvent() {
   //todo asyn or limit
   while (!fires.empty() && nds > 0) {
     FiredEvent &fire = fires.back();
-    IOTask *task = NULL;
+    iotask_pointer task = NULL;
     if (FindTask(fire.id, &task)) {
       //Callback
-      task->Process(*this, *task, fire.mask);
+      task->Process(this, fire.mask);
     }
     fires.pop_back();
   }
