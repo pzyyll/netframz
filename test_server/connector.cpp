@@ -6,12 +6,13 @@
 #include <sys/time.h>
 #include "connector.h"
 
-Connector::Connector(EventLoop &loop, int fd)
-    : is_close_(0),
+Connector::Connector(unsigned long uid, EventLoop &loop, int fd)
+    : uid_(uid),
+      is_close_(0),
       last_act_time_(0),
       recv_buf_(DEFAULT_BUFF_SIZE),
       send_buf_(DEFAULT_BUFF_SIZE),
-      task_(new IOTask(fd, 0)){
+      task_(new IOTask(loop, fd, 0)){
     struct timeval now;
     gettimeofday(&now, NULL);
     last_act_time_ = now.tv_sec;

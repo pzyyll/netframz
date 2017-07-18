@@ -39,7 +39,7 @@ public:
     };
 
 public:
-    Connector(EventLoop &loop, int fd);
+    Connector(unsigned long uid, EventLoop &loop, int fd);
     virtual ~Connector();
 
     ssize_t Write(const char *buff, const size_t size);
@@ -59,6 +59,7 @@ protected:
     Connector& operator=(const Connector&);
 
 private:
+    unsigned long uid_;
     bool is_close_;
 
     //second
