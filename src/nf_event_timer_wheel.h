@@ -48,21 +48,21 @@ class TimerWheel {
  public:
   void Init() {
     base_.size = 0;
-    base_.clk = _GetDeafaultJiffers();
+    base_.clk = GetDeafaultJiffers();
   }
 
   int AddTimer(const struct timeval &expire, const tdata_type &timer_data) {
-    unsigned long expires_clk = _GetJiffersFromTime(expire);
+    unsigned long expires_clk = GetJiffersFromTime(expire);
     timer_node_t tnode = {expires_clk, timer_data};
 
-    _InnerAddTimer(tnode);
+    InnerAddTimer(tnode);
 
     return 0;
   }
 
   //放到主循环去获取，粒度依据循环的精度，最小是 PRECISION_USEC
   int GetTimer(timer_vec_type &all_timer) {
-    return _TimerRun(all_timer, _GetDeafaultJiffers());
+    return TimerRun(all_timer, GetDeafaultJiffers());
   }
 
   unsigned long GetTimerSize() {
@@ -70,58 +70,58 @@ class TimerWheel {
   }
 
  private:
-  void _InnerAddTimer(const timer_node_t &tnode) {
+  void InnerAddTimer(const timer_node_t &tnode) {
     timer_list_t *vec = NULL;
 
-    if ((vec = _GetTimerListVec(tnode.expires)) != NULL) {
+    if ((vec = GetTimerListVec(tnode.expires)) != NULL) {
       vec->push_back(tnode);
       ++base_.size;
     }
   }
 
-  timer_list_t* _GetTimerListVec(const unsigned long expires) {
+  timer_list_t* GetTimerListVec(const unsigned long expires) {
     unsigned long expires_clk = expires;
     unsigned long delta = expires_clk - base_.clk;
     timer_list_t *vec = NULL;
 
     if (delta < (1 << LV_SHIFT(0))) {
-      unsigned long idx = _IndexOfTvn(expires_clk, 0);    //expires_clk & NFTVR_MASK;
+      unsigned long idx = IndexOfTvn(expires_clk, 0);    //expires_clk & NFTVR_MASK;
       vec = base_.tv.vec + idx;
     } else if (delta < (1 << LV_SHIFT(1))) {
-      unsigned long idx = _IndexOfTvn(expires_clk, 1);    //(expires_clk >> LV_SHIFT(0)) & NFTVN_MASK;
+      unsigned long idx = IndexOfTvn(expires_clk, 1);    //(expires_clk >> LV_SHIFT(0)) & NFTVN_MASK;
       vec = base_.tv1.vec + idx;
     } else if (delta < (1 << LV_SHIFT(2))) {
-      unsigned long idx = _IndexOfTvn(expires_clk, 2);    //(expires_clk >> LV_SHIFT(1)) & NFTVN_MASK;
+      unsigned long idx = IndexOfTvn(expires_clk, 2);    //(expires_clk >> LV_SHIFT(1)) & NFTVN_MASK;
       vec = base_.tv2.vec + idx;
     } else if (delta < (1 << LV_SHIFT(3))) {
-      unsigned long idx = _IndexOfTvn(expires_clk, 3);    //(expires_clk >> LV_SHIFT(2)) & NFTVN_MASK;
+      unsigned long idx = IndexOfTvn(expires_clk, 3);    //(expires_clk >> LV_SHIFT(2)) & NFTVN_MASK;
       vec = base_.tv3.vec + idx;
     } else if ((long)delta < 0) {
-      vec = base_.tv.vec + _IndexOfTvn(base_.clk, 0);     //(base_.clk & NFTVR_MASK);
+      vec = base_.tv.vec + IndexOfTvn(base_.clk, 0);     //(base_.clk & NFTVR_MASK);
     } else {
       if (delta > 0xffffffffUL) {
         delta = 0xffffffffUL;
         expires_clk = delta + base_.clk;
       }
 
-      unsigned long idx = _IndexOfTvn(expires_clk, 4);
+      unsigned long idx = IndexOfTvn(expires_clk, 4);
       vec = base_.tv4.vec + idx;
     }
 
     return vec;
   }
 
-  int _TimerRun(timer_vec_type &all_timer, unsigned long jiffers) {
+  int TimerRun(timer_vec_type &all_timer, unsigned long jiffers) {
 
     while ((long)jiffers >= (long)base_.clk) {
       timer_list_t work_list;
-      unsigned int tvr_idx = _IndexOfTvn(base_.clk, 0);
+      unsigned int tvr_idx = IndexOfTvn(base_.clk, 0);
 
       if (!tvr_idx &&
-          !_Cascade(&base_.tv1, _IndexOfTvn(base_.clk, 1)) &&
-          !_Cascade(&base_.tv2, _IndexOfTvn(base_.clk, 2)) &&
-          !_Cascade(&base_.tv3, _IndexOfTvn(base_.clk, 3)))
-        _Cascade(&base_.tv4, _IndexOfTvn(base_.clk, 4));
+          !Cascade(&base_.tv1, IndexOfTvn(base_.clk, 1)) &&
+          !Cascade(&base_.tv2, IndexOfTvn(base_.clk, 2)) &&
+          !Cascade(&base_.tv3, IndexOfTvn(base_.clk, 3)))
+        Cascade(&base_.tv4, IndexOfTvn(base_.clk, 4));
 
       ++base_.clk;
 
@@ -138,11 +138,11 @@ class TimerWheel {
     return all_timer.size();
   }
 
-  int _Cascade(nftv_t *tv, int index) {
+  int Cascade(nftv_t *tv, int index) {
     //当节拍走完当前层的一轮时间后重新搬迁下一层中 tick 链中的定时器。
     timer_list_t &tv_list = tv->vec[index];
     for (tl_iterator itr = tv_list.begin(); itr != tv_list.end(); ++itr) {
-      _InnerAddTimer(*itr);
+      InnerAddTimer(*itr);
     }
     //统一清除搬迁后的定时器链。
     tv_list.clear();
@@ -150,7 +150,7 @@ class TimerWheel {
     return index;
   }
 
-  static inline unsigned long _IndexOfTvn(unsigned long clk, unsigned int n) {
+  static inline unsigned long IndexOfTvn(unsigned long clk, unsigned int n) {
     if (n <= 0) {
       return (clk & NFTVR_MASK);
     } else if (n <= 4) {
@@ -160,15 +160,15 @@ class TimerWheel {
     return (unsigned long)0-1;
   }
 
-  static inline unsigned long _GetJiffersFromTime(const struct timeval &t) {
+  static inline unsigned long GetJiffersFromTime(const struct timeval &t) {
     return (t.tv_sec * (unsigned long)(1e6 / PRECISION_USEC)
         + t.tv_usec / (unsigned long)PRECISION_USEC);
   }
 
-  static inline unsigned long _GetDeafaultJiffers() {
+  static inline unsigned long GetDeafaultJiffers() {
     struct timeval now;
     gettimeofday(&now, NULL);
-    return _GetJiffersFromTime(now);
+    return GetJiffersFromTime(now);
   }
 
  private:

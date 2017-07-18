@@ -10,10 +10,11 @@ set(CMAKE_CXX_STANDARD 11)
 set(SOURCE_FILES main.cpp
         src/nf_event.cpp
         src/nf_epoll.cpp
-        src/nf_event_task.cpp
-        src/nf_event_timer.cpp
         src/nf_event_timer_mng.cpp
-        src/nf_operator.cpp src/impl/nf_operator.h src/nf_event_timer_task.cpp src/nf_event_timer_task.h)
+        src/nf_event_timer_task.cpp
+        src/nf_event_iotask.cpp
+        src/nf_event_iotask_impl.cpp
+        src/nf_event_timer_impl.cpp)
 add_executable(netframz ${SOURCE_FILES})
 
 #target_link_libraries(netframz -lboostsystem)
