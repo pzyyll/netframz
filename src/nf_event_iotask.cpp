@@ -7,8 +7,8 @@
 #include "nf_event.h"
 #include "nf_event_iotask_impl.h"
 
-IOTask::IOTask(EventLoop &loop)
-    : loop_(loop), pimpl_(new IOTaskImpl(-1, 0)) {
+IOTask::IOTask(EventLoop &loop, const int fd)
+    : loop_(loop), pimpl_(new IOTaskImpl(fd, 0)) {
 
 }
 

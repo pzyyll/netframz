@@ -28,24 +28,31 @@ struct Buffer {
 };
 
 class Connector {
+    static const unsigned long DEFAULT_BUFF_SIZE = 1024000;
 public:
     typedef unsigned long size_t;
+    typedef long ssize_t;
     typedef std::function<void (EventLoop *, task_data_t, int)> handle_t;
 
+    enum STAT {
+        WBUFF_LIMIT = -1001,
+    };
+
 public:
-    Connector(EventLoop &loop, int fd, handle_t w, handle_t r);
+    Connector(EventLoop &loop, int fd);
     virtual ~Connector();
 
-    int OnTimeOut(const unsigned long time_limit, const struct timeval &now);
-    size_t Write(const char *buff, const size_t size);
-    size_t Read(char *buff, const size_t size);
+    ssize_t Write(const char *buff, const size_t size);
+    ssize_t Read(char *buff, const size_t size);
 
-    size_t WriteRemain();
+    ssize_t WriteRemain();
 
-    IOTask& GetIOTask();
 
     //close the connect
     void Close();
+    int OnTimeOut(const unsigned long time_limit, const struct timeval &now);
+
+    IOTask& GetIOTask();
 
 protected:
     Connector(const Connector&);
@@ -59,7 +66,7 @@ private:
     Buffer recv_buf_;
     Buffer send_buf_;
     IOTask *task_;
-    handle_t w, r;
+    //handle_t w, r;
 };
 
 #endif //NF_TEST_CONNETOR_H

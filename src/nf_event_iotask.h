@@ -19,7 +19,7 @@ class IOTask {
   typedef IOTaskImpl impl_type;
 
  public:
-  IOTask(EventLoop &loop);
+  IOTask(EventLoop &loop, const int fd);
   IOTask(EventLoop &loop, const int fd, const int mask);
   IOTask(EventLoop &loop, const int fd, const int mask, handle_t op);
   ~IOTask();
