@@ -148,8 +148,7 @@ void accept_cb(EventLoop *loop, task_data_t data, int mask) {
 
     printf("cli fd : %d \n", cli_fd);
     IOTask *cli_task = new IOTask(*loop, cli_fd, EVSTAT::EV_READABLE);
-    task_data_t iodata;
-    iodata.data.fd = cli_fd;
+    task_data_t iodata = { .data = {.fd = cli_fd} };
     cli_task->SetPrivateData(iodata);
     cli_task->Bind(read_cb);
     cli_task->Start();
@@ -165,8 +164,7 @@ void accept_cb(EventLoop *loop, task_data_t data, int mask) {
     TimerPriData *sdata = new TimerPriData;
     sdata->fd = cli_fd;
     sdata->timer = timer;
-    task_data_t timerdata;
-    timerdata.data.ptr = sdata;
+    task_data_t timerdata = { .data = {.ptr = sdata} };
     timer->SetPrivateData(timerdata);
     timer->Start();
 }
@@ -182,8 +180,7 @@ int main(int argc, char **argv) {
 
     EventLoop loop;
     IOTask accept_task(loop, fd, EVSTAT::EV_READABLE);
-    task_data_t data;
-    data.data.ptr = &accept_task;
+    task_data_t data = { .data = {.ptr = &accept_task} };
     accept_task.SetPrivateData(data);
     accept_task.Bind(accept_cb);
     accept_task.Start();

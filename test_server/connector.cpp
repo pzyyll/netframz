@@ -4,23 +4,24 @@
 //
 #include <ctime>
 #include <sys/time.h>
+
 #include "connector.h"
 
-Connector::Connector(unsigned long uid, EventLoop &loop, int fd)
-    : uid_(uid),
+Connector::Connector(EventLoop &loop, int fd)
+    : cid_(id_cnt_++),
       is_close_(0),
       last_act_time_(0),
       recv_buf_(DEFAULT_BUFF_SIZE),
       send_buf_(DEFAULT_BUFF_SIZE),
-      task_(new IOTask(loop, fd, 0)){
+      task_(new IOTask(loop, fd, 0)) {
     struct timeval now;
     gettimeofday(&now, NULL);
     last_act_time_ = now.tv_sec;
 }
 
-Connector::Connector() {
+Connector::~Connector() {
     if (!is_close_) {
-        //tode close connect
+        //todo close connect
         Close();
     }
 
@@ -29,15 +30,28 @@ Connector::Connector() {
     task_ = NULL;
 }
 
-int Write(const char *buff, const size_t size) {
-    ssize_t nwriten = 0;
-    ssize_t nleft = size;
-
-    while (nleft > 0) {
-        //todo first
-        write()
+Connector::ssize_t Connector::SyncRead(char *buff, const size_t size) {
+    int fd = task_->GetFd();
+    MakeFdBlockIs(false, fd);
+    ssize_t nbyes = ::read(fd, buff, size);
+    if (nbyes < 0) {
+        snprintf(err_msg_, sizeof(err_msg_), "fd=%d to read is bad! %s",
+                fd, strerror(errno));
+        return FAIL;
     }
+    return nbyes;
+}
 
+Connector::ssize_t Connector::SyncWrite(const char *buff, const size_t size) {
+    int fd = task_->GetFd();
+    MakeFdBlockIs(true, fd);
+    ssize_t nbyes = ::write(fd, buff, size);
+    if (nbyes < 0) {
+        snprintf(err_msg_, sizeof(err_msg_), "fd(%d) to write is bad! %s",
+                fd, strerror(errno));
+        return FAIL;
+    }
+    return nbyes;
 }
 
 IOTask& GetIOTask() {
