@@ -57,3 +57,26 @@ Connector::ssize_t Connector::SyncWrite(const char *buff, const size_t size) {
 IOTask& GetIOTask() {
     return *task_;
 }
+
+int MakeFdBlockIs(bool is_block, int fd) {
+    int val = ::fcntl(fd, F_GETFL, 0);
+    if (val < 0) {
+        snprintf(err_msg_, sizeof(err_msg_),
+                "get fd(%d) status fail. %s", fd, strerror(errno));
+        return FAIL;
+    }
+
+    if (is_block) {
+        val &= ~O_NONBLOCK;
+    } else {
+        val |= O_NONBLOCK;
+    }
+
+    if (::fcntl(fd, F_SETFL, val) < 0) {
+        snprintf(err_msg_, sizeof(err_msg_),
+                "set fd(%d) status fail. %s", fd, strerror(errno));
+        return FAIL;
+    }
+
+    return SUCCESS;
+}
