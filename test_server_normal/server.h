@@ -6,11 +6,28 @@
 #ifndef NF_TEST_SERVER_SERVER_H
 #define NF_TEST_SERVER_SERVER_H
 
-#include "../src/nf_event.h"
-#include "../src/nf_event_iotask.h"
-#include "../src/nf_event_timer_task.h"
+#include <unistd.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <getopt.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+
+#include "nf_event.h"
+#include "nf_event_iotask.h"
+#include "nf_event_timer_task.h"
+#include "connector.h"
+#include "sigleton.h"
 
 class TServer {
+ public:
+  enum STAT {
+    FAIL = -1,
+    SUCCESS = 0,
+  };
+
  public:
   TServer();
   virtual ~TServer();
@@ -28,9 +45,12 @@ class TServer {
   void OnExit();
 
  private:
+  int GetOption(int argc, char **argv);
 
  private:
-  EventLoop loop;
+  char *conf_file_;
+  IOTask *accept_task_;
+  EventLoop loop_;
 };
 
 #endif //NF_TEST_SERVER_SERVER_H

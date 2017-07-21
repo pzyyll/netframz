@@ -6,17 +6,20 @@
 #define NF_TEST_CONNETOR_H
 
 #include <functional>
-#include <sys/time.h>
+#include <ctime>
+#include <cstring>
+#include <cstdlib>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/time.h>
 
-#include "../src/nf_event_iotask.h"
+#include "nf_event_iotask.h"
 
 static const unsigned long DEFAULT_BUFF_SIZE = 1024000;
 
 struct Buffer {
     explicit Buffer(const unsigned long len)
-        : base(new char[size]), lenth(len), fpos(0), tpos(0) {
+        : base(new char[len]), lenth(len), fpos(0), tpos(0) {
 
     }
 
@@ -37,8 +40,8 @@ public:
     typedef long ssize_t;
 
     enum STAT {
-        SUCCESS = 0;
-        FAIL = -1;
+        SUCCESS = 0,
+        FAIL = -1,
         BUFF_LIMIT = -1001,
     };
 
@@ -50,11 +53,13 @@ public:
     ssize_t Write(const char *buff, const size_t size);
 
     ssize_t WriteRemain();
-    //size_t GetRemainSize();
+    size_t GetRemainSize();
 
     //close the connect
     void Close();
-    int OnTimeOut(const unsigned long time_limit, const struct timeval &now);
+    bool IsTimeOut(const unsigned long time_limit);
+
+    void SetLastActTimeToNow();
 
     IOTask& GetIOTask();
     unsigned long GetCID();
@@ -80,7 +85,5 @@ protected:
 
     static unsigned long id_cnt_;
 };
-
-unsigned long Connector::id_cnt_ = 1;
 
 #endif //NF_TEST_CONNETOR_H

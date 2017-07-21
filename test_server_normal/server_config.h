@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "../src/singleton.h"
+#include "singleton.h"
 
 struct ServerConfig {
 public:
@@ -13,7 +13,7 @@ public:
     int port;
     std::string ipv4;
     std::string ipv6;
-    int out_time;
+    int timeout;
 
     int deamon;
 };
