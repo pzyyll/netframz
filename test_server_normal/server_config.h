@@ -14,8 +14,8 @@ public:
     std::string ipv4;
     std::string ipv6;
     int timeout;
-
     int deamon;
+    int log_level;
 };
 
 typedef nf::singleton<ServerConfig> svr_cfg;
