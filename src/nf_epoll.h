@@ -15,47 +15,56 @@
 #define EV_POLLOUT EPOLLOUT
 
 struct FiredEvent {
-  int id;
-  int mask;
+    int id;
+    int mask;
 };
 
 class Epoll {
- public:
-  typedef struct epoll_event ev_type;
-  typedef struct epoll_event* ev_pointer;
-  typedef unsigned int data_type;
+public:
+    typedef struct epoll_event ev_type;
+    typedef struct epoll_event *ev_pointer;
+    typedef unsigned int data_type;
 
-  const static int DEFAULT_MAXEVS = 1024;
-  const static int DEFAULT_TIMEOUT = 10;
+    const static int DEFAULT_MAXEVS = 1024;
+    const static int DEFAULT_TIMEOUT = 10;
 
- public:
-  Epoll();
-  ~Epoll();
+public:
+    Epoll();
 
-  int Init(const int timeout = DEFAULT_TIMEOUT, const int maxevs = DEFAULT_MAXEVS);
-  void Deinit();
-  int AddEvent(int fd, data_type data, int mask);
-  int DelEvent(int fd);
-  int ModEvent(int fd, data_type data, int mask);
-  int WaitEvent(std::deque<FiredEvent> &fires);
-  int Resize(const size_t maxevs);
+    ~Epoll();
 
-  std::string get_err();
+    int Init(const int timeout = DEFAULT_TIMEOUT, const int maxevs = DEFAULT_MAXEVS);
 
- private:
-  Epoll(const Epoll&);
-  Epoll& operator=(const Epoll&);
+    void Deinit();
 
- private:
-  int CtlEvent(int fd, int op, data_type data, int mask);
-  void set_err(const char *s, ...);
+    int AddEvent(int fd, data_type data, int mask);
 
- private:
-  int epfd_;
-  int timeout_;
-  int maxevs_;
-  ev_pointer evs_;
-  char err_ [256];
+    int DelEvent(int fd);
+
+    int ModEvent(int fd, data_type data, int mask);
+
+    int WaitEvent(std::deque<FiredEvent> &fires);
+
+    int Resize(const size_t maxevs);
+
+    std::string get_err();
+
+private:
+    Epoll(const Epoll &);
+
+    Epoll &operator=(const Epoll &);
+
+private:
+    int CtlEvent(int fd, int op, data_type data, int mask);
+
+    void set_err(const char *s, ...);
+
+private:
+    int epfd_;
+    int timeout_;
+    int maxevs_;
+    ev_pointer evs_;
+    char err_[256];
 };
 
 typedef Epoll poll_type;

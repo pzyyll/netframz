@@ -23,49 +23,55 @@
 #include "sigleton.h"
 
 class TServer {
- public:
-  enum STAT {
-    FAIL = -1,
-    SUCCESS = 0,
-  };
-  typedef IOTask* IOTaskPtr;
-  typedef TimerTask* TimerTaskPtr;
-  typedef Connector* ConnectorPtr;
-  typedef std::unordered_map<unsigned long, ConnectorPtr> conn_map_t;
-  typedef std::unordered_map<unsigned long, TimerTaskPtr> timer_map_t;
+public:
+    enum STAT {
+        FAIL = -1,
+        SUCCESS = 0,
+    };
+    typedef IOTask *IOTaskPtr;
+    typedef TimerTask *TimerTaskPtr;
+    typedef Connector *ConnectorPtr;
+    typedef std::unordered_map<unsigned long, ConnectorPtr> conn_map_t;
+    typedef std::unordered_map<unsigned long, TimerTaskPtr> timer_map_t;
 
- public:
-  TServer();
-  virtual ~TServer();
+public:
+    TServer();
 
-  int Init(int argc, char **argv);
-  int StartListen();
-  int StartTick();
+    virtual ~TServer();
 
-  void OnAccept(EventLoop *loopsv, task_data_t data, int mask);
-  //void OnRead(EventLoop *loopsv, task_data_t data, int mask);
-  //void OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask);
-  void OnTick(EventLoop *loopsv, task_data_t data, int mask);
-  void OnTimerOut(EventLoop *loopsv, task_data_t data, int mask);
+    int Init(int argc, char **argv);
 
-  //int Run();
-  //void OnTick();
-  //void OnIdle();
-  //void OnExit();
+    int StartListen();
 
- private:
-  int GetOption(int argc, char **argv);
+    int StartTick();
 
-  int MakeNonblock(int fd);
-  int SetCliOpt(int fd);
+    void OnAccept(EventLoop *loopsv, task_data_t data, int mask);
 
- private:
-  char *conf_file_;
-  IOTaskPtr accept_task_;
-  TimerPtr tick_;
-  EventLoop loop_;
-  iotask_map_t conn_map_;
-  timer_map_t timer_map_;
+    //void OnRead(EventLoop *loopsv, task_data_t data, int mask);
+    //void OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask);
+    void OnTick(EventLoop *loopsv, task_data_t data, int mask);
+
+    void OnTimerOut(EventLoop *loopsv, task_data_t data, int mask);
+
+    //int Run();
+    //void OnTick();
+    //void OnIdle();
+    //void OnExit();
+
+private:
+    int GetOption(int argc, char **argv);
+
+    int MakeNonblock(int fd);
+
+    int SetCliOpt(int fd);
+
+private:
+    char *conf_file_;
+    IOTaskPtr accept_task_;
+    TimerPtr tick_;
+    EventLoop loop_;
+    iotask_map_t conn_map_;
+    timer_map_t timer_map_;
 };
 
 #endif //NF_TEST_SERVER_SERVER_H

@@ -8,56 +8,56 @@
 #include "nf_event_iotask_impl.h"
 
 IOTask::IOTask(EventLoop &loop, const int fd)
-    : loop_(loop), pimpl_(new IOTaskImpl(fd, 0)) {
+        : loop_(loop), pimpl_(new IOTaskImpl(fd, 0)) {
 
 }
 
 IOTask::IOTask(EventLoop &loop, const int fd, const int mask)
-    : loop_(loop), pimpl_(new IOTaskImpl(fd, mask)) {
+        : loop_(loop), pimpl_(new IOTaskImpl(fd, mask)) {
 
 }
 
 IOTask::IOTask(EventLoop &loop, const int fd, const int mask, handle_t op)
-    : loop_(loop), pimpl_(new IOTaskImpl(fd, mask, op)) {
+        : loop_(loop), pimpl_(new IOTaskImpl(fd, mask, op)) {
 
 }
 
 IOTask::~IOTask() {
-  Stop();
+    Stop();
 }
 
 void IOTask::Bind(handle_t handle) {
-  pimpl_->Bind(handle);
+    pimpl_->Bind(handle);
 }
 
 void IOTask::Start() {
-  loop_.SetIOTask(pimpl_);
+    loop_.SetIOTask(pimpl_);
 }
 
 void IOTask::Restart() {
-  loop_.ResetIOTask(pimpl_);
+    loop_.ResetIOTask(pimpl_);
 }
 
 void IOTask::Stop() {
-  loop_.DelIOTask(pimpl_->get_fd());
+    loop_.DelIOTask(pimpl_->get_fd());
 }
 
 void IOTask::SetPrivateData(task_data_t data) {
-  pimpl_->set_data(data);
+    pimpl_->set_data(data);
 }
 
 task_data_t IOTask::GetPrivateData() {
-  return pimpl_->get_data();
+    return pimpl_->get_data();
 }
 
 void IOTask::SetMask(int mask) {
-  pimpl_->set_mask(mask);
+    pimpl_->set_mask(mask);
 }
 
 int IOTask::GetMask() {
-  return pimpl_->get_mask();
+    return pimpl_->get_mask();
 }
 
 int IOTask::GetFd() {
-  return pimpl_->get_fd();
+    return pimpl_->get_fd();
 }

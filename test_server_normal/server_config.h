@@ -18,6 +18,6 @@ public:
     int log_level;
 };
 
-typedef nf::singleton<ServerConfig> svr_cfg;
+typedef nf::singleton <ServerConfig> svr_cfg;
 
 #endif //NF_TEST_SERVER_CONFIG_H

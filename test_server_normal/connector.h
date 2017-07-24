@@ -19,7 +19,7 @@ static const unsigned long DEFAULT_BUFF_SIZE = 1024000;
 
 struct Buffer {
     explicit Buffer(const unsigned long len)
-        : base(new char[len]), lenth(len), fpos(0), tpos(0) {
+            : base(new char[len]), lenth(len), fpos(0), tpos(0) {
 
     }
 
@@ -47,29 +47,37 @@ public:
 
 public:
     Connector(EventLoop &loop, int fd);
+
     virtual ~Connector();
 
     ssize_t Read(char *buff, const size_t size);
+
     ssize_t Write(const char *buff, const size_t size);
 
     ssize_t WriteRemain();
+
     size_t GetRemainSize();
 
     //close the connect
     void Close();
+
     bool IsTimeOut(const unsigned long time_limit);
 
     void SetLastActTimeToNow();
 
-    IOTask& GetIOTask();
+    IOTask &GetIOTask();
+
     unsigned long GetCID();
 
 protected:
-    Connector(const Connector&);
-    Connector& operator=(const Connector&);
+    Connector(const Connector &);
+
+    Connector &operator=(const Connector &);
 
     int MakeFdBlockIs(bool is_block, int fd);
+
     ssize_t InnerRead(void *buff, size_t size);
+
     ssize_t InnerWrite(const void *buff, const size_t size);
 
 protected:

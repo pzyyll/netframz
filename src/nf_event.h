@@ -11,7 +11,9 @@
 #include <string>
 
 #ifdef LINUX_EPOLL
+
 #include "nf_epoll.h"
+
 #endif
 
 //#include "nf_event_task.h"
@@ -20,51 +22,59 @@
 class IOTaskImpl;
 
 class EventLoop {
- public:
-  typedef IOTaskImpl* iotask_pointer;
-  typedef TimerImpl* timer_pointer;
-  typedef std::unordered_map<int, iotask_pointer> TaskMap;
-  typedef TaskMap::iterator TaskMapItr;
+public:
+    typedef IOTaskImpl *iotask_pointer;
+    typedef TimerImpl *timer_pointer;
+    typedef std::unordered_map<int, iotask_pointer> TaskMap;
+    typedef TaskMap::iterator TaskMapItr;
 
- public:
-  EventLoop();
-  ~EventLoop();
+public:
+    EventLoop();
 
-  void Run();
+    ~EventLoop();
 
-  const std::string& get_err_msg();
+    void Run();
+
+    const std::string &get_err_msg();
 
 // protected:
-  int SetIOTask(iotask_pointer task);
-  int ResetIOTask(iotask_pointer task);
-  int DelIOTask(int fd);
+    int SetIOTask(iotask_pointer task);
 
-  int AddTimerTask(timer_pointer timer);
-  int DelTimerTask(const unsigned long id);
-  int ResetTimerTask(timer_pointer timer);
+    int ResetIOTask(iotask_pointer task);
 
- private:
-  void HandleIOEvent();
-  bool HaveIOEvent();
-  bool FindTask(const int fd, iotask_pointer *find);
+    int DelIOTask(int fd);
 
-  void HandleAllTimerTask();
-  bool HaveTimerTask();
+    int AddTimerTask(timer_pointer timer);
 
-  void set_err_msg(std::string msg);
+    int DelTimerTask(const unsigned long id);
 
- private:
-  bool stop_;
+    int ResetTimerTask(timer_pointer timer);
 
-  TaskMap file_tasks_;
+private:
+    void HandleIOEvent();
 
-  poll_type poll_;
+    bool HaveIOEvent();
 
-  std::deque<FiredEvent> fires;
+    bool FindTask(const int fd, iotask_pointer *find);
 
-  TimerMng timer_mng_;
+    void HandleAllTimerTask();
 
-  std::string err_msg_;
+    bool HaveTimerTask();
+
+    void set_err_msg(std::string msg);
+
+private:
+    bool stop_;
+
+    TaskMap file_tasks_;
+
+    poll_type poll_;
+
+    std::deque<FiredEvent> fires;
+
+    TimerMng timer_mng_;
+
+    std::string err_msg_;
 };
 
 #endif //NETFRAMZ_NF_EVENT_H
