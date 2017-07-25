@@ -74,8 +74,8 @@ int TServer::StartListen() {
     }
 
     log_debug("Listen port = %u|%u, addr = %s.",
-            svr_cfg::get_const_instance().port, addr.sin_port,
-            svr_cfg::get_const_instance().ipv4.c_str());
+              svr_cfg::get_const_instance().port, addr.sin_port,
+              svr_cfg::get_const_instance().ipv4.c_str());
 
     if (::bind(listen_fd, (struct sockaddr *) &addr, sizeof(addr)) < 0) {
         log_err("Bind for listen fd(%d) fail. %s", listen_fd, strerror(errno));
@@ -186,7 +186,7 @@ void TServer::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
         DelConn(cid);
         return;
     }
-    if ((unsigned int)ns < str.size()) {
+    if ((unsigned int) ns < str.size()) {
         //todo send remain;
         log_warn("Send buff full.");
     }
@@ -240,25 +240,25 @@ int TServer::GetOption(int argc, char **argv) {
     int c = 0, ops_idx = 0;
     while ((c = getopt_long(argc, argv, "hc:v", ops, &ops_idx)) != -1) {
         switch (c) {
-        case 'h':
-            printf("Unfortunately, there is no any help.");
-            ret = -1;
-            break;
-        case 'c':
-            //set conf file to server_config
-            conf_file_ = optarg;
-            break;
-        case 'v':
-            printf("\tTest server v1.\n");
-            printf("\tDate 2017/7/21.");
-            ret = -1;
-            break;
-        case '?':
-            ret = -1;
-            break;
-        default:
-            ret = -1;
-            break;
+            case 'h':
+                printf("Unfortunately, there is no any help.");
+                ret = -1;
+                break;
+            case 'c':
+                //set conf file to server_config
+                conf_file_ = optarg;
+                break;
+            case 'v':
+                printf("\tTest server v1.\n");
+                printf("\tDate 2017/7/21.");
+                ret = -1;
+                break;
+            case '?':
+                ret = -1;
+                break;
+            default:
+                ret = -1;
+                break;
 
         }
     }
@@ -286,20 +286,20 @@ int TServer::SetCliOpt(int fd) {
     int recv_buff_size = 4 * 32768;
 
     if (::setsockopt(fd, SOL_SOCKET, SO_SNDBUF,
-                (void *) &send_buff_size, sizeof(send_buff_size)) < 0) {
+                     (void *) &send_buff_size, sizeof(send_buff_size)) < 0) {
         log_warn("setsockopt to send buff size fail. %s", strerror(errno));
         return FAIL;
     }
 
     if (::setsockopt(fd, SOL_SOCKET, SO_RCVBUF,
-                (void *) &recv_buff_size, sizeof(recv_buff_size)) < 0) {
+                     (void *) &recv_buff_size, sizeof(recv_buff_size)) < 0) {
         log_warn("setsockopt to recv buff size fail. %s", strerror(errno));
         return FAIL;
     }
 
     int nodelay = 1;
     if (::setsockopt(fd, IPPROTO_TCP, TCP_NODELAY,
-                (void *) &nodelay, sizeof(nodelay))) {
+                     (void *) &nodelay, sizeof(nodelay))) {
         log_warn("setsockopt to forbid Nagle's algorithm. %s", strerror(errno));
         return FAIL;
     }
@@ -339,9 +339,12 @@ TServer::ConnectorPtr TServer::CreateConn(int fd) {
     log_debug("Create Connector for fd %d.", fd);
 
     ConnectorPtr cli = new Connector(loop_, fd);
+    if (NULL == cli) {
+        log_err("New a Connector fail.");
+        return NULL;
+    }
     unsigned long cid = cli->GetCID();
-    if (cli == NULL
-            || conn_map_.insert(std::make_pair(cid, cli)).second == false) {
+    if (conn_map_.insert(std::make_pair(cid, cli)).second) {
         log_err("Add cli connector to map fail, fd|%d", fd);
         if (cli)
             delete cli;
@@ -383,7 +386,7 @@ TServer::TimerTaskPtr TServer::CreateTimerTask(unsigned long cid) {
     int timeout = svr_cfg::get_const_instance().timeout;
     TimerTaskPtr timer = new TimerTask(loop_, timeout, 0);
     if (NULL == timer
-            || timer_map_.insert(make_pair(cid, timer)).second != true) {
+        || !timer_map_.insert(make_pair(cid, timer)).second) {
         log_warn("Create timer fail for cid %u.", cid);
         if (timer)
             delete timer;
@@ -405,6 +408,7 @@ void TServer::DelTimerTask(unsigned long cid) {
         return;
     }
 
+    timer->Stop();
     timer_map_.erase(cid);
     delete timer;
 }

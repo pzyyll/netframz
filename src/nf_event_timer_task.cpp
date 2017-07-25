@@ -15,8 +15,10 @@ TimerTask::TimerTask(EventLoop &loop, const unsigned long interval, bool is_loop
 }
 
 TimerTask::~TimerTask() {
-    if (impl_)
+    if (impl_) {
+        Stop();
         delete impl_;
+    }
     impl_ = NULL;
 }
 
