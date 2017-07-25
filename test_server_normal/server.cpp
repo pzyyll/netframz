@@ -344,7 +344,7 @@ TServer::ConnectorPtr TServer::CreateConn(int fd) {
         return NULL;
     }
     unsigned long cid = cli->GetCID();
-    if (conn_map_.insert(std::make_pair(cid, cli)).second) {
+    if (!conn_map_.insert(std::make_pair(cid, cli)).second) {
         log_err("Add cli connector to map fail, fd|%d", fd);
         if (cli)
             delete cli;
