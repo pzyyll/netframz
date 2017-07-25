@@ -9,7 +9,7 @@ int ServerConfig::Init(const char *cfg_file) {
     port = 23399;
     ipv4 = "";
     ipv6 = "";
-    timeout = 1500;
+    timeout = 30000;
     deamon = 0;
     log_level = 4;
 

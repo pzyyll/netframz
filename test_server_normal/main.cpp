@@ -2,9 +2,20 @@
 #include <functional>
 #include <unistd.h>
 
-#include "connector.h"
+#include "server.h"
 
-int main() {
+using namespace std;
+
+int main(int argc, char *argv[]) {
+
+    TServer svr;
+
+    if (svr.Init(argc, argv) < 0) {
+        cout << "init fail." << endl;
+        return -1;
+    }
+
+    svr.Run();
 
     return 0;
 }

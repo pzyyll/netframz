@@ -10,12 +10,12 @@ public:
     int Init(const char *cfg_file);
 
 public:
-    int port;
+    unsigned int port;
     std::string ipv4;
     std::string ipv6;
-    int timeout;
-    int deamon;
-    int log_level;
+    unsigned int timeout;
+    unsigned int deamon;
+    unsigned int log_level;
 };
 
 typedef nf::singleton <ServerConfig> svr_cfg;

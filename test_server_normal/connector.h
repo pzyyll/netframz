@@ -50,15 +50,14 @@ public:
 
     virtual ~Connector();
 
-    ssize_t Read(char *buff, const size_t size);
+    ssize_t Recv(char *buff, const size_t size);
 
-    ssize_t Write(const char *buff, const size_t size);
+    ssize_t Send(const char *buff, const size_t size);
 
-    ssize_t WriteRemain();
+    ssize_t SendRemain();
 
     size_t GetRemainSize();
 
-    //close the connect
     void Close();
 
     bool IsTimeOut(const unsigned long time_limit);
@@ -68,6 +67,8 @@ public:
     IOTask &GetIOTask();
 
     unsigned long GetCID();
+
+    std::string GetErrMsg();
 
 protected:
     Connector(const Connector &);

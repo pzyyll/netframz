@@ -7,6 +7,8 @@
 #define NF_TEST_SERVER_SERVER_H
 
 #include <unordered_map>
+#include <string>
+#include <algorithm>
 #include <unistd.h>
 #include <cstdio>
 #include <cstdlib>
@@ -15,12 +17,15 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <fcntl.h>
 
 #include "nf_event.h"
 #include "nf_event_iotask.h"
 #include "nf_event_timer_task.h"
 #include "connector.h"
-#include "sigleton.h"
+//#include "singleton.h"
 
 class TServer {
 public:
@@ -47,15 +52,20 @@ public:
 
     void OnAccept(EventLoop *loopsv, task_data_t data, int mask);
 
-    //void OnRead(EventLoop *loopsv, task_data_t data, int mask);
+    void OnRead(EventLoop *loopsv, task_data_t data, int mask);
+
     //void OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask);
+
     void OnTick(EventLoop *loopsv, task_data_t data, int mask);
 
     void OnTimerOut(EventLoop *loopsv, task_data_t data, int mask);
 
-    //int Run();
+    void Run();
+
     //void OnTick();
+
     //void OnIdle();
+
     //void OnExit();
 
 private:
@@ -65,12 +75,30 @@ private:
 
     int SetCliOpt(int fd);
 
+    ConnectorPtr CreateConn(int fd);
+
+    void DelConn(unsigned long cid);
+
+    void DelConn(ConnectorPtr conn);
+
+    ConnectorPtr FindConn(unsigned long cid);
+
+    int CheckMask(int mask);
+
+    TimerTaskPtr CreateTimerTask(unsigned long cid);
+
+    void DelTimerTask(unsigned long cid);
+
+    TimerTaskPtr FindTimer(unsigned long cid);
+
+    //void Daemon();
+
 private:
     char *conf_file_;
     IOTaskPtr accept_task_;
-    TimerPtr tick_;
+    TimerTaskPtr tick_;
     EventLoop loop_;
-    iotask_map_t conn_map_;
+    conn_map_t conn_map_;
     timer_map_t timer_map_;
 };
 

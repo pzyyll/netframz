@@ -20,7 +20,9 @@ set(NFSOURCE_FILES
 set(SOURCE_FILES 
         main.cpp
         connector.cpp
-        server_config.cpp)
+        server_config.cpp
+        server.cpp
+        log.cpp)
 
 add_executable(test_svr_normal ${SOURCE_FILES} ${NFSOURCE_FILES})
 

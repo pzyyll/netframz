@@ -23,11 +23,11 @@ Connector::~Connector() {
     task_ = NULL;
 }
 
-Connector::ssize_t Connector::Read(char *buff, const size_t size) {
+Connector::ssize_t Connector::Recv(char *buff, const size_t size) {
     return InnerRead((void *) buff, size);
 }
 
-Connector::ssize_t Connector::Write(const char *buff, const size_t size) {
+Connector::ssize_t Connector::Send(const char *buff, const size_t size) {
     ssize_t nw = InnerWrite((void *) buff, size);
     if (nw < 0) {
         return FAIL;
@@ -51,7 +51,7 @@ Connector::ssize_t Connector::Write(const char *buff, const size_t size) {
     return nw;
 }
 
-Connector::ssize_t Connector::WriteRemain() {
+Connector::ssize_t Connector::SendRemain() {
     if (send_buf_.fpos == send_buf_.tpos) {
         return 0;
     }
@@ -78,6 +78,7 @@ void Connector::Close() {
         return;
 
     //To make close operate
+    task_->Stop();
     int fd = task_->GetFd();
     if (fd > 0)
         ::close(fd);
@@ -111,6 +112,10 @@ IOTask &Connector::GetIOTask() {
 
 unsigned long Connector::GetCID() {
     return cid_;
+}
+
+std::string Connector::GetErrMsg() {
+    return std::string(err_msg_);
 }
 
 //================== protected or private ===============================//
