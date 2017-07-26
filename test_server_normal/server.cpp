@@ -69,7 +69,6 @@ int TServer::StartListen() {
         log_debug("Set ip addr %s.", svr_cfg::get_const_instance().ipv4.c_str());
         inet_pton(AF_INET, svr_cfg::get_const_instance().ipv4.c_str(), &addr.sin_addr);
     } else {
-        log_debug("INADDR_ANY");
         addr.sin_addr.s_addr = INADDR_ANY;
     }
 
@@ -156,13 +155,15 @@ void TServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
     }
 }
 
+char buff[1024000];
+
 void TServer::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
     unsigned long cid = data.data.id;
     ConnectorPtr conn = FindConn(cid);
 
     if (!conn) {
-        //这里是走不进来的，如果进来的话就见鬼了，有大 bug.
-        log_warn("Not find conn for cid %u.", cid);
+        //Never go here;
+        log_warn("Not find conn for cid %lu.", cid);
         return;
     }
 
@@ -174,22 +175,58 @@ void TServer::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
 
     //Do
     conn->SetLastActTimeToNow();
-    char buff[1024] = {0};
-    conn->Recv(buff, sizeof(buff));
+    //char buff[1024000] = {0};
+    memset(buff, 0, sizeof(buff));
+    long int nr = conn->Recv(buff, sizeof(buff));
+    log_debug("recv size: %ld", nr);
 
-    std::string str(buff);
-    std::reverse(str.begin(), str.end());
-    str += "\n";
-    int ns = conn->Send(str.c_str(), str.size());
+    std::string str(buff, nr);
+    //std::reverse(str.begin(), str.end());
+    //str += "\n";
+    long int ns = conn->Send(str.c_str(), str.size());
     if (ns < 0) {
         log_warn("Send err %s.", conn->GetErrMsg().c_str());
         DelConn(cid);
+        DelTimerTask(cid);
         return;
     }
+
+    log_debug("send size: %ld, str size: %ld", ns, (long int)str.size());
+
     if ((unsigned int) ns < str.size()) {
         //todo send remain;
         log_warn("Send buff full.");
+        conn->GetIOTask().SetMask(EV_WRITEABLE);
+        conn->GetIOTask().Bind(std::bind(&TServer::OnWriteRemain, this, _1, _2, _3));
+        conn->GetIOTask().Restart();
     }
+}
+
+void TServer::OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask) {
+    unsigned long cid = data.data.id;
+    ConnectorPtr conn = FindConn(cid);
+
+    if (!conn) {
+        //Never go here;
+        log_warn("Not find conn for cid %lu.", cid);
+        return;
+    }
+
+    if (CheckMask(mask) < 0) {
+        DelConn(cid);
+        DelTimerTask(cid);
+        return;
+    }
+
+    unsigned long remain_size = conn->GetRemainSize();
+    long int snd_size = conn->SendRemain();
+    if (remain_size - snd_size == 0) {
+        conn->GetIOTask().SetMask(EV_READABLE);
+        conn->GetIOTask().Bind(std::bind(&TServer::OnRead, this, _1, _2, _3));
+        conn->GetIOTask().Restart();
+    }
+
+    log_info("snd_size %ld, remain_size %lu.", snd_size, remain_size);
 }
 
 void TServer::OnTick(EventLoop *loopsv, task_data_t data, int mask) {
@@ -205,13 +242,13 @@ void TServer::OnTimerOut(EventLoop *loopsv, task_data_t data, int mask) {
 
     ConnectorPtr conn = FindConn(cid);
     if (!conn) {
-        log_warn("Connector for cid %u not find.", cid);
+        log_warn("Connector for cid %lu not find.", cid);
         DelTimerTask(cid);
         return;
     }
 
     if (conn->IsTimeOut(svr_cfg::get_const_instance().timeout / 1000)) {
-        log_debug("Close cid %u this long time not act.", cid);
+        log_debug("Close cid %lu this long time not act.", cid);
         DelConn(conn);
         DelTimerTask(cid);
         return;
@@ -219,7 +256,6 @@ void TServer::OnTimerOut(EventLoop *loopsv, task_data_t data, int mask) {
 
     log_debug("Resume timer.");
     TimerTaskPtr timer = FindTimer(cid);
-    //todo check
     timer->Restart();
 }
 
@@ -282,6 +318,15 @@ int TServer::MakeNonblock(int fd) {
 }
 
 int TServer::SetCliOpt(int fd) {
+
+    int snds = 0, rvs = 0;
+    socklen_t len = sizeof(int);
+    getsockopt(fd, SOL_SOCKET, SO_SNDBUF, (void *) &snds, &len);
+    getsockopt(fd, SOL_SOCKET, SO_RCVBUF, (void *) &rvs, &len);
+    log_debug("getsockopt snds = %d, rvs = %d", snds, rvs);
+
+    //一般实际缓冲区大小是设置的2倍
+    //path:/proc/sys/net/core/wmem_max
     int send_buff_size = 4 * 32768;
     int recv_buff_size = 4 * 32768;
 
@@ -303,6 +348,11 @@ int TServer::SetCliOpt(int fd) {
         log_warn("setsockopt to forbid Nagle's algorithm. %s", strerror(errno));
         return FAIL;
     }
+
+    getsockopt(fd, SOL_SOCKET, SO_SNDBUF, (void *) &snds, &len);
+    getsockopt(fd, SOL_SOCKET, SO_RCVBUF, (void *) &rvs, &len);
+    log_debug("getsockopt snds = %d, rvs = %d", snds, rvs);
+
 
     return SUCCESS;
 }
@@ -361,11 +411,11 @@ TServer::ConnectorPtr TServer::CreateConn(int fd) {
 }
 
 void TServer::DelConn(unsigned long cid) {
-    log_debug("Connect cid %u will be closed and del.", cid);
+    log_debug("Connect cid %lu will be closed and del.", cid);
 
     ConnectorPtr conn = FindConn(cid);
     if (!conn) {
-        log_warn("Can't find conn for cid %u in map.", cid);
+        log_warn("Can't find conn for cid %lu in map.", cid);
         return;
     }
 
@@ -381,13 +431,13 @@ void TServer::DelConn(ConnectorPtr conn) {
 }
 
 TServer::TimerTaskPtr TServer::CreateTimerTask(unsigned long cid) {
-    log_debug("Create timer task for cid %u.", cid);
+    log_debug("Create timer task for cid %lu.", cid);
 
     int timeout = svr_cfg::get_const_instance().timeout;
     TimerTaskPtr timer = new TimerTask(loop_, timeout, 0);
     if (NULL == timer
         || !timer_map_.insert(make_pair(cid, timer)).second) {
-        log_warn("Create timer fail for cid %u.", cid);
+        log_warn("Create timer fail for cid %lu.", cid);
         if (timer)
             delete timer;
         return NULL;
@@ -402,9 +452,11 @@ TServer::TimerTaskPtr TServer::CreateTimerTask(unsigned long cid) {
 }
 
 void TServer::DelTimerTask(unsigned long cid) {
+    log_debug("DelTimerTask cid %lu", cid);
+
     TimerTaskPtr timer = FindTimer(cid);
     if (!timer) {
-        log_warn("Not find timer task for cid %u.", cid);
+        log_warn("Not find timer task for cid %lu.", cid);
         return;
     }
 
@@ -421,4 +473,3 @@ TServer::TimerTaskPtr TServer::FindTimer(unsigned long cid) {
 
     return itr->second;
 }
-

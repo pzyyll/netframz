@@ -25,6 +25,7 @@ add_executable(echo_server echo_server.cpp ${SOURCE_FILES})
 add_executable(epoll epoll.cpp ${SOURCE_FILES})
 add_executable(epoll_inout epoll_in_out.cpp tcp_client.cpp ${SOURCE_FILES})
 add_executable(send_client send_client.cpp tcp_client.cpp ${SOURCE_FILES})
+add_executable(robot_client robot_client.cpp tcp_client.cpp ${SOURCE_FILES})
 
 #target_link_libraries(netframz -lboostsystem)
 #target_link_libraries(iotask -lglog)

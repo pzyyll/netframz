@@ -16,7 +16,6 @@
 
 #endif
 
-//#include "nf_event_task.h"
 #include "nf_event_timer_mng.h"
 
 class IOTaskImpl;

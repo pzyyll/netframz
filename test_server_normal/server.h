@@ -54,7 +54,7 @@ public:
 
     void OnRead(EventLoop *loopsv, task_data_t data, int mask);
 
-    //void OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask);
+    void OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask);
 
     void OnTick(EventLoop *loopsv, task_data_t data, int mask);
 

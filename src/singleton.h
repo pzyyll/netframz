@@ -33,7 +33,7 @@ private:
 };
 
 template <typename T>
-T& singleton<T>::instance = get_instance();
+T& singleton<T>::instance = singleton<T>::get_instance();
 
 } //nf
 

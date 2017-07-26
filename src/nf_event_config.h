@@ -15,11 +15,11 @@ enum RET {
 
 enum EVSTAT {
     EV_NONE = 0,
-    EV_READABLE = 0X001,
-    EV_WRITEABLE = 0X002,
-    EV_HUP = 0X004,
-    EV_RDHUP = 0X008,    //EPOLL since linux 2.6.17 EPOLLRDHUP
-    EV_ERR = 0X100,
+    EV_READABLE = 0x001,
+    EV_WRITEABLE = 0x004,
+    EV_ERR = 0x008,
+    EV_HUP = 0x010,
+    EV_RDHUP = 0x2000,    //EPOLL since linux 2.6.17 EPOLLRDHUP
 };
 
 struct task_data_t {
