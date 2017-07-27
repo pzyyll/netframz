@@ -1,6 +1,9 @@
 #ifndef TEST_PROTO_H
 #define TEST_PROTO_H
 
+#include <string>
+#include <vector>
+
 namespace proto {
     struct Head {
         int len;
@@ -8,17 +11,34 @@ namespace proto {
 
     class Cmd {
     public:
-        Cmd() : size_(0), container_(NULL);
-        ~Cmd() {
-            if (container_) {
-                delete container_;
-                container_ = NULL;
+        static void Packing(const std::string &str, std::string &pack) {
+            struct Head head;
+            head.len = htonl(str.size());
+            pack.append((char *) &head, sizeof(head));
+            pack.append(str);
+        }
+
+        static void Unpack(std::vector<std::string> &vec_str, const char *buf, unsigned long size) {
+            if (NULL == buf)
+                return;
+
+            int fpos = 0;
+            while ((unsigned int)fpos < size) {
+                if (size - fpos < sizeof(struct Head)) {
+                    break;
+                }
+                struct Head *head = (struct Head *)(buf + fpos);
+                int len = ntohl(head->len);
+                fpos += sizeof(struct Head);
+                if (size - fpos < (unsigned long) len) {
+                    break;
+                }
+                std::string item(buf + fpos, len);
+                vec_str.push_back(item);
+                fpos += len;
             }
         }
 
-    private:
-        unsigned long size_;
-        char *container_;
     };
 }
 

@@ -7,9 +7,11 @@
 #include "server_config.h"
 #include "log.h"
 #include "mem_check.h"
+#include "proto.h"
 
 using namespace std::placeholders;
 using namespace std;
+using namespace proto;
 
 TServer::TServer() : conf_file_(NULL), accept_task_(NULL), tick_(NULL) {
 
@@ -180,50 +182,27 @@ void TServer::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
     Do(*conn);
 }
 
-char buff[1024000];
+static char buff[1024000];
 void TServer::Do(Connector &conn) {
     conn.SetLastActTimeToNow();
     long int nr = conn.Recv(buff, sizeof(buff));
-
     log_debug("recv size: %ld", nr);
-    if (nr < sizeof(struct Head)) {
-        log_warn("Bag lenth is err.");
-        return;
-    }
 
     std::vector<std::string> vec_strs;
-    int fpos = 0;
-    while (fpos < nr) {
-        char *topbuf = buff + fpos;
-        struct Head *head = (struct Head *)topbuf;
-        int len = ntohs(head->len);
-        log_debug("recv bag len %d", len);
-        fpos += sizeof(struct Head);
+    Cmd::Unpack(vec_strs, buff, nr);
 
-        if (nr - fpos < len) {
-            log_warn("bag container is flaw.");
-        }
-
-        std::string rvstr(topbuf + fpos, len);
-        vec_strs.push_back(rvstr);
-        fpos += len;
+    for (auto x: vec_strs) {
+        log_debug("rv msg: %s", x.c_str());
     }
 
-
+    // echo
+    log_debug("send msg size: %u", vec_strs.size());
     std::string sndstr;
-    for (int i = 0; i < vec_strs.size(); ++i) {
-        std::string &item = vec_strs[i];
-        struct Head head;
-        head.len = htons(item.size());
-        std::string nitem((char *)&head, sizeof(head));
-        nitem += item;
-        sndstr += nitem;
+    for (int i = 0; (unsigned int)i < vec_strs.size(); ++i) {
+        Cmd::Packing(vec_strs[i], sndstr);
     }
 
-    //todo first
-
-    std::string str(buff, nr);
-    long int ns = conn.Send(str.c_str(), str.size());
+    long int ns = conn.Send(sndstr.c_str(), sndstr.size());
     if (ns < 0) {
         log_warn("Send err %s.", conn.GetErrMsg().c_str());
         DelConn(conn.GetCID());
@@ -231,9 +210,9 @@ void TServer::Do(Connector &conn) {
         return;
     }
 
-    log_debug("send size: %ld, str size: %ld", ns, (long int)str.size());
+    log_debug("send size: %ld, str size: %ld", ns, (long int)sndstr.size());
 
-    if ((unsigned int) ns < str.size()) {
+    if ((unsigned int) ns < sndstr.size()) {
         //todo send remain;
         log_warn("Send buff full.");
         conn.GetIOTask().SetMask(EV_WRITEABLE);
