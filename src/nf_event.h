@@ -34,6 +34,8 @@ public:
 
     void Run();
 
+    void Stop();
+
     const std::string &get_err_msg();
 
 // protected:

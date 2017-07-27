@@ -7,6 +7,8 @@
 #include "nf_event.h"
 #include "nf_event_iotask_impl.h"
 
+#include "mem_check.h"
+
 IOTask::IOTask(EventLoop &loop, const int fd)
         : loop_(loop), pimpl_(new IOTaskImpl(fd, 0)) {
 
@@ -24,6 +26,10 @@ IOTask::IOTask(EventLoop &loop, const int fd, const int mask, handle_t op)
 
 IOTask::~IOTask() {
     Stop();
+    if (pimpl_) {
+        delete pimpl_;
+        pimpl_ = NULL;
+    }
 }
 
 void IOTask::Bind(handle_t handle) {

@@ -3,6 +3,7 @@
 // @ Bref
 //
 #include "connector.h"
+#include "mem_check.h"
 
 unsigned long Connector::id_cnt_ = 1;
 
@@ -23,12 +24,12 @@ Connector::~Connector() {
     task_ = NULL;
 }
 
-Connector::ssize_t Connector::Recv(char *buff, const size_t size) {
-    return InnerRead((void *) buff, size);
+Connector::ssize_t Connector::Recv(void *buff, const size_t size) {
+    return InnerRead(buff, size);
 }
 
-Connector::ssize_t Connector::Send(const char *buff, const size_t size) {
-    ssize_t nw = InnerWrite((void *) buff, size);
+Connector::ssize_t Connector::Send(const void *buff, const size_t size) {
+    ssize_t nw = InnerWrite(buff, size);
     if (nw < 0) {
         return FAIL;
     }
@@ -45,7 +46,7 @@ Connector::ssize_t Connector::Send(const char *buff, const size_t size) {
                      snd_buf_size, nleft);
             return FAIL;
         }
-        memcpy(send_buf_.base + send_buf_.tpos, buff + nw, nleft);
+        memcpy(send_buf_.base + send_buf_.tpos, (char *) buff + nw, nleft);
         send_buf_.tpos += nleft;
     }
     return nw;

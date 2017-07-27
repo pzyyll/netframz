@@ -62,6 +62,10 @@ public:
 
     void Run();
 
+    void Stop();
+
+    void Do(Connector &conn);
+
     //void OnTick();
 
     //void OnIdle();

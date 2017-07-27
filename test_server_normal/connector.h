@@ -50,9 +50,9 @@ public:
 
     virtual ~Connector();
 
-    ssize_t Recv(char *buff, const size_t size);
+    ssize_t Recv(void *buff, const size_t size);
 
-    ssize_t Send(const char *buff, const size_t size);
+    ssize_t Send(const void *buff, const size_t size);
 
     ssize_t SendRemain();
 

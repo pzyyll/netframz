@@ -6,6 +6,7 @@
 #include "server.h"
 #include "server_config.h"
 #include "log.h"
+#include "mem_check.h"
 
 using namespace std::placeholders;
 using namespace std;
@@ -15,6 +16,10 @@ TServer::TServer() : conf_file_(NULL), accept_task_(NULL), tick_(NULL) {
 }
 
 TServer::~TServer() {
+    if (accept_task_)
+        delete accept_task_;
+    if (tick_)
+        delete tick_;
 
 }
 
@@ -155,8 +160,6 @@ void TServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
     }
 }
 
-char buff[1024000];
-
 void TServer::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
     unsigned long cid = data.data.id;
     ConnectorPtr conn = FindConn(cid);
@@ -174,20 +177,21 @@ void TServer::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
     }
 
     //Do
-    conn->SetLastActTimeToNow();
-    //char buff[1024000] = {0};
-    memset(buff, 0, sizeof(buff));
-    long int nr = conn->Recv(buff, sizeof(buff));
+    Do(*conn);
+}
+
+char buff[1024000];
+void TServer::Do(Connector &conn) {
+    conn.SetLastActTimeToNow();
+    long int nr = conn.Recv(buff, sizeof(buff));
     log_debug("recv size: %ld", nr);
 
     std::string str(buff, nr);
-    //std::reverse(str.begin(), str.end());
-    //str += "\n";
-    long int ns = conn->Send(str.c_str(), str.size());
+    long int ns = conn.Send(str.c_str(), str.size());
     if (ns < 0) {
-        log_warn("Send err %s.", conn->GetErrMsg().c_str());
-        DelConn(cid);
-        DelTimerTask(cid);
+        log_warn("Send err %s.", conn.GetErrMsg().c_str());
+        DelConn(conn.GetCID());
+        DelTimerTask(conn.GetCID());
         return;
     }
 
@@ -196,9 +200,9 @@ void TServer::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
     if ((unsigned int) ns < str.size()) {
         //todo send remain;
         log_warn("Send buff full.");
-        conn->GetIOTask().SetMask(EV_WRITEABLE);
-        conn->GetIOTask().Bind(std::bind(&TServer::OnWriteRemain, this, _1, _2, _3));
-        conn->GetIOTask().Restart();
+        conn.GetIOTask().SetMask(EV_WRITEABLE);
+        conn.GetIOTask().Bind(std::bind(&TServer::OnWriteRemain, this, _1, _2, _3));
+        conn.GetIOTask().Restart();
     }
 }
 
@@ -263,6 +267,10 @@ void TServer::Run() {
     loop_.Run();
 }
 
+void TServer::Stop() {
+    loop_.Stop();
+}
+
 //=====================private===========================//
 int TServer::GetOption(int argc, char **argv) {
     int ret = 0;
@@ -318,13 +326,6 @@ int TServer::MakeNonblock(int fd) {
 }
 
 int TServer::SetCliOpt(int fd) {
-
-    int snds = 0, rvs = 0;
-    socklen_t len = sizeof(int);
-    getsockopt(fd, SOL_SOCKET, SO_SNDBUF, (void *) &snds, &len);
-    getsockopt(fd, SOL_SOCKET, SO_RCVBUF, (void *) &rvs, &len);
-    log_debug("getsockopt snds = %d, rvs = %d", snds, rvs);
-
     //一般实际缓冲区大小是设置的2倍
     //path:/proc/sys/net/core/wmem_max
     int send_buff_size = 4 * 32768;
@@ -348,11 +349,6 @@ int TServer::SetCliOpt(int fd) {
         log_warn("setsockopt to forbid Nagle's algorithm. %s", strerror(errno));
         return FAIL;
     }
-
-    getsockopt(fd, SOL_SOCKET, SO_SNDBUF, (void *) &snds, &len);
-    getsockopt(fd, SOL_SOCKET, SO_RCVBUF, (void *) &rvs, &len);
-    log_debug("getsockopt snds = %d, rvs = %d", snds, rvs);
-
 
     return SUCCESS;
 }

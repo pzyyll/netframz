@@ -9,6 +9,8 @@
 #include "nf_event.h"
 #include "nf_event_timer_impl.h"
 
+#include "mem_check.h"
+
 TimerTask::TimerTask(EventLoop &loop, const unsigned long interval, bool is_loop)
         : loop_(loop), impl_(new impl_type(interval, is_loop)) {
 

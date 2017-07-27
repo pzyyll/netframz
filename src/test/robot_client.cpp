@@ -58,6 +58,24 @@ int main(int argc, char *argv[]) {
 
     int n = 0;
     while (cin >> n) {
+        if (0 == n) {
+            while (true) {
+                cnt = 0;
+                int n = 1000;
+                for (int i = 0; i < n; ++i) {
+                    pthread_create(threads + i, NULL, AnRobot, NULL);
+                }
+
+                for (int i = 0; i < n; ++i) {
+                    pthread_join(threads[i], NULL);
+                }
+
+                cout << "==========" << endl;
+                cout << cnt << endl;
+                cout << "==========" << endl;
+                sleep(1);
+            }
+        }
         cnt = 0;
         for (int i = 0; i < n; ++i) {
             pthread_create(threads + i, NULL, AnRobot, NULL);

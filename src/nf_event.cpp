@@ -26,6 +26,10 @@ void EventLoop::Run() {
     } while (!stop_ && (HaveIOEvent() || HaveTimerTask()));
 }
 
+void EventLoop::Stop() {
+    stop_ = true;
+}
+
 int EventLoop::SetIOTask(iotask_pointer task) {
     int ret = RET::RET_SUCCESS;
 

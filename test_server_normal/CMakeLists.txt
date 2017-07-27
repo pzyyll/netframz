@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(NFSOURCE_FILES
         ../src/nf_event.cpp
         ../src/nf_epoll.cpp
+        #../src/nf_mem_check.cpp
         ../src/nf_event_iotask.cpp
         ../src/nf_event_iotask_impl.cpp
         ../src/nf_event_timer_task.cpp
