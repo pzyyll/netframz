@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
         if (0 == n) {
             cin >> n2;
             while (true) {
-                StartNRobot(n);
+                StartNRobot(n2);
                 sleep(1);
             }
         }
