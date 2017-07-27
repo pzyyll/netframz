@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
         if (0 == n) {
             while (true) {
                 cnt = 0;
-                int n = 1000;
+                int n = 200;
                 for (int i = 0; i < n; ++i) {
                     pthread_create(threads + i, NULL, AnRobot, NULL);
                 }

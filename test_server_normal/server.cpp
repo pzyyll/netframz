@@ -184,7 +184,43 @@ char buff[1024000];
 void TServer::Do(Connector &conn) {
     conn.SetLastActTimeToNow();
     long int nr = conn.Recv(buff, sizeof(buff));
+
     log_debug("recv size: %ld", nr);
+    if (nr < sizeof(struct Head)) {
+        log_warn("Bag lenth is err.");
+        return;
+    }
+
+    std::vector<std::string> vec_strs;
+    int fpos = 0;
+    while (fpos < nr) {
+        char *topbuf = buff + fpos;
+        struct Head *head = (struct Head *)topbuf;
+        int len = ntohs(head->len);
+        log_debug("recv bag len %d", len);
+        fpos += sizeof(struct Head);
+
+        if (nr - fpos < len) {
+            log_warn("bag container is flaw.");
+        }
+
+        std::string rvstr(topbuf + fpos, len);
+        vec_strs.push_back(rvstr);
+        fpos += len;
+    }
+
+
+    std::string sndstr;
+    for (int i = 0; i < vec_strs.size(); ++i) {
+        std::string &item = vec_strs[i];
+        struct Head head;
+        head.len = htons(item.size());
+        std::string nitem((char *)&head, sizeof(head));
+        nitem += item;
+        sndstr += nitem;
+    }
+
+    //todo first
 
     std::string str(buff, nr);
     long int ns = conn.Send(str.c_str(), str.size());
