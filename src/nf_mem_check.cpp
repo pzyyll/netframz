@@ -6,6 +6,56 @@
 
 using namespace std;
 
+MemCheck::MemCheck() : size_(0) {
+    ListHeadInit(&head_);
+}
+
+vois MemCheck::Add(const struct NodeInfo &info) {
+    struct ListNode *node = (struct ListNode *)malloc(sizeof(struct ListNode));
+    if (node) {
+        ListHeadInit(&node->list);
+        node->info = info;
+        ListAdd(&node->list, &head_);
+        ++size_;
+    }
+}
+
+void MemCheck::Del(void *key) {
+    struct ListNode *pos;
+    LIST_FOR_EACH(pos, &head, list) {
+        if (pos->info.ptr == key) {
+            ListDel(&pos->list);
+            free(pos);
+            --size_;
+            break;
+        }
+    }
+}
+
+struct NodeInfo *MemCheck::Search(void *key) {
+    struct ListNode *pos;
+    LIST_FOR_EACH(pos, &head, list) {
+        if (pos->info.ptr == key) {
+            return &pos->info;
+        }
+    }
+
+    return NULL;
+}
+
+void MemCheck::Clear() {
+    struct ListHead *pos = &head_.next;
+    while (pos != &head_) {
+        struct ListHead *pre = pos;
+        pos = pos->next;
+
+        struct ListNode *node = LIST_ENTRY(pre, struct ListNode, list);
+        ListDel(pre);
+        free(node);
+        --size_;
+    }
+}
+
 static void use(mem_map_t const *m) {  }
 
 mem_map_t &GetMemMap() {
