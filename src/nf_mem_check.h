@@ -1,7 +1,6 @@
 #ifndef NF_MEM_CHECK_H
 #define NF_MEM_CHECK_H
 
-#include <unordered_map>
 #include "nf_list.h"
 
 struct NodeInfo {
@@ -10,8 +9,6 @@ struct NodeInfo {
     unsigned int line;
     char file_name[256];
 };
-
-typedef std::unordered_map<void *, NodeInfo> mem_map_t;
 
 class MemCheck {
 public:
@@ -25,21 +22,32 @@ public:
     ~MemCheck();
 
     void Add(const struct NodeInfo &info);
+
     void Del(void *key);
+
     struct NodeInfo *Search(void *key);
+
     void Clear();
+
     unsigned long GetSize();
+
     struct NodeInfo *GetNext(bool is_reset = false);
+
 
 private:
     struct ListHead head_;
     unsigned long size_;
 
-    static struct ListHead &head;
-    static struct ListHead &GetInstance();
+// singleton
+public:
+    static MemCheck &GetMutableInstance();
+
+private:
+    static MemCheck &GetInstance();
+
+    static MemCheck &instance;
 };
 
-mem_map_t &GetMemMap();
 void *operator new(size_t size, const char *file, unsigned int line);
 void *operator new[] (size_t size, const char *file, unsigned int line);
 void operator delete(void *mem) noexcept;

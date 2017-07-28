@@ -17,6 +17,7 @@ set(SOURCE_FILES
         ../nf_event_timer_task.cpp
         ../nf_event_timer_impl.cpp
         ../nf_event_timer_mng.cpp
+        ../nf_mem_check.cpp
         )
 
 add_executable(iotask iotask.cpp ${SOURCE_FILES})
@@ -27,6 +28,8 @@ add_executable(epoll_inout epoll_in_out.cpp tcp_client.cpp ${SOURCE_FILES})
 add_executable(send_client send_client.cpp tcp_client.cpp ${SOURCE_FILES})
 add_executable(robot_client robot_client.cpp tcp_client.cpp ${SOURCE_FILES})
 add_executable(pthread pthread.cpp) 
+add_executable(tmem_check tmem_check.cpp ${SOURCE_FILES})
+
 #target_link_libraries(netframz -lboostsystem)
 #target_link_libraries(iotask -lglog)
 target_link_libraries(robot_client -lpthread)

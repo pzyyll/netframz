@@ -5,6 +5,8 @@
 #ifndef NETFRAMZ_NF_LIST_H
 #define NETFRAMZ_NF_LIST_H
 
+#include <stddef.h>
+
 struct ListHead {
     struct ListHead *next, *prev;
 };
