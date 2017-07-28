@@ -20,11 +20,11 @@ static const unsigned long DEFAULT_BUFF_SIZE = 1024000;
 class ErrCode {
 public:
     enum RET {
-        FAIL = -1;
-        SUCCESS = 0;
+        FAIL = -1,
+        SUCCESS = 0,
     };
 public:
-    ErrCode(int ret = 0, std::string err_msg = "") : ret(ret), err_msg_(err_msg) {  }
+    ErrCode(int ret = 0, std::string err_msg = "") : ret_(ret), err_msg_(err_msg) {  }
     ~ErrCode() {  }
 
     void set_ret(int ret) { ret_ = ret; }
@@ -36,9 +36,9 @@ public:
 private:
     int ret_;
     std::string err_msg_;
-}
+};
 
-typedef std::function<void (unsigned long, task_data_t, ErrCode)> WRHandler;
+typedef std::function<void(unsigned long, task_data_t, ErrCode)> WRHandler;
 
 struct Buffer {
     explicit Buffer(const unsigned long len)
@@ -63,8 +63,7 @@ struct StaticBuffer {
 };
 
 struct ConnCbData {
-    struct StaticBuffer buf_info;
-    task_data_t other;
+    task_data_t pri_data;
     WRHandler handler;
 };
 
@@ -88,7 +87,7 @@ public:
 
     ssize_t Recv(void *buff, const size_t size);
 
-    void Send(const ConnCbData &cb_data);
+    void Send(const char *buff, const size_t lenth, const ConnCbData &cb_data = ConnCbData());
 
     void Close();
 

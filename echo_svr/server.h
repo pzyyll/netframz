@@ -25,7 +25,6 @@
 #include "nf_event_iotask.h"
 #include "nf_event_timer_task.h"
 #include "connector.h"
-//#include "singleton.h"
 
 class TServer {
 public:
@@ -52,9 +51,9 @@ public:
 
     void OnAccept(EventLoop *loopsv, task_data_t data, int mask);
 
-    void OnRead(EventLoop *loopsv, task_data_t data, int mask);
+    void OnRead(unsigned long lenth, task_data_t data, ErrCode err);
 
-    void OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask);
+    void OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err);
 
     void OnTick(EventLoop *loopsv, task_data_t data, int mask);
 

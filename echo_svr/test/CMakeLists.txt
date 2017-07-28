@@ -11,5 +11,6 @@ set(SOURCE_FILES tcp_client.cpp)
 
 add_executable(robot_client robot_client.cpp ${SOURCE_FILES})
 add_executable(send_client send_client.cpp ${SOURCE_FILES})
+add_executable(send_patch_client send_patch_client.cpp ${SOURCE_FILES})
 
 target_link_libraries(robot_client -lpthread)

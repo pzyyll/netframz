@@ -2,6 +2,7 @@
 // @ Create by CaiZhili on 2017/7/18
 // @ Bref
 //
+
 #include "connector.h"
 #include "mem_check.h"
 
@@ -29,30 +30,29 @@ Connector::~Connector() {
 void Connector::BeginRecv(const ConnCbData &cb_data) {
     rdata = cb_data;
 
-    task_.SetMask(EV_READABLE);
-    task_.Bind(std::bind(&Connector::OnRead, this, _1, _2, _3));
-    task_.Start();
+    task_->SetMask(EV_READABLE);
+    task_->Bind(std::bind(&Connector::OnRead, this, _1, _2, _3));
+    task_->Start();
 }
 
-void Connector::Send(const ConnCbData &cb_data) {
-    Errcode err_code(ErrCode::SUCCESS);
+void Connector::Send(const char *buff, const size_t lenth, const ConnCbData &cb_data) {
+    ErrCode err_code(ErrCode::SUCCESS);
 
-    struct StaticBuffer &buf_info = cb_data.buf_info;
-
-    ssize_t ns = Send((void *)buf_info.buff, buf_info.lenth);
+    ssize_t ns = Send((void *)buff, lenth);
     if (ns < 0) {
         err_code.set_ret(ErrCode::FAIL);
         err_code.set_err_msg(err_msg_);
-        cb_data.handler(0, cb_data.other, err_code);
+        if (cb_data.handler)
+            cb_data.handler(0, cb_data.pri_data, err_code);
         return;
     }
 
     //Socket 缓冲区满
-    if (ns < buf_info.lenth) {
+    if ((size_t) ns < lenth) {
         wdata = cb_data;
-        task_.SetMask(EV_WRITEABLE);
-        task_.Bind(std::bind(&Connector::OnWriteRemain, this, _1, _2, _3));
-        task_.Restart();
+        task_->SetMask(EV_WRITEABLE);
+        task_->Bind(std::bind(&Connector::OnWriteRemain, this, _1, _2, _3));
+        task_->Restart();
     }
 }
 
@@ -62,14 +62,16 @@ void Connector::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
     if (CheckMask(mask) < 0) {
         err_code.set_ret(ErrCode::FAIL);
         err_code.set_err_msg(err_msg_);
-        rdata.handler(0, rdata.other, err_code);
+        if (rdata.handler)
+            rdata.handler(0, rdata.pri_data, err_code);
         return;
     }
 
     //检查用户缓冲区是否满了
-    ssize_t remain = recv_buf_.lenth - tpos;
+    ssize_t remain = recv_buf_.lenth - recv_buf_.tpos;
     if (remain <= 0) {
-        rdata.handler(recv_buf_.tpos - recv_buf_.fpos, rdata.other, err_code);
+        if (rdata.handler)
+            rdata.handler(recv_buf_.tpos - recv_buf_.fpos, rdata.pri_data, err_code);
         return;
     }
 
@@ -78,30 +80,32 @@ void Connector::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
     if (nr < 0) {
         err_code.set_ret(ErrCode::FAIL);
         err_code.set_err_msg(err_msg_);
-        rdata.handler(recv_buf_.tpos - recv_buf_.fpos, rdata.other, err_code);
+        if (rdata.handler)
+            rdata.handler(recv_buf_.tpos - recv_buf_.fpos, rdata.pri_data, err_code);
         return;
     }
 
     recv_buf_.tpos += nr;
-    rdata.handler(recv_buf_.tpos - recv_buf_.fpos, rdata.other, err_code);
+    if (rdata.handler)
+        rdata.handler(recv_buf_.tpos - recv_buf_.fpos, rdata.pri_data, err_code);
 }
 
 void Connector::OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask) {
-    ErrCode err_code(ErrCode::SUCCESS);
+    ErrCode err_code(ErrCode::FAIL);
 
     if (CheckMask(mask) < 0) {
-        err_code.set_ret(ErrCode::FAIL);
         err_code.set_err_msg(err_msg_);
-        wdata.handler(0, wdata.other, err_code);
+        if (wdata.handler)
+            wdata.handler(0, wdata.pri_data, err_code);
         return;
     }
 
     size_t remain = GetRemainSize();
     ssize_t ns = SendRemain();
     if (ns < 0) {
-        err_code.set_ret(ErrCode::FAIL);
         err_code.set_err_msg(err_msg_);
-        wdata.handler(0, wdata.other, err_code);
+        if (wdata.handler)
+            wdata.handler(0, wdata.pri_data, err_code);
         return;
     }
 
@@ -289,6 +293,8 @@ Connector::ssize_t Connector::InnerRead(void *buff, size_t size) {
                 return FAIL;
             }
             break;
+        } else if (nread == 0) {
+            break;
         }
 
         nleft -= nread;
@@ -306,7 +312,7 @@ Connector::ssize_t Connector::InnerWrite(const void *buff, const size_t size) {
 
     while (nleft > 0) {
         nwriten = ::write(fd, ptr, nleft);
-        if (nwriten < 0) {
+        if (nwriten <= 0) {
             if (EINTR == errno) {
                 continue;
             }

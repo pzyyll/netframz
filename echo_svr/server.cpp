@@ -160,7 +160,7 @@ void TServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
     }
 }
 
-void TServer::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
+void TServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
     unsigned long cid = data.data.id;
     ConnectorPtr conn = FindConn(cid);
 
@@ -170,7 +170,8 @@ void TServer::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
         return;
     }
 
-    if (CheckMask(mask) < 0) {
+    if (err.get_ret() != ErrCode::SUCCESS) {
+        log_info("%s", err.get_err_msg().c_str());
         DelConn(cid);
         DelTimerTask(cid);
         return;
@@ -187,6 +188,7 @@ void TServer::Do(Connector &conn) {
     conn.SetLastActTimeToNow();
     long int nr = conn.Recv(buff, sizeof(buff));
 
+    log_debug("rv: %li", nr);
     std::vector<std::string> vec_strs;
     Cmd::Unpack(vec_strs, buff, nr);
 
@@ -196,24 +198,15 @@ void TServer::Do(Connector &conn) {
         Cmd::Packing(vec_strs[i], sndstr);
     }
 
-    long int ns = conn.Send(sndstr.c_str(), sndstr.size());
-    if (ns < 0) {
-        log_warn("Send err %s.", conn.GetErrMsg().c_str());
-        DelConn(conn.GetCID());
-        DelTimerTask(conn.GetCID());
-        return;
-    }
+    log_debug("snd: %li", (long int)sndstr.size());
 
-    if ((unsigned int) ns < sndstr.size()) {
-        //todo send remain;
-        log_warn("Send buff full.");
-        conn.GetIOTask().SetMask(EV_WRITEABLE);
-        conn.GetIOTask().Bind(std::bind(&TServer::OnWriteRemain, this, _1, _2, _3));
-        conn.GetIOTask().Restart();
-    }
+    struct ConnCbData cbdata;
+    cbdata.pri_data.data.id = conn.GetCID();
+    cbdata.handler = std::bind(&TServer::OnWriteErr, this,_1, _2, _3);
+    conn.Send(sndstr.c_str(), sndstr.size(), cbdata);
 }
 
-void TServer::OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask) {
+void TServer::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
     unsigned long cid = data.data.id;
     ConnectorPtr conn = FindConn(cid);
 
@@ -223,21 +216,12 @@ void TServer::OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask) {
         return;
     }
 
-    if (CheckMask(mask) < 0) {
+    if (err.get_ret() != ErrCode::SUCCESS) {
+        log_warn("%s", err.get_err_msg().c_str());
         DelConn(cid);
         DelTimerTask(cid);
         return;
     }
-
-    unsigned long remain_size = conn->GetRemainSize();
-    long int snd_size = conn->SendRemain();
-    if (remain_size - snd_size == 0) {
-        conn->GetIOTask().SetMask(EV_READABLE);
-        conn->GetIOTask().Bind(std::bind(&TServer::OnRead, this, _1, _2, _3));
-        conn->GetIOTask().Restart();
-    }
-
-    log_info("snd_size %ld, remain_size %lu.", snd_size, remain_size);
 }
 
 void TServer::OnTick(EventLoop *loopsv, task_data_t data, int mask) {
@@ -335,7 +319,7 @@ int TServer::MakeNonblock(int fd) {
 int TServer::SetCliOpt(int fd) {
     //一般实际缓冲区大小是设置的2倍
     //path:/proc/sys/net/core/wmem_max
-    int send_buff_size = 4 * 32768;
+    int send_buff_size = 1024;//4 * 32768;
     int recv_buff_size = 4 * 32768;
 
     if (::setsockopt(fd, SOL_SOCKET, SO_SNDBUF,
@@ -403,12 +387,11 @@ TServer::ConnectorPtr TServer::CreateConn(int fd) {
             delete cli;
         return NULL;
     }
-    IOTask &task = cli->GetIOTask();
-    task.SetMask(EV_READABLE);
-    task.Bind(std::bind(&TServer::OnRead, this, _1, _2, _3));
-    task_data_t pridata = {.data = {.id = cid}};
-    task.SetPrivateData(pridata);
-    task.Start();
+
+    struct ConnCbData cb_data;
+    cb_data.pri_data.data.id = cid;
+    cb_data.handler = std::bind(&TServer::OnRead, this, _1, _2, _3);
+    cli->BeginRecv(cb_data);
 
     return cli;
 }
