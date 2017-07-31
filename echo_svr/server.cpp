@@ -22,7 +22,6 @@ TServer::~TServer() {
         delete accept_task_;
     if (tick_)
         delete tick_;
-
 }
 
 int TServer::Init(int argc, char **argv) {
@@ -153,27 +152,31 @@ void TServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
             ::close(fd);
             return;
         }
+
         if (!CreateTimerTask(conn->GetCID())) {
             ::close(fd);
             return;
         }
+
+        struct ConnCbData cb_data;
+        cb_data.pri_data.data.id = conn->GetCID();
+        cb_data.handler = std::bind(&TServer::OnRead, this, _1, _2, _3);
+        conn->BeginRecv(cb_data);
     }
 }
 
 void TServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
     unsigned long cid = data.data.id;
-    ConnectorPtr conn = FindConn(cid);
-
-    if (!conn) {
-        //Never go here;
-        log_warn("Not find conn for cid %lu.", cid);
-        return;
-    }
-
     if (err.get_ret() != ErrCode::SUCCESS) {
         log_info("%s", err.get_err_msg().c_str());
         DelConn(cid);
         DelTimerTask(cid);
+        return;
+    }
+
+    ConnectorPtr conn = FindConn(cid);
+    if (!conn) {
+        log_warn("Can't find conn for cid %lu in map.", cid);
         return;
     }
 
@@ -208,13 +211,6 @@ void TServer::Do(Connector &conn) {
 
 void TServer::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
     unsigned long cid = data.data.id;
-    ConnectorPtr conn = FindConn(cid);
-
-    if (!conn) {
-        //Never go here;
-        log_warn("Not find conn for cid %lu.", cid);
-        return;
-    }
 
     if (err.get_ret() != ErrCode::SUCCESS) {
         log_warn("%s", err.get_err_msg().c_str());
@@ -318,7 +314,7 @@ int TServer::MakeNonblock(int fd) {
 
 int TServer::SetCliOpt(int fd) {
     //一般实际缓冲区大小是设置的2倍
-    //path:/proc/sys/net/core/wmem_max
+    //path:/proc/sys/net/core/w(r)mem_max
     int send_buff_size = 1024;//4 * 32768;
     int recv_buff_size = 4 * 32768;
 
@@ -380,6 +376,7 @@ TServer::ConnectorPtr TServer::CreateConn(int fd) {
         log_err("New a Connector fail.");
         return NULL;
     }
+
     unsigned long cid = cli->GetCID();
     if (!conn_map_.insert(std::make_pair(cid, cli)).second) {
         log_err("Add cli connector to map fail, fd|%d", fd);
@@ -387,11 +384,6 @@ TServer::ConnectorPtr TServer::CreateConn(int fd) {
             delete cli;
         return NULL;
     }
-
-    struct ConnCbData cb_data;
-    cb_data.pri_data.data.id = cid;
-    cb_data.handler = std::bind(&TServer::OnRead, this, _1, _2, _3);
-    cli->BeginRecv(cb_data);
 
     return cli;
 }

@@ -14,29 +14,9 @@
 #include <sys/time.h>
 
 #include "nf_event_iotask.h"
+#include "err_code.h"
 
 static const unsigned long DEFAULT_BUFF_SIZE = 1024000;
-
-class ErrCode {
-public:
-    enum RET {
-        FAIL = -1,
-        SUCCESS = 0,
-    };
-public:
-    ErrCode(int ret = 0, std::string err_msg = "") : ret_(ret), err_msg_(err_msg) {  }
-    ~ErrCode() {  }
-
-    void set_ret(int ret) { ret_ = ret; }
-    int get_ret() { return ret_; }
-
-    void set_err_msg(const std::string &err_msg) { err_msg_ = err_msg; }
-    std::string get_err_msg() { return err_msg_; }
-
-private:
-    int ret_;
-    std::string err_msg_;
-};
 
 typedef std::function<void(unsigned long, task_data_t, ErrCode)> WRHandler;
 
@@ -50,6 +30,26 @@ struct Buffer {
         if (base)
             delete[] base;
         base = NULL;
+    }
+
+    //以下提供的几个接口只是方便内存操作，调用前需要自行检查越界问题。
+    unsigned long MaxSize() { return lenth; }
+    unsigned long UsedSize() { return (unsigned long)(tpos - fpos); }
+    unsigned long RemainSize() { return (unsigned long)(MaxSize() - UsedSize()); }
+    void FrontAdvancing(long step_size) {
+        fpos += step_size;
+        if (fpos == tpos)
+            fpos = tpos = 0;
+    }
+    void TailAdvancing(long step_size) { tpos += step_size; }
+    char *FrontPos() { return (base + fpos); }
+    char *TailPos() { return (base + tpos); }
+    void MemoryMove2Left() {
+        if (0 == fpos)
+            return;
+        memmove(base, base + fpos, tpos - fpos);
+        tpos -= fpos;
+        fpos = 0;
     }
 
     char *base;
@@ -101,6 +101,8 @@ public:
 
     std::string GetErrMsg();
 
+    size_t GetRvBuffLenth();
+
 protected:
     Connector(const Connector &);
 
@@ -121,8 +123,6 @@ protected:
     ssize_t Send(const void *buff, const size_t size);
 
     ssize_t SendRemain();
-
-    size_t GetRemainSize();
 
 protected:
     unsigned long cid_;

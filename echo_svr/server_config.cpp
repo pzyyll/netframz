@@ -11,7 +11,7 @@ int ServerConfig::Init(const char *cfg_file) {
     ipv6 = "";
     timeout = 30000;
     deamon = 0;
-    log_level = 2;
+    log_level = 4;
 
     return 0;
 }

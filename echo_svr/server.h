@@ -65,13 +65,13 @@ public:
 
     void Do(Connector &conn);
 
-    //void OnTick();
+    //void OnTick(unsigned long now);
 
     //void OnIdle();
 
     //void OnExit();
 
-private:
+protected:
     int GetOption(int argc, char **argv);
 
     int MakeNonblock(int fd);

@@ -5,6 +5,7 @@
 
 #include "connector.h"
 #include "mem_check.h"
+#include "log.h"
 
 using namespace std::placeholders;
 
@@ -58,62 +59,73 @@ void Connector::Send(const char *buff, const size_t lenth, const ConnCbData &cb_
 
 void Connector::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
     ErrCode err_code(ErrCode::SUCCESS);
+    ssize_t nr = 0;
 
-    if (CheckMask(mask) < 0) {
-        err_code.set_ret(ErrCode::FAIL);
-        err_code.set_err_msg(err_msg_);
-        if (rdata.handler)
-            rdata.handler(0, rdata.pri_data, err_code);
-        return;
-    }
+    do {
+        if (CheckMask(mask) < 0) {
+            err_code.set_ret(ErrCode::FAIL);
+            err_code.set_err_msg(err_msg_);
+            nr = 0;
+            break;
+        }
 
-    //检查用户缓冲区是否满了
-    ssize_t remain = recv_buf_.lenth - recv_buf_.tpos;
-    if (remain <= 0) {
-        if (rdata.handler)
-            rdata.handler(recv_buf_.tpos - recv_buf_.fpos, rdata.pri_data, err_code);
-        return;
-    }
+        //检查用户缓冲区是否满了
+        recv_buf_.MemoryMove2Left();
+        log_warn("tpos|%lu, fpos|%lu", recv_buf_.tpos, recv_buf_.fpos);
+        ssize_t remain = recv_buf_.RemainSize();
+        if (remain == 0) {
+            nr = 0;
+            break;
+        }
 
-    char *base = recv_buf_.base + recv_buf_.tpos;
-    ssize_t nr = InnerRead(base, remain);
-    if (nr < 0) {
-        err_code.set_ret(ErrCode::FAIL);
-        err_code.set_err_msg(err_msg_);
-        if (rdata.handler)
-            rdata.handler(recv_buf_.tpos - recv_buf_.fpos, rdata.pri_data, err_code);
-        return;
-    }
+        char *base = recv_buf_.TailPos();
+        nr = InnerRead(base, remain);
+        if (nr < 0) {
+            err_code.set_ret(ErrCode::FAIL);
+            err_code.set_err_msg(err_msg_);
+            nr = 0;
+        }
 
-    recv_buf_.tpos += nr;
+    } while (false);
+
+    recv_buf_.TailAdvancing(nr);
+
     if (rdata.handler)
-        rdata.handler(recv_buf_.tpos - recv_buf_.fpos, rdata.pri_data, err_code);
+        rdata.handler(recv_buf_.UsedSize(), rdata.pri_data, err_code);
 }
 
 void Connector::OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask) {
     ErrCode err_code(ErrCode::FAIL);
+    ssize_t ns = 0;
 
-    if (CheckMask(mask) < 0) {
-        err_code.set_err_msg(err_msg_);
-        if (wdata.handler)
-            wdata.handler(0, wdata.pri_data, err_code);
+    do {
+        if (CheckMask(mask) < 0) {
+            err_code.set_err_msg(err_msg_);
+            break;
+        }
+
+        ssize_t ns = SendRemain();
+        if (ns < 0) {
+            err_code.set_err_msg(err_msg_);
+            break;
+        }
+
+        if (send_buf_.UsedSize() == 0) {
+            err_code.set_ret(ErrCode::SUCCESS);
+            task_->SetMask(EV_READABLE);
+            task_->Bind(std::bind(&Connector::OnRead, this, _1, _2, _3));
+            task_->Restart();
+            break;
+        }
+
+        log_debug("ns|%ld, remain|%d.", (int)send_buf_.UsedSize());
+        log_debug("tpos|%lu, fpos|%lu", send_buf_.tpos, send_buf_.fpos);
+
         return;
-    }
+    } while (false);
 
-    size_t remain = GetRemainSize();
-    ssize_t ns = SendRemain();
-    if (ns < 0) {
-        err_code.set_err_msg(err_msg_);
-        if (wdata.handler)
+    if (wdata.handler)
             wdata.handler(0, wdata.pri_data, err_code);
-        return;
-    }
-
-    if (remain - ns == 0) {
-        task_->SetMask(EV_READABLE);
-        task_->Bind(std::bind(&Connector::OnRead, this, _1, _2, _3));
-        task_->Restart();
-    }
     //todo check
 }
 
@@ -137,23 +149,19 @@ int Connector::CheckMask(int mask) {
 }
 
 Connector::ssize_t Connector::Recv(void *buff, const size_t size) {
-    size_t remain = recv_buf_.tpos - recv_buf_.fpos;
-    char *base = recv_buf_.base + recv_buf_.fpos;
+    size_t remain = recv_buf_.UsedSize();
+    size_t take_size = size;
+    char *base = recv_buf_.FrontPos();
 
-    if (size >= remain) {
-        memcpy(buff, base, remain);
-        recv_buf_.tpos = recv_buf_.fpos = 0;
-        return remain;
+    if (take_size > remain) {
+        take_size = remain;
     }
 
-    //暂时先这么写吧，每次都左对齐，是否可以等到左边的空闲空间达到一定比例时在考虑对齐
-    memcpy(buff, base, size);
-    recv_buf_.fpos += size;
-    memmove(recv_buf_.base, recv_buf_.base + recv_buf_.fpos, recv_buf_.tpos - recv_buf_.fpos);
-    recv_buf_.fpos = 0;
-    recv_buf_.tpos -= size;
+    log_warn("remain|%lu, take|%lu", remain, take_size);
+    memcpy(buff, base, take_size);
+    recv_buf_.FrontAdvancing(take_size);
 
-    return size;
+    return take_size;
 }
 
 Connector::ssize_t Connector::Send(const void *buff, const size_t size) {
@@ -165,8 +173,10 @@ Connector::ssize_t Connector::Send(const void *buff, const size_t size) {
     //nw = 0 或 nw 小于要求写的大小，说明 socket 缓冲区满了。
     //缓存下未发送的数据
     if ((size_t) nw < size) {
+        log_debug("send full.");
         //检查用户缓存是否足够存放现场
-        int snd_buf_size = send_buf_.lenth - send_buf_.tpos;
+        send_buf_.MemoryMove2Left();
+        int snd_buf_size = send_buf_.RemainSize();
         int nleft = size - nw;
         if (snd_buf_size < nleft) {
             snprintf(err_msg_, sizeof(err_msg_),
@@ -174,33 +184,27 @@ Connector::ssize_t Connector::Send(const void *buff, const size_t size) {
                      snd_buf_size, nleft);
             return FAIL;
         }
-        memcpy(send_buf_.base + send_buf_.tpos, (char *) buff + nw, nleft);
-        send_buf_.tpos += nleft;
+
+        memcpy(send_buf_.TailPos(), (char *) buff + nw, nleft);
+        send_buf_.TailAdvancing(nleft);
     }
+
     return nw;
 }
 
 Connector::ssize_t Connector::SendRemain() {
-    if (send_buf_.fpos == send_buf_.tpos) {
+    if (send_buf_.UsedSize() == 0) {
         return 0;
     }
 
-    void *buff = send_buf_.base;
-    size_t lenth = send_buf_.tpos - send_buf_.fpos;
+    void *buff = send_buf_.FrontPos();
+    size_t lenth = send_buf_.UsedSize();
     ssize_t nw = InnerWrite(buff, lenth);
     if (nw < 0) {
         return FAIL;
     }
-    send_buf_.fpos += nw;
-
-    if (send_buf_.fpos == send_buf_.tpos) {
-        send_buf_.fpos = send_buf_.tpos = 0;
-    } else {
-        //keep left aligned
-        memmove(send_buf_.base, send_buf_.base + send_buf_.fpos, lenth - nw);
-        send_buf_.fpos = 0;
-        send_buf_.tpos -= nw;
-    }
+    send_buf_.FrontAdvancing(nw);
+    log_debug("tpos|%lu, fpos|%lu, nw|%ld", send_buf_.tpos, send_buf_.fpos, nw);
 
     return nw;
 }
@@ -234,10 +238,6 @@ void Connector::SetLastActTimeToNow() {
     last_act_time_ = now.tv_sec;
 }
 
-Connector::size_t Connector::GetRemainSize() {
-    return (send_buf_.tpos - send_buf_.fpos);
-}
-
 IOTask &Connector::GetIOTask() {
     return *task_;
 }
@@ -250,7 +250,9 @@ std::string Connector::GetErrMsg() {
     return std::string(err_msg_);
 }
 
-//================== protected or private ===============================//
+Connector::size_t Connector::GetRvBuffLenth() {
+    return recv_buf_.UsedSize();
+}
 
 int Connector::MakeFdBlockIs(bool is_block, int fd) {
     int val = ::fcntl(fd, F_GETFL, 0);

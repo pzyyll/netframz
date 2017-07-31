@@ -12,6 +12,7 @@ add_definitions(
         )
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_BUILD_TYPE debug CACHE STRING "set build type debug")
 
 set(NFSOURCE_FILES
         ../src/nf_event.cpp
