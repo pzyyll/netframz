@@ -3,42 +3,64 @@
 
 #include <string>
 #include <vector>
+#include <cstddef.h>
 
 namespace proto {
-    struct Head {
-        int len;
+#pragma pack(1)
+    struct MsgHeader {
+        unsigned int len;
     };
+#pragma pack()
 
-    class Cmd {
-    public:
-        static void Packing(std::string &pack, const std::string &str) {
-            struct Head head;
-            head.len = htonl(str.size());
-            pack.append((char *) &head, sizeof(head));
-            pack.append(str);
+#define MAX_CMD_LEN (1024 * 1024)
+
+class Cmd {
+public:
+    int Parse(const char *data, unsigned long lenth) {
+        unsigned int head_len = sizeof(struct MsgHeader);
+        if (lenth < head_len) {
+            return 0;
         }
 
-        static void Unpack(std::vector<std::string> &vec_str, const char *buf, unsigned long size) {
-            if (NULL == buf)
-                return;
+        const struct MsgHeader *head = (const struct MsgHeader *)(data);
+        unsigned int msg_len = ntohl(head->len);
 
-            int fpos = 0;
-            while ((unsigned int)fpos < size) {
-                if (size - fpos < sizeof(struct Head)) {
-                    break;
-                }
-                struct Head *head = (struct Head *)(buf + fpos);
-                int len = ntohl(head->len);
-                fpos += sizeof(struct Head);
-                if (size - fpos < (unsigned long) len) {
-                    break;
-                }
-                std::string item(buf + fpos, len);
-                vec_str.push_back(item);
-                fpos += len;
-            }
+        if (msg_len > MAX_CMD_LEN) {
+            snprintf("pkg is too long. msg len|%u", msg_len);
+            return -1;
         }
-    };
+
+        if (msg_len < head_len) {
+            snprintf("parse msg len err. msg len|%u", msg_len);
+            return -1;
+        }
+
+        if (msg_len > lenth) {
+            snprintf("msg is incomplete. msg_len|%u, buf len|%lu", msg_len, lenth);
+            return 0;
+        }
+
+        SetMsgData(std::string(data + head_len, msg_len - head_len));
+        return (int)msg_len;
+    }
+
+    void Serialize(std::string &data) {
+        data.clear();
+        struct MsgHeader head;
+        head.len = htonl(sizeof(head) + msg_data_.size());
+        data.append((char *) &head, sizeof(head));
+        data.append(msg_data_);
+    }
+
+    std::string GetErr() { return std::string(err_); }
+
+    std::string &GetMsgData() { return msg_data_; }
+    void SetMsgData(const std::string &msg_data) { msg_data_ = msg_data; }
+
+protected:
+    std::string msg_data_;
+    char err_[256];
+};
 }
 
 #endif //TEST_PROTO_H

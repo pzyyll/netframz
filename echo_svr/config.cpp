@@ -56,6 +56,8 @@ int CConfig::Init(const char *path) {
         if (line[0] == "#" || line[0] == '\0') {
             continue;
         }
-
+        std::vector<std::string> vecs;
+        StrSplit(vecs, std::string(line), "=");
+        //todo first
     }
 }
