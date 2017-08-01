@@ -24,10 +24,9 @@ private:
 
 private:
     static T& instance;
-    static void use(T const *Ta) {  }
     static T& get_instance() {
         static T t;
-        use(&t);
+        (void)(t);
         return t;
     };
 };

@@ -83,7 +83,7 @@ MemCheck &MemCheck::GetMutableInstance() {
 
 MemCheck &MemCheck::GetInstance() {
     static MemCheck mem_check;
-    (void *)&mem_check;
+    (void)(mem_check);
     return mem_check;
 }
 
