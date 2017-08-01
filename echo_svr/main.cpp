@@ -12,6 +12,7 @@ using namespace std;
 
 TServer svr;
 static void TermSigHandler(int sig) {
+    (void)(sig);
     svr.Stop();
 
 #ifdef MEM_CHECK

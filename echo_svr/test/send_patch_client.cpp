@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
         for (int i = 0; i < a; ++i) {
             string str(302400, 'a');
             string pack;
-            Cmd::Packing(str, pack);
+            Cmd::Packing(pack, str);
             int ns = cli.send((void *)pack.c_str(), pack.size());
             if (ns < 0) {
                 cout << cli.get_err_msg() << endl;

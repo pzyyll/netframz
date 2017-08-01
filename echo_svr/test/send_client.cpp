@@ -11,7 +11,7 @@
 using namespace std;
 using namespace proto;
 
-char recvbuff[10240000];
+char recvbuff[1024 * 1024 * 10];
 
 int main(int argc, char *argv[]) {
     if (argc < 3) {
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
             continue;
         }
         string pack;
-        Cmd::Packing(a, pack);
+        Cmd::Packing(pack, a);
         int ns = cli.send((void *)pack.c_str(), pack.size());
         if (ns < 0) {
             cout << cli.get_err_msg() << endl;

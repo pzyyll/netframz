@@ -16,7 +16,7 @@
 #include "nf_event_iotask.h"
 #include "err_code.h"
 
-static const unsigned long DEFAULT_BUFF_SIZE = 1024000;
+static const unsigned long DEFAULT_BUFF_SIZE = 1024 * 1024;
 
 typedef std::function<void(unsigned long, task_data_t, ErrCode)> WRHandler;
 
@@ -32,10 +32,10 @@ struct Buffer {
         base = NULL;
     }
 
-    //以下提供的几个接口只是方便内存操作，调用前需要自行检查越界问题。
+    //以下提供的几个接口只是方便操作，调用前需要自行检查越界问题。
     unsigned long MaxSize() { return lenth; }
     unsigned long UsedSize() { return (unsigned long)(tpos - fpos); }
-    unsigned long RemainSize() { return (unsigned long)(MaxSize() - UsedSize()); }
+    unsigned long RemainSize() { return (unsigned long)(lenth - tpos); }
     void FrontAdvancing(long step_size) {
         fpos += step_size;
         if (fpos == tpos)
@@ -55,11 +55,6 @@ struct Buffer {
     char *base;
     unsigned long lenth;
     unsigned long fpos, tpos;
-};
-
-struct StaticBuffer {
-    char *buff;
-    unsigned long lenth;
 };
 
 struct ConnCbData {
@@ -85,7 +80,7 @@ public:
 
     void BeginRecv(const ConnCbData &cb_data);
 
-    ssize_t Recv(void *buff, const size_t size);
+    size_t Recv(void *buff, const size_t size);
 
     void Send(const char *buff, const size_t lenth, const ConnCbData &cb_data = ConnCbData());
 

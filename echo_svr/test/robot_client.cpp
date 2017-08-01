@@ -38,7 +38,7 @@ void *AnRobot(void *arg) {
 LOOP_N_BEGING(nmsg)
     string str(pkg_len, 'a');
     string pack;
-    Cmd::Packing(str, pack);
+    Cmd::Packing(pack, str);
 
     int ns = cli.send((void *)pack.c_str(), pack.size());
     if (ns < 0) {

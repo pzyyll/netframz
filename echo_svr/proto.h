@@ -11,7 +11,7 @@ namespace proto {
 
     class Cmd {
     public:
-        static void Packing(const std::string &str, std::string &pack) {
+        static void Packing(std::string &pack, const std::string &str) {
             struct Head head;
             head.len = htonl(str.size());
             pack.append((char *) &head, sizeof(head));
@@ -38,7 +38,6 @@ namespace proto {
                 fpos += len;
             }
         }
-
     };
 }
 

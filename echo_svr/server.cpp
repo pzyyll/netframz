@@ -9,6 +9,8 @@
 #include "mem_check.h"
 #include "proto.h"
 
+#define UNUSE(x) ((void)(x))
+
 using namespace std::placeholders;
 using namespace std;
 using namespace proto;
@@ -125,6 +127,9 @@ int TServer::StartTick() {
 
 void TServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
     log_debug("OnAccept.");
+    UNUSE(loopsv);
+    UNUSE(data);
+    UNUSE(mask);
     int listen_fd = accept_task_->GetFd();
 
     while (true) {
@@ -184,21 +189,21 @@ void TServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
     Do(*conn);
 }
 
-static char buff[1024000];
+static char buff[1024 * 1024];
 void TServer::Do(Connector &conn) {
     log_debug("Do");
 
     conn.SetLastActTimeToNow();
-    long int nr = conn.Recv(buff, sizeof(buff));
+    unsigned long nr = conn.Recv(buff, sizeof(buff));
 
-    log_debug("rv: %li", nr);
+    log_debug("rv: %lu", nr);
     std::vector<std::string> vec_strs;
     Cmd::Unpack(vec_strs, buff, nr);
 
     // echo
     std::string sndstr;
     for (int i = 0; (unsigned int)i < vec_strs.size(); ++i) {
-        Cmd::Packing(vec_strs[i], sndstr);
+        Cmd::Packing(sndstr, vec_strs[i]);
     }
 
     log_debug("snd: %li", (long int)sndstr.size());
@@ -210,8 +215,8 @@ void TServer::Do(Connector &conn) {
 }
 
 void TServer::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
+    UNUSE(lenth);
     unsigned long cid = data.data.id;
-
     if (err.get_ret() != ErrCode::SUCCESS) {
         log_warn("%s", err.get_err_msg().c_str());
         DelConn(cid);
@@ -222,12 +227,17 @@ void TServer::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
 
 void TServer::OnTick(EventLoop *loopsv, task_data_t data, int mask) {
     //log_debug("OnTick");
+    UNUSE(loopsv);
+    UNUSE(data);
+    UNUSE(mask);
 
     //Do some need tick task;
 }
 
 void TServer::OnTimerOut(EventLoop *loopsv, task_data_t data, int mask) {
     log_debug("OnTimerOut.");
+    UNUSE(loopsv);
+    UNUSE(mask);
 
     unsigned long cid = data.data.id;
 
@@ -315,7 +325,7 @@ int TServer::MakeNonblock(int fd) {
 int TServer::SetCliOpt(int fd) {
     //一般实际缓冲区大小是设置的2倍
     //path:/proc/sys/net/core/w(r)mem_max
-    int send_buff_size = 1024;//4 * 32768;
+    int send_buff_size = 4 * 32768;
     int recv_buff_size = 4 * 32768;
 
     if (::setsockopt(fd, SOL_SOCKET, SO_SNDBUF,

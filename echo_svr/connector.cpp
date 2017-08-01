@@ -1,11 +1,13 @@
 //
 // @ Create by CaiZhili on 2017/7/18
-// @ Bref
+// @ Brief
 //
 
 #include "connector.h"
 #include "mem_check.h"
 #include "log.h"
+
+#define UNUSE(x) (void)(x);
 
 using namespace std::placeholders;
 
@@ -54,12 +56,18 @@ void Connector::Send(const char *buff, const size_t lenth, const ConnCbData &cb_
         task_->SetMask(EV_WRITEABLE);
         task_->Bind(std::bind(&Connector::OnWriteRemain, this, _1, _2, _3));
         task_->Restart();
+        return;
     }
+
+    if (cb_data.handler)
+        cb_data.handler(0, cb_data.pri_data, err_code);
 }
 
 void Connector::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
     ErrCode err_code(ErrCode::SUCCESS);
     ssize_t nr = 0;
+    UNUSE(loopsv);
+    UNUSE(data);
 
     do {
         if (CheckMask(mask) < 0) {
@@ -85,7 +93,6 @@ void Connector::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
             err_code.set_err_msg(err_msg_);
             nr = 0;
         }
-
     } while (false);
 
     recv_buf_.TailAdvancing(nr);
@@ -97,6 +104,8 @@ void Connector::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
 void Connector::OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask) {
     ErrCode err_code(ErrCode::FAIL);
     ssize_t ns = 0;
+    UNUSE(loopsv);
+    UNUSE(data);
 
     do {
         if (CheckMask(mask) < 0) {
@@ -104,9 +113,10 @@ void Connector::OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask) {
             break;
         }
 
-        ssize_t ns = SendRemain();
+        ns = SendRemain();
         if (ns < 0) {
             err_code.set_err_msg(err_msg_);
+            ns = 0;
             break;
         }
 
@@ -118,15 +128,15 @@ void Connector::OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask) {
             break;
         }
 
-        log_debug("ns|%ld, remain|%d.", (int)send_buf_.UsedSize());
+        log_debug("ns|%ld, remain|%d.", ns, (int)send_buf_.UsedSize());
         log_debug("tpos|%lu, fpos|%lu", send_buf_.tpos, send_buf_.fpos);
 
         return;
     } while (false);
 
     if (wdata.handler)
-            wdata.handler(0, wdata.pri_data, err_code);
-    //todo check
+            wdata.handler(ns, wdata.pri_data, err_code);
+    //todo
 }
 
 int Connector::CheckMask(int mask) {
@@ -148,7 +158,7 @@ int Connector::CheckMask(int mask) {
     return SUCCESS;
 }
 
-Connector::ssize_t Connector::Recv(void *buff, const size_t size) {
+Connector::size_t Connector::Recv(void *buff, const size_t size) {
     size_t remain = recv_buf_.UsedSize();
     size_t take_size = size;
     char *base = recv_buf_.FrontPos();
@@ -157,7 +167,7 @@ Connector::ssize_t Connector::Recv(void *buff, const size_t size) {
         take_size = remain;
     }
 
-    log_warn("remain|%lu, take|%lu", remain, take_size);
+    log_debug("remain|%lu, take|%lu", remain, take_size);
     memcpy(buff, base, take_size);
     recv_buf_.FrontAdvancing(take_size);
 
@@ -303,7 +313,7 @@ Connector::ssize_t Connector::InnerRead(void *buff, size_t size) {
         ptr += nread;
     }
 
-    return (size - nleft);
+    return (ssize_t)(size - nleft);
 }
 
 Connector::ssize_t Connector::InnerWrite(const void *buff, const size_t size) {
@@ -331,5 +341,5 @@ Connector::ssize_t Connector::InnerWrite(const void *buff, const size_t size) {
         ptr += nwriten;
     }
 
-    return (size - nleft);
+    return (ssize_t)(size - nleft);
 }
