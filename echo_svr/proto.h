@@ -16,6 +16,10 @@ namespace proto {
 
 class Cmd {
 public:
+    Cmd() { }
+
+    ~Cmd() { }
+
     int Parse(const char *data, unsigned long lenth) {
         unsigned int head_len = sizeof(struct MsgHeader);
         if (lenth < head_len) {
@@ -55,6 +59,7 @@ public:
     std::string GetErr() { return std::string(err_); }
 
     std::string &GetMsgData() { return msg_data_; }
+
     void SetMsgData(const std::string &msg_data) { msg_data_ = msg_data; }
 
 protected:
