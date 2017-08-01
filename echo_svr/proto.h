@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <cstddef.h>
+#include <cstddef>
 
 namespace proto {
 #pragma pack(1)
@@ -30,17 +30,17 @@ public:
         unsigned int msg_len = ntohl(head->len);
 
         if (msg_len > MAX_CMD_LEN) {
-            snprintf("pkg is too long. msg len|%u", msg_len);
+            snprintf(err_, sizeof(err_), "pkg is too long. msg len|%u", msg_len);
             return -1;
         }
 
         if (msg_len < head_len) {
-            snprintf("parse msg len err. msg len|%u", msg_len);
+            snprintf(err_, sizeof(err_), "parse msg len err. msg len|%u", msg_len);
             return -1;
         }
 
         if (msg_len > lenth) {
-            snprintf("msg is incomplete. msg_len|%u, buf len|%lu", msg_len, lenth);
+            snprintf(err_, sizeof(err_), "msg is incomplete. msg_len|%u, buf len|%lu", msg_len, lenth);
             return 0;
         }
 

@@ -21,7 +21,6 @@ void BuffHandle(char *buff, unsigned int &len) {
         int nr = cmd.Parse(buff + usepos, len);
         if (nr < 0) {
             cout << cmd.GetErr() << endl;
-            cli.close();
             return;
         }
 
