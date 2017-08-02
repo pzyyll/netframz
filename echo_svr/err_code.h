@@ -6,7 +6,7 @@
 class ErrCode {
 public:
     enum RET {
-        FAIL = -1,
+        FAIL    = -1,
         SUCCESS = 0,
     };
 public:
@@ -20,7 +20,7 @@ public:
     std::string get_err_msg() { return err_msg_; }
 
 private:
-    int ret_;
+    int         ret_;
     std::string err_msg_;
 };
 

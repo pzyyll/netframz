@@ -1,4 +1,3 @@
-#include "tcp_client.h"
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -6,6 +5,8 @@
 #include <sys/poll.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
+
+#include "tcp_client.h"
 
 TcpClient::TcpClient()
     : port_(0),

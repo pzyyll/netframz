@@ -11,10 +11,10 @@
 
 using namespace std::placeholders;
 
-unsigned long Connector::id_cnt_ = 1;
+unsigned long Connector::id_cnt = 1;
 
 Connector::Connector(EventLoop &loop, int fd)
-        : cid_(id_cnt_++),
+        : cid_(id_cnt++),
           is_close_(0),
           last_act_time_(0),
           recv_buf_(DEFAULT_BUFF_SIZE),
@@ -31,7 +31,7 @@ Connector::~Connector() {
 }
 
 void Connector::BeginRecv(const ConnCbData &cb_data) {
-    rdata = cb_data;
+    rdata_ = cb_data;
 
     task_->SetMask(EV_READABLE);
     task_->Bind(std::bind(&Connector::OnRead, this, _1, _2, _3));
@@ -52,7 +52,7 @@ void Connector::Send(const char *buff, const size_t lenth, const ConnCbData &cb_
 
     //Socket 缓冲区满
     if ((size_t) ns < lenth) {
-        wdata = cb_data;
+        wdata_ = cb_data;
         task_->SetMask(EV_WRITEABLE);
         task_->Bind(std::bind(&Connector::OnWriteRemain, this, _1, _2, _3));
         task_->Restart();
@@ -97,8 +97,8 @@ void Connector::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
 
     recv_buf_.TailAdvancing(nr);
 
-    if (rdata.handler)
-        rdata.handler(recv_buf_.UsedSize(), rdata.pri_data, err_code);
+    if (rdata_.handler)
+        rdata_.handler(recv_buf_.UsedSize(), rdata_.pri_data, err_code);
 }
 
 void Connector::OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask) {
@@ -134,8 +134,8 @@ void Connector::OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask) {
         return;
     } while (false);
 
-    if (wdata.handler)
-            wdata.handler(ns, wdata.pri_data, err_code);
+    if (wdata_.handler)
+            wdata_.handler(ns, wdata_.pri_data, err_code);
     //todo
 }
 

@@ -69,14 +69,14 @@ struct Buffer {
         fpos = 0;
     }
 
-    char *base;
+    char          *base;
     unsigned long lenth;
     unsigned long fpos, tpos;
 };
 
 struct ConnCbData {
     task_data_t pri_data;
-    WRHandler handler;
+    WRHandler   handler;
 };
 
 class Connector {
@@ -135,18 +135,18 @@ protected:
     ssize_t SendRemain();
 
 protected:
-    unsigned long cid_;
-    bool is_close_;
+    unsigned long  cid_;
+    bool           is_close_;
 
     //second
-    unsigned long last_act_time_;
-    Buffer recv_buf_;
-    Buffer send_buf_;
-    IOTask *task_;
-    ConnCbData rdata, wdata;
-    char err_msg_[256];
+    unsigned long  last_act_time_;
+    Buffer         recv_buf_;
+    Buffer         send_buf_;
+    IOTask         *task_;
+    ConnCbData     rdata_, wdata_;
+    char           err_msg_[256];
 
-    static unsigned long id_cnt_;
+    static unsigned long id_cnt;
 };
 
 #endif //NF_TEST_CONNETOR_H

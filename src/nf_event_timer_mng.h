@@ -37,6 +37,7 @@ public:
 
 public:
     TimerMng();
+    ~TimerMng();
 
     int AddTimer(timer_type *timer);
 

@@ -50,14 +50,14 @@ public:
 
 private:
     //default = 0
-    id_type id_;
+    id_type        id_;
     struct timeval begin_;
 
     //ms, expire time = begin_ + interval_;
-    unsigned long interval_;
-    bool is_loop_;
-    handle_t op_;
-    task_data_t data_;
+    unsigned long  interval_;
+    bool           is_loop_;
+    handle_t       op_;
+    task_data_t    data_;
 };
 
 #endif //NETFRAMZ_NF_EVENT_TIMER_IMPL_H_

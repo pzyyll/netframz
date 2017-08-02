@@ -65,17 +65,12 @@ private:
     void set_err_msg(std::string msg);
 
 private:
-    bool stop_;
-
-    TaskMap file_tasks_;
-
-    poll_type poll_;
-
+    bool                   stop_;
+    TaskMap                file_tasks_;
+    poll_type              poll_;
     std::deque<FiredEvent> fires;
-
-    TimerMng timer_mng_;
-
-    std::string err_msg_;
+    TimerMng               timer_mng_;
+    std::string            err_msg_;
 };
 
 #endif //NETFRAMZ_NF_EVENT_H

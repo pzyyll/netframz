@@ -29,10 +29,10 @@
 class TServer {
 public:
     enum STAT {
-        FAIL = -1,
+        FAIL    = -1,
         SUCCESS = 0,
     };
-    typedef IOTask *IOTaskPtr;
+    typedef IOTask    *IOTaskPtr;
     typedef TimerTask *TimerTaskPtr;
     typedef Connector *ConnectorPtr;
     typedef std::unordered_map<unsigned long, ConnectorPtr> conn_map_t;
@@ -99,12 +99,12 @@ protected:
     //void Daemon();
 
 private:
-    char *conf_file_;
-    IOTaskPtr accept_task_;
+    char         *conf_file_;
+    IOTaskPtr    accept_task_;
     TimerTaskPtr tick_;
-    EventLoop loop_;
-    conn_map_t conn_map_;
-    timer_map_t timer_map_;
+    EventLoop    loop_;
+    conn_map_t   conn_map_;
+    timer_map_t  timer_map_;
 };
 
 #endif //NF_TEST_SERVER_SERVER_H

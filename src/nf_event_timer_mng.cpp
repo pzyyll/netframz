@@ -23,6 +23,10 @@ TimerMng::TimerMng() : dist_id_(1) {
     timers_.Init();
 }
 
+TimerMng::~TimerMng() {
+
+}
+
 int TimerMng::AddTimer(timer_type *timer) {
     return_val_fail(timer, FAIL);
 

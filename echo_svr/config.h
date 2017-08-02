@@ -18,7 +18,7 @@
 class CConfig {
 public:
     enum RET {
-        FAIL = -1,
+        FAIL    = -1,
         SUCCESS = 0,
     };
 
@@ -46,7 +46,7 @@ public:
 private:
     typedef std::map<std::string, std::string> dict_t;
     dict_t dict_;
-    char err_msg_[256];
+    char   err_msg_[256];
 };
 
 #endif //NF_ECHO_SVR_CONFIG_H
