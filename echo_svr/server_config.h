@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "config.h"
 #include "singleton.h"
 
 struct ServerConfig {
@@ -10,12 +11,12 @@ public:
     int Init(const char *cfg_file);
 
 public:
-    unsigned int port;
+    int port;
     std::string ipv4;
     std::string ipv6;
-    unsigned int timeout;
-    unsigned int deamon;
-    unsigned int log_level;
+    int timeout;
+    int deamon;
+    int log_level;
 };
 
 typedef nf::singleton <ServerConfig> svr_cfg;

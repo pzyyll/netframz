@@ -5,13 +5,13 @@ int ServerConfig::Init(const char *cfg_file) {
         return -1;
     }
 
-    //todo add cfg_file
-    port = 23399;
-    ipv4 = "";
-    ipv6 = "";
-    timeout = 30000;
-    deamon = 0;
-    log_level = 4;
+    CConfig cfg(cfg_file);
+
+    cfg.GetInt(port, "port", 23399);
+    cfg.GetString(ipv4, "ipv4", "");
+    cfg.GetInt(timeout, "timeout", 30000);
+    cfg.GetInt(deamon, "deamon", 0);
+    cfg.GetInt(log_level, "log_level", 2);
 
     return 0;
 }

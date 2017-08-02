@@ -7,9 +7,9 @@
 
 namespace proto {
 #pragma pack(1)
-    struct MsgHeader {
-        unsigned int len;
-    };
+struct MsgHeader {
+    unsigned int len;
+};
 #pragma pack()
 
 #define MAX_CMD_LEN (1024 * 1024)

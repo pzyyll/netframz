@@ -24,7 +24,7 @@ unsigned long pkg_len = 100;
 
 #define LOOP_N_BEGING(n) for (unsigned int i = 0; i < (unsigned int)(n); ++i) {
 #define LOOP_N_END }
-#define RV_MAX_SIZE 2048000
+#define RV_MAX_SIZE (2048 * 1024)
 
 void *AnRobot(void *arg) {
     char *rv_buff = new char[RV_MAX_SIZE];
@@ -36,9 +36,10 @@ void *AnRobot(void *arg) {
     }
 
 LOOP_N_BEGING(nmsg)
-    string str(pkg_len, 'a');
+    Cmd cmd;
+    cmd.SetMsgData(string(pkg_len, 'a'));
     string pack;
-    Cmd::Packing(pack, str);
+    cmd.Serialize(pack);
 
     int ns = cli.send((void *)pack.c_str(), pack.size());
     if (ns < 0) {
@@ -46,18 +47,34 @@ LOOP_N_BEGING(nmsg)
         pthread_exit(NULL);
     }
 
-    unsigned int len = RV_MAX_SIZE;
-    int ret = cli.recv((void *)rv_buff, len);
+    unsigned int ex_len = sizeof(struct MsgHeader);
+    unsigned int nlen = 0;
+    int ret = cli.recv((void *)rv_buff, nlen, ex_len);
     if (ret < 0) {
         cout << "rv fail: " << cli.get_err_msg() << endl;
-        pthread_exit(NULL);
+        cli.reconnect();
+        continue;
     }
 
-    vector<string> str_vec;
-    Cmd::Unpack(str_vec, rv_buff, len);
-    if (str_vec.size() >= 1) {
+    struct MsgHeader *head = (struct MsgHeader *)(rv_buff);
+    unsigned int msg_len = ntohl(head->len);
+    if (MAX_CMD_LEN < msg_len || msg_len < sizeof(struct MsgHeader)) {
+        cout << "pkg len err " << msg_len << endl;
+        cli.reconnect();
+        continue;
+    }
+
+    ex_len = msg_len - sizeof(struct MsgHeader);
+    ret = cli.recv((void *)rv_buff, nlen, ex_len);
+    if (ret < 0) {
+        cout << "rv fail: " << cli.get_err_msg() << endl;
+        cli.reconnect();
+        continue;
+    }
+
+    if (nlen == cmd.GetMsgData().size()) {
         pthread_mutex_lock(&lock);
-        cnt += str_vec.size();
+        cnt++;
         pthread_mutex_unlock(&lock);
     }
 LOOP_N_END

@@ -14,14 +14,14 @@ using namespace proto;
 char recvbuff[1024 * 1024 * 10];
 unsigned int rv_len;
 
-void BuffHandle(char *buff, unsigned int &len) {
+int BuffHandle(const char *buff, const unsigned int len) {
     unsigned int usepos = 0;
     while (usepos < len) {
         Cmd cmd;
-        int nr = cmd.Parse(buff + usepos, len);
+        int nr = cmd.Parse(buff + usepos, len - usepos);
         if (nr < 0) {
             cout << cmd.GetErr() << endl;
-            return;
+            return -1;
         }
 
         if (nr == 0) {
@@ -29,11 +29,12 @@ void BuffHandle(char *buff, unsigned int &len) {
             break;
         }
 
-        usepos += nr;
         cout << cmd.GetMsgData() << endl;
+
+        usepos += nr;
     }
 
-    memmove(buff, buff + usepos, len - usepos);
+    return usepos;
 }
 
 int main(int argc, char *argv[]) {
@@ -58,7 +59,14 @@ int main(int argc, char *argv[]) {
             }
             cout << "recv: " <<  len << endl;
             rv_len += len;
-            BuffHandle(recvbuff, rv_len);
+            cout << "rv_len: " << rv_len << endl;
+
+            int hn = BuffHandle(recvbuff, rv_len);
+            if (hn < 0) {
+                return 0;
+            }
+            rv_len -= hn;
+            memmove(recvbuff, recvbuff + hn, rv_len);
             continue;
         }
         Cmd cmd;

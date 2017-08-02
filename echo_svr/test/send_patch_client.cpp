@@ -11,7 +11,32 @@
 using namespace std;
 using namespace proto;
 
-char recvbuff[10240000];
+char recvbuff[1024 * 1024 * 10];
+unsigned int rv_len;
+
+int BuffHandle(const char *buff, const unsigned int len) {
+    unsigned int usepos = 0;
+    while (usepos < len) {
+        Cmd cmd;
+        int nr = cmd.Parse(buff + usepos, len - usepos);
+        if (nr < 0) {
+            cout << cmd.GetErr() << endl;
+            return -1;
+        }
+
+        if (nr == 0) {
+            cout << cmd.GetErr() << endl;
+            break;
+        }
+
+        cout << cmd.GetMsgData().size() << endl;
+
+        usepos += nr;
+    }
+
+    return usepos;
+}
+
 
 int main(int argc, char *argv[]) {
     if (argc < 3) {
@@ -27,21 +52,30 @@ int main(int argc, char *argv[]) {
     int a;
     while (cin >> a) {
         if (0 == a) {
-            unsigned int len = sizeof(recvbuff);
-            cli.recv((void *)recvbuff, len);
-            cout << "recv: " <<  len << endl;
-
-            vector<string> vec_str;
-            Cmd::Unpack(vec_str, recvbuff, len);
-            for (int i = 0; (unsigned int)i < vec_str.size(); ++i) {
-                cout << vec_str[i].size() << endl;
+            unsigned int len = sizeof(recvbuff) - rv_len;
+            int ret = cli.recv((void *)(recvbuff + rv_len), len);
+            if (ret < 0) {
+                cout << cli.get_err_msg() << endl;
+                continue;
             }
+            cout << "recv: " <<  len << endl;
+            rv_len += len;
+            cout << "rv_len: " << rv_len << endl;
+
+            int hn = BuffHandle(recvbuff, rv_len);
+            if (hn < 0) {
+                return 0;
+            }
+            rv_len -= hn;
+            memmove(recvbuff, recvbuff + hn, rv_len);
             continue;
         }
         for (int i = 0; i < a; ++i) {
             string str(302400, 'a');
+            Cmd cmd;
+            cmd.SetMsgData(string(302400, 'a'));
             string pack;
-            Cmd::Packing(pack, str);
+            cmd.Serialize(pack);
             int ns = cli.send((void *)pack.c_str(), pack.size());
             if (ns < 0) {
                 cout << cli.get_err_msg() << endl;

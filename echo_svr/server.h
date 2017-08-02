@@ -94,6 +94,8 @@ protected:
 
     TimerTaskPtr FindTimer(unsigned long cid);
 
+    void CloseConn(unsigned long cid);
+
     //void Daemon();
 
 private:

@@ -32,16 +32,33 @@ struct Buffer {
         base = NULL;
     }
 
-    //以下提供的几个接口只是方便操作，调用前需要自行检查越界问题。
     unsigned long MaxSize() { return lenth; }
     unsigned long UsedSize() { return (unsigned long)(tpos - fpos); }
     unsigned long RemainSize() { return (unsigned long)(lenth - tpos); }
-    void FrontAdvancing(long step_size) {
+    int Resize(unsigned long size) {
+        char *newbuf = new char[size];
+        if (!newbuf)
+            return -1;
+        unsigned long cpsize = size < lenth ? size : lenth;
+        memcpy(newbuf, base, cpsize);
+        delete[] base;
+        base = newbuf;
+        lenth = size;
+        fpos = tpos = 0;
+        return 0;
+    }
+    void FrontAdvancing(unsigned long step_size) {
+        if (fpos + step_size > tpos)
+            return;
         fpos += step_size;
         if (fpos == tpos)
             fpos = tpos = 0;
     }
-    void TailAdvancing(long step_size) { tpos += step_size; }
+    void TailAdvancing(unsigned long step_size) {
+        if (tpos + step_size > lenth)
+            return;
+        tpos += step_size;
+    }
     char *FrontPos() { return (base + fpos); }
     char *TailPos() { return (base + tpos); }
     void MemoryMove2Left() {
@@ -76,7 +93,7 @@ public:
 public:
     Connector(EventLoop &loop, int fd);
 
-    virtual ~Connector();
+    ~Connector();
 
     void BeginRecv(const ConnCbData &cb_data);
 
@@ -90,13 +107,11 @@ public:
 
     void SetLastActTimeToNow();
 
-    IOTask &GetIOTask();
+    struct Buffer &GetRecvBuff();
 
     unsigned long GetCID();
 
     std::string GetErrMsg();
-
-    size_t GetRvBuffLenth();
 
 protected:
     Connector(const Connector &);

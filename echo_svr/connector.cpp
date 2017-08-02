@@ -248,8 +248,8 @@ void Connector::SetLastActTimeToNow() {
     last_act_time_ = now.tv_sec;
 }
 
-IOTask &Connector::GetIOTask() {
-    return *task_;
+struct Buffer &Connector::GetRecvBuff() {
+    return recv_buf_;
 }
 
 unsigned long Connector::GetCID() {
@@ -258,10 +258,6 @@ unsigned long Connector::GetCID() {
 
 std::string Connector::GetErrMsg() {
     return std::string(err_msg_);
-}
-
-Connector::size_t Connector::GetRvBuffLenth() {
-    return recv_buf_.UsedSize();
 }
 
 int Connector::MakeFdBlockIs(bool is_block, int fd) {

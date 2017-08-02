@@ -171,11 +171,11 @@ void TServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
 }
 
 void TServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
+    UNUSE(lenth);
     unsigned long cid = data.data.id;
     if (err.get_ret() != ErrCode::SUCCESS) {
         log_info("%s", err.get_err_msg().c_str());
-        DelConn(cid);
-        DelTimerTask(cid);
+        CloseConn(cid);
         return;
     }
 
@@ -185,33 +185,42 @@ void TServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
         return;
     }
 
+    log_debug("rv buff size %lu", lenth);
+
     //Do
     Do(*conn);
 }
 
-static char buff[1024 * 1024];
 void TServer::Do(Connector &conn) {
     log_debug("Do");
-
     conn.SetLastActTimeToNow();
-    unsigned long nr = conn.Recv(buff, sizeof(buff));
+    while (conn.GetRecvBuff().UsedSize() > 0) {
+        Cmd cmd;
+        char *buff = conn.GetRecvBuff().FrontPos();
+        unsigned long len = conn.GetRecvBuff().UsedSize();
+        int nr = cmd.Parse(buff, len);
+        if (nr < 0) {
+            log_warn("Parse cli %lu msg fail. %s", conn.GetCID(), cmd.GetErr().c_str());
+            CloseConn(conn.GetCID());
+            return;
+        }
+        if (nr == 0) {
+            log_debug("%s", cmd.GetErr().c_str());
+            break;
+        }
 
-    log_debug("rv: %lu", nr);
-    std::vector<std::string> vec_strs;
-    Cmd::Unpack(vec_strs, buff, nr);
+        conn.GetRecvBuff().FrontAdvancing(nr);
+        log_debug("cli data size: %u", (unsigned)cmd.GetMsgData().size());
 
-    // echo
-    std::string sndstr;
-    for (int i = 0; (unsigned int)i < vec_strs.size(); ++i) {
-        Cmd::Packing(sndstr, vec_strs[i]);
+        //Echo Test
+        std::string sndstr;
+        cmd.Serialize(sndstr);
+        log_debug("snd: %li", (long int)sndstr.size());
+        struct ConnCbData cbdata;
+        cbdata.pri_data.data.id = conn.GetCID();
+        cbdata.handler = std::bind(&TServer::OnWriteErr, this,_1, _2, _3);
+        conn.Send(sndstr.c_str(), sndstr.size(), cbdata);
     }
-
-    log_debug("snd: %li", (long int)sndstr.size());
-
-    struct ConnCbData cbdata;
-    cbdata.pri_data.data.id = conn.GetCID();
-    cbdata.handler = std::bind(&TServer::OnWriteErr, this,_1, _2, _3);
-    conn.Send(sndstr.c_str(), sndstr.size(), cbdata);
 }
 
 void TServer::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
@@ -219,8 +228,7 @@ void TServer::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
     unsigned long cid = data.data.id;
     if (err.get_ret() != ErrCode::SUCCESS) {
         log_warn("%s", err.get_err_msg().c_str());
-        DelConn(cid);
-        DelTimerTask(cid);
+        CloseConn(cid);
         return;
     }
 }
@@ -250,8 +258,7 @@ void TServer::OnTimerOut(EventLoop *loopsv, task_data_t data, int mask) {
 
     if (conn->IsTimeOut(svr_cfg::get_const_instance().timeout / 1000)) {
         log_debug("Close cid %lu this long time not act.", cid);
-        DelConn(conn);
-        DelTimerTask(cid);
+        CloseConn(cid);
         return;
     }
 
@@ -460,4 +467,9 @@ TServer::TimerTaskPtr TServer::FindTimer(unsigned long cid) {
     }
 
     return itr->second;
+}
+
+void TServer::CloseConn(unsigned long cid) {
+    DelConn(cid);
+    DelTimerTask(cid);
 }

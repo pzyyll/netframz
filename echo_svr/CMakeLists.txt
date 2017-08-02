@@ -30,7 +30,9 @@ set(SOURCE_FILES
         connector.cpp
         server_config.cpp
         server.cpp
-        log.cpp)
+        log.cpp
+        config.cpp
+        )
 
 add_executable(echo_svr ${SOURCE_FILES} ${NFSOURCE_FILES})
 
