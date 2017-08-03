@@ -37,6 +37,15 @@ int TServer::Init(int argc, char **argv) {
 
     log_init(argv[0], svr_cfg::get_const_instance().log_level);
 
+    if (svr_cfg::get_const_instance().daemon &&
+        Daemon() == FAIL) {
+        return FAIL;
+    }
+
+    if (loop_.Init() < 0) {
+        return FAIL;
+    }
+
     if (StartListen() < 0) {
         return FAIL;
     }
@@ -103,9 +112,13 @@ int TServer::StartListen() {
     accept_task_->Bind(std::bind(&TServer::OnAccept, this, _1, _2, _3));
     task_data_t data = {.data = {.ptr = accept_task_}};
     accept_task_->SetPrivateData(data);
-    accept_task_->Start();
 
-    log_debug("Listen start.");
+    if (accept_task_->Start() < 0) {
+        log_err("%s", accept_task_->GetErr().c_str());
+        return FAIL;
+    }
+
+    log_debug("Listen start. fd|%d", listen_fd);
     return listen_fd;
 }
 
@@ -453,7 +466,6 @@ TServer::TimerTaskPtr TServer::CreateTimerTask(unsigned long cid) {
         return NULL;
     }
 
-
     return timer;
 }
 
@@ -483,4 +495,42 @@ TServer::TimerTaskPtr TServer::FindTimer(unsigned long cid) {
 void TServer::CloseConn(unsigned long cid) {
     DelConn(cid);
     DelTimerTask(cid);
+}
+
+int TServer::Daemon() {
+    //Linux 有现成的 daemon() 调用可以将进程转为守护进程
+    //这里作为练习就没有用库提供的调用.
+
+    pid_t pid;
+
+    if ( (pid = fork()) < 0)
+        return FAIL;
+    else if (pid)
+        _exit(0);
+
+    if (setsid() < 0)
+        return FAIL;
+
+    struct sigaction sa;
+    memset(&sa, 0, sizeof(sa));
+    sa.sa_handler = SIG_IGN;
+    if (sigaction(SIGHUP, &sa, NULL) < 0)
+        return FAIL;
+
+    if ( (pid = fork()) < 0)
+        return FAIL;
+    else if (pid)
+        _exit(0);
+
+    umask(0);
+
+    const int kMaxFd = 64;
+    for (int i = 0; i < kMaxFd; ++i)
+        close(i);
+
+    open("/dev/null", O_RDWR);
+    open("/dev/null", O_RDWR);
+    open("/dev/null", O_RDWR);
+
+    return SUCCESS;
 }

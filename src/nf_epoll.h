@@ -25,7 +25,7 @@ public:
     typedef struct epoll_event *ev_pointer;
     typedef unsigned int data_type;
 
-    const static int DEFAULT_MAXEVS = 10240;
+    const static int DEFAULT_MAXEVS = 10000;
     const static int DEFAULT_TIMEOUT = 10;
 
 public:

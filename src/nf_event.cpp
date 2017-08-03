@@ -8,12 +8,22 @@
 #include "nf_event_timer_impl.h"
 #include "nf_event_iotask_impl.h"
 
-EventLoop::EventLoop() : stop_(false) {
+EventLoop::EventLoop() : stop_(true) {
     poll_.Init();
 }
 
 EventLoop::~EventLoop() {
 
+}
+
+int EventLoop::Init() {
+    int ret = poll_.Init();
+    if (ret < 0) {
+        set_err_msg(poll_.get_err());
+        return ret;
+    }
+    stop_ = false;
+    return ret;
 }
 
 void EventLoop::Run() {
@@ -97,12 +107,10 @@ int EventLoop::DelIOTask(int fd) {
 void EventLoop::HandleIOEvent() {
     int nds = poll_.WaitEvent(fires);
 
-    //todo asyn or limit
     while (!fires.empty() && nds > 0) {
         FiredEvent &fire = fires.back();
         iotask_pointer task = NULL;
         if (FindTask(fire.id, &task)) {
-            //Callback
             task->Process(this, fire.mask);
         }
         fires.pop_back();

@@ -16,7 +16,7 @@ public:
     //std::string ipv6;
     int         tick;
     int         timeout;
-    int         deamon;
+    int         daemon;
     int         log_level;
 };
 

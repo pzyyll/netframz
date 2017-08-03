@@ -7,6 +7,7 @@
 #define NETFRAMZ_NF_EVENT_IOTASK_H
 
 #include <functional>
+#include <string>
 #include "nf_event_config.h"
 
 class EventLoop;
@@ -29,9 +30,9 @@ public:
 
     void Bind(handle_t handle);
 
-    void Start();
+    int Start();
 
-    void Restart();
+    int Restart();
 
     void Stop();
 
@@ -44,6 +45,8 @@ public:
     int GetMask();
 
     int GetFd();
+
+    std::string GetErr();
 
 private:
     EventLoop &loop_;
