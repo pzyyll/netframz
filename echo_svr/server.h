@@ -45,6 +45,19 @@ public:
 
     int Init(int argc, char **argv);
 
+    void Run();
+
+    void Stop();
+
+    void Do(Connector &conn);
+
+    void Tick(unsigned long now);
+
+    //void OnIdle();
+
+    //void OnExit();
+
+protected:
     int StartListen();
 
     int StartTick();
@@ -59,19 +72,6 @@ public:
 
     void OnTimerOut(EventLoop *loopsv, task_data_t data, int mask);
 
-    void Run();
-
-    void Stop();
-
-    void Do(Connector &conn);
-
-    //void OnTick(unsigned long now);
-
-    //void OnIdle();
-
-    //void OnExit();
-
-protected:
     int GetOption(int argc, char **argv);
 
     int MakeNonblock(int fd);

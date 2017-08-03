@@ -27,11 +27,12 @@ unsigned long pkg_len = 100;
 #define RV_MAX_SIZE (2048 * 1024)
 
 void *AnRobot(void *arg) {
+    (void)(arg);
     char *rv_buff = new char[RV_MAX_SIZE];
     if (!rv_buff) pthread_exit(NULL);
 
     TcpClient cli;
-    if (cli.init(ip.c_str(), port, 1000, 5000) < 0) {
+    if (cli.init(ip.c_str(), port, 5000, 5000) < 0) {
         cout << "init fail : " << cli.get_err_msg() << endl;
     }
 

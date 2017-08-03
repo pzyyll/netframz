@@ -14,6 +14,7 @@ public:
     int         port;
     std::string ipv4;
     //std::string ipv6;
+    int         tick;
     int         timeout;
     int         deamon;
     int         log_level;

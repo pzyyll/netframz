@@ -79,7 +79,7 @@ void Connector::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
 
         //检查用户缓冲区是否满了
         recv_buf_.MemoryMove2Left();
-        log_warn("tpos|%lu, fpos|%lu", recv_buf_.tpos, recv_buf_.fpos);
+        log_debug("tpos|%lu, fpos|%lu", recv_buf_.tpos, recv_buf_.fpos);
         ssize_t remain = recv_buf_.RemainSize();
         if (remain == 0) {
             nr = 0;

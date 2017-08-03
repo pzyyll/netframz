@@ -6,6 +6,9 @@ port 13399
 # ipv4
 ipv4 127.0.0.1
 
+# Tick interval (ms)
+# tick 100
+
 # client time out (ms)
 timeout 60000
 

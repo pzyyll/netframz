@@ -110,7 +110,8 @@ int TServer::StartListen() {
 }
 
 int TServer::StartTick() {
-    tick_ = new TimerTask(loop_, 100, 1);
+    int tick_interval =  svr_cfg::get_const_instance().tick;
+    tick_ = new TimerTask(loop_, tick_interval, 1);
     if (NULL == tick_) {
         log_err("New fail.");
         return FAIL;
@@ -158,8 +159,9 @@ void TServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
             return;
         }
 
-        if (!CreateTimerTask(conn->GetCID())) {
-            ::close(fd);
+        TimerTaskPtr timer = CreateTimerTask(conn->GetCID());
+        if (!timer) {
+            DelConn(conn);
             return;
         }
 
@@ -167,6 +169,11 @@ void TServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
         cb_data.pri_data.data.id = conn->GetCID();
         cb_data.handler = std::bind(&TServer::OnRead, this, _1, _2, _3);
         conn->BeginRecv(cb_data);
+
+        task_data_t data = {.data = {.id = conn->GetCID()}};
+        timer->SetPrivateData(data);
+        timer->Bind(std::bind(&TServer::OnTimerOut, this, _1, _2, _3));
+        timer->Start();
     }
 }
 
@@ -223,6 +230,11 @@ void TServer::Do(Connector &conn) {
     }
 }
 
+void TServer::Tick(unsigned long now) {
+    log_debug("Tick: %lu", now);
+    //Do tick task;
+}
+
 void TServer::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
     UNUSE(lenth);
     unsigned long cid = data.data.id;
@@ -239,7 +251,10 @@ void TServer::OnTick(EventLoop *loopsv, task_data_t data, int mask) {
     UNUSE(data);
     UNUSE(mask);
 
-    //Do some need tick task;
+    struct timeval now;
+    gettimeofday(&now, NULL);
+    unsigned long now_ms = now.tv_sec * 1000 + now.tv_usec / 1000;
+    Tick(now_ms);
 }
 
 void TServer::OnTimerOut(EventLoop *loopsv, task_data_t data, int mask) {
@@ -438,10 +453,6 @@ TServer::TimerTaskPtr TServer::CreateTimerTask(unsigned long cid) {
         return NULL;
     }
 
-    task_data_t data = {.data = {.id = cid}};
-    timer->SetPrivateData(data);
-    timer->Bind(std::bind(&TServer::OnTimerOut, this, _1, _2, _3));
-    timer->Start();
 
     return timer;
 }
