@@ -34,11 +34,10 @@ void StrSplit(std::vector<std::string> &vecs, const std::string &str, const char
         sp = np;
         while(sp < str.size() && strchr(cset, str[sp])) ++sp;
         np = str.find_first_of(cset, sp);
-        if (np == std::string::npos && sp < str.size()) {
-            vecs.push_back(str.substr(sp));
-            break;
-        }
     }
+
+    if (sp < str.size())
+        vecs.push_back(str.substr(sp));
 }
 
 CConfig::CConfig() {
