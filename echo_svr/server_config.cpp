@@ -11,7 +11,7 @@ int ServerConfig::Init(const char *cfg_file) {
     cfg.GetString(ipv4, "ipv4", "");
     cfg.GetInt(tick, "tick", 100);
     cfg.GetInt(timeout, "timeout", 30000);
-    cfg.GetInt(deamon, "deamon", 0);
+    cfg.GetInt(daemon, "daemon", 0);
     cfg.GetInt(log_level, "log_level", 2);
 
     return 0;

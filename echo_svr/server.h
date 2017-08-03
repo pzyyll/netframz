@@ -16,10 +16,12 @@
 #include <getopt.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 #include <fcntl.h>
+#include <signal.h>
 
 #include "nf_event.h"
 #include "nf_event_iotask.h"
@@ -28,7 +30,7 @@
 
 class TServer {
 public:
-    enum STAT {
+    enum Ret {
         FAIL    = -1,
         SUCCESS = 0,
     };
@@ -96,7 +98,7 @@ protected:
 
     void CloseConn(unsigned long cid);
 
-    //void Daemon();
+    int Daemon();
 
 private:
     char         *conf_file_;

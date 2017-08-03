@@ -36,12 +36,12 @@ void IOTask::Bind(handle_t handle) {
     pimpl_->Bind(handle);
 }
 
-void IOTask::Start() {
-    loop_.SetIOTask(pimpl_);
+int IOTask::Start() {
+    return loop_.SetIOTask(pimpl_);
 }
 
-void IOTask::Restart() {
-    loop_.ResetIOTask(pimpl_);
+int IOTask::Restart() {
+    return loop_.ResetIOTask(pimpl_);
 }
 
 void IOTask::Stop() {
@@ -66,4 +66,8 @@ int IOTask::GetMask() {
 
 int IOTask::GetFd() {
     return pimpl_->get_fd();
+}
+
+std::string IOTask::GetErr() {
+    return loop_.get_err_msg();
 }

@@ -32,6 +32,8 @@ public:
 
     ~EventLoop();
 
+    int Init();
+
     void Run();
 
     void Stop();
