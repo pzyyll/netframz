@@ -23,6 +23,7 @@ set(NFSOURCE_FILES
         ../src/nf_event_timer_task.cpp
         ../src/nf_event_timer_impl.cpp
         ../src/nf_event_timer_mng.cpp
+        ../src/nf_event_idle_impl.cpp
         )
 
 set(SOURCE_FILES

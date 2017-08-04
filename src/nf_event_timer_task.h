@@ -26,10 +26,10 @@ public:
     void Bind(handle_t handle);
 
     // 开始定时器
-    void Start();
+    int Start();
 
     // 重新开始
-    void Restart();
+    int Restart();
 
     // 提前停止
     void Stop();

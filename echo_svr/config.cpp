@@ -67,7 +67,7 @@ int CConfig::Init(const char *path) {
             continue;
         }
         std::vector<std::string> vecs;
-        StrSplit(vecs, std::string(line), "\r\n\t ");
+        StrSplit(vecs, std::string(line), "\t ");
         if (vecs.size() == 0)
             continue;
         dict_.insert(std::make_pair(vecs[0], std::string(line)));
