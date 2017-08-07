@@ -30,10 +30,9 @@ int EventLoop::Init() {
 }
 
 void EventLoop::Run() {
-    bool exist_task;
-    do {
-        exist_task = false;
+    bool exist_task = true;
 
+    while (!stop_ && exist_task) {
         HandleAllTimerTask();
 
         PollTask(waittime_);
@@ -41,18 +40,18 @@ void EventLoop::Run() {
         HandleAllIdleTask();
 
         //Check if exist task continue loop.
+        exist_task = false;
         if (idle_tasks_.size() > 0) {
             exist_task = true;
             waittime_ = 0;
         } else {
             waittime_ = kMaxBlockTime;
         }
-
         if (timer_mng_.GetTimerSize() > 0 ||
             file_tasks_.size() > 0) {
             exist_task = true;
         }
-    } while (!stop_ && exist_task);
+    }
 }
 
 void EventLoop::Stop() {
