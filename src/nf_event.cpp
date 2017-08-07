@@ -7,8 +7,11 @@
 #include "nf_event.h"
 #include "nf_event_timer_impl.h"
 #include "nf_event_iotask_impl.h"
+#include "nf_event_idle_impl.h"
 
-EventLoop::EventLoop() : stop_(true) {
+static const int kMaxBlockTime = 10;
+
+EventLoop::EventLoop() : stop_(true), waittime_(0) {
     poll_.Init();
 }
 
@@ -27,17 +30,37 @@ int EventLoop::Init() {
 }
 
 void EventLoop::Run() {
+    bool exist_task;
     do {
+        exist_task = false;
 
-        if (HaveTimerTask()) HandleAllTimerTask();
+        HandleAllTimerTask();
 
-        if (HaveIOEvent()) HandleIOEvent();
+        PollTask(waittime_);
 
-    } while (!stop_ && (HaveIOEvent() || HaveTimerTask()));
+        HandleAllIdleTask();
+
+        //Check if exist task continue loop.
+        if (idle_tasks_.size() > 0) {
+            exist_task = true;
+            waittime_ = 0;
+        } else {
+            waittime_ = kMaxBlockTime;
+        }
+
+        if (timer_mng_.GetTimerSize() > 0 ||
+            file_tasks_.size() > 0) {
+            exist_task = true;
+        }
+    } while (!stop_ && exist_task);
 }
 
 void EventLoop::Stop() {
     stop_ = true;
+}
+
+void EventLoop::Sleep(int timeout) {
+    PollTask(timeout);
 }
 
 int EventLoop::SetIOTask(iotask_pointer task) {
@@ -104,21 +127,51 @@ int EventLoop::DelIOTask(int fd) {
     return ret;
 }
 
-void EventLoop::HandleIOEvent() {
-    int nds = poll_.WaitEvent(fires);
+int EventLoop::AddTimerTask(timer_pointer timer) {
+    return timer_mng_.AddTimer(timer);
+}
 
-    while (!fires.empty() && nds > 0) {
-        FiredEvent &fire = fires.back();
+int EventLoop::DelTimerTask(const unsigned long id) {
+    return timer_mng_.DelTimer(id);
+}
+
+int EventLoop::ResetTimerTask(timer_pointer timer) {
+    return timer_mng_.ModTimer(timer);
+}
+
+int EventLoop::AddIdleTask(idle_pointer idler) {
+    if (NULL == idler) {
+        set_err_msg("idler pointer is null.");
+        return RET::RET_FAIL;
+    }
+    idle_tasks_.push_back(idler);
+    return RET::RET_SUCCESS;
+}
+
+int EventLoop::DelIdleTask(idle_pointer idler) {
+    if (NULL == idler) {
+        set_err_msg("idler pointer is null.");
+        return RET::RET_FAIL;
+    }
+    idle_tasks_.remove(idler);
+    return RET::RET_SUCCESS;
+}
+
+const std::string &EventLoop::get_err_msg() {
+    return err_msg_;
+}
+
+void EventLoop::PollTask(int timeout) {
+    int nds = poll_.WaitEvent(fires_, timeout);
+
+    while (!fires_.empty() && nds > 0) {
+        FiredEvent &fire = fires_.back();
         iotask_pointer task = NULL;
         if (FindTask(fire.id, &task)) {
             task->Process(this, fire.mask);
         }
-        fires.pop_back();
+        fires_.pop_back();
     }
-}
-
-bool EventLoop::HaveIOEvent() {
-    return (!file_tasks_.empty() ? true : false);
 }
 
 bool EventLoop::FindTask(const int fd, iotask_pointer *find) {
@@ -131,24 +184,8 @@ bool EventLoop::FindTask(const int fd, iotask_pointer *find) {
     return false;
 }
 
-const std::string &EventLoop::get_err_msg() {
-    return err_msg_;
-}
-
 void EventLoop::set_err_msg(std::string msg) {
     err_msg_ = msg;
-}
-
-int EventLoop::AddTimerTask(timer_pointer timer) {
-    return timer_mng_.AddTimer(timer);
-}
-
-int EventLoop::DelTimerTask(const unsigned long id) {
-    return timer_mng_.DelTimer(id);
-}
-
-int EventLoop::ResetTimerTask(timer_pointer timer) {
-    return timer_mng_.ModTimer(timer);
 }
 
 void EventLoop::HandleAllTimerTask() {
@@ -167,6 +204,13 @@ void EventLoop::HandleAllTimerTask() {
     }
 }
 
-bool EventLoop::HaveTimerTask() {
-    return (timer_mng_.GetTimerSize() > 0);
+void EventLoop::HandleAllIdleTask() {
+    std::vector<idle_pointer> vecs;
+    for (IdleList::iterator itr = idle_tasks_.begin(); itr != idle_tasks_.end(); ++itr) {
+        if (*itr)
+            vecs.push_back(*itr);
+    }
+    for (unsigned int i = 0; i < vecs.size(); ++i) {
+        vecs[i]->Process(this, 0);
+    }
 }

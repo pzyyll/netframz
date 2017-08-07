@@ -16,7 +16,7 @@ class IOTaskImpl;
 
 class IOTask {
 public:
-    typedef std::function<void(EventLoop *, task_data_t data, int)> handle_t;
+    typedef std::function<void(EventLoop *, task_data_t, int)> handle_t;
     typedef IOTaskImpl impl_type;
 
 public:

@@ -26,14 +26,13 @@ public:
     typedef unsigned int data_type;
 
     const static int DEFAULT_MAXEVS = 10000;
-    const static int DEFAULT_TIMEOUT = 10;
 
 public:
     Epoll();
 
     ~Epoll();
 
-    int Init(const int timeout = DEFAULT_TIMEOUT, const int maxevs = DEFAULT_MAXEVS);
+    int Init(const int maxevs = DEFAULT_MAXEVS);
 
     void Deinit();
 
@@ -43,7 +42,7 @@ public:
 
     int ModEvent(int fd, data_type data, int mask);
 
-    int WaitEvent(std::deque<FiredEvent> &fires);
+    int WaitEvent(std::deque<FiredEvent> &fires, int timeout);
 
     int Resize(const size_t maxevs);
 
@@ -61,7 +60,6 @@ private:
 
 private:
     int epfd_;
-    int timeout_;
     int maxevs_;
     ev_pointer evs_;
     char err_[256];

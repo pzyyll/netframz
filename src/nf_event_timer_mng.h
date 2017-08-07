@@ -11,9 +11,7 @@
 #include <string>
 
 #ifdef NF_TIMER_WHEEL
-
 #include "nf_event_timer_wheel.h"
-
 typedef TimerWheel<unsigned long> timers_type;
 #else
 #include "nf_event_timer_heap.h"
@@ -52,13 +50,13 @@ public:
     std::string GetErrMsg();
 
 private:
-    bool _FindTimer(const unsigned long id, timer_type **timer);
+    bool FindTimer(const unsigned long id, timer_type **timer);
 
-    void _InnerAddTimer(timer_type *timer);
+    void InnerAddTimer(timer_type *timer);
 
-    int _DelTimer(const unsigned long id);
+    int InnerDelTimer(const unsigned long id);
 
-    unsigned long _GetDistId();
+    unsigned long GetDistId();
 
 private:
     unsigned long dist_id_;

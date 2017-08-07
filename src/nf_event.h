@@ -6,7 +6,8 @@
 #ifndef NETFRAMZ_NF_EVENT_H
 #define NETFRAMZ_NF_EVENT_H
 
-#include <unordered_map>
+#include <map>
+#include <list>
 #include <queue>
 #include <string>
 
@@ -20,12 +21,16 @@
 
 class IOTaskImpl;
 
+class IdleImpl;
+
 class EventLoop {
 public:
     typedef IOTaskImpl *iotask_pointer;
     typedef TimerImpl *timer_pointer;
-    typedef std::unordered_map<int, iotask_pointer> TaskMap;
+    typedef IdleImpl *idle_pointer;
+    typedef std::map<unsigned long, iotask_pointer> TaskMap;
     typedef TaskMap::iterator TaskMapItr;
+    typedef std::list<idle_pointer> IdleList;
 
 public:
     EventLoop();
@@ -38,9 +43,9 @@ public:
 
     void Stop();
 
-    const std::string &get_err_msg();
+    void Sleep(int timeout);
 
-// protected:
+
     int SetIOTask(iotask_pointer task);
 
     int ResetIOTask(iotask_pointer task);
@@ -53,25 +58,31 @@ public:
 
     int ResetTimerTask(timer_pointer timer);
 
-private:
-    void HandleIOEvent();
+    int AddIdleTask(idle_pointer idler);
 
-    bool HaveIOEvent();
+    int DelIdleTask(idle_pointer idler);
+
+    const std::string &get_err_msg();
+
+private:
+    void PollTask(int timeout);
 
     bool FindTask(const int fd, iotask_pointer *find);
 
     void HandleAllTimerTask();
 
-    bool HaveTimerTask();
+    void HandleAllIdleTask();
 
     void set_err_msg(std::string msg);
 
 private:
     bool                   stop_;
-    TaskMap                file_tasks_;
+    int                    waittime_;
     poll_type              poll_;
-    std::deque<FiredEvent> fires;
     TimerMng               timer_mng_;
+    TaskMap                file_tasks_;
+    std::deque<FiredEvent> fires_;
+    IdleList               idle_tasks_;
     std::string            err_msg_;
 };
 

@@ -10,7 +10,6 @@
 
 Epoll::Epoll()
         : epfd_(-1),
-          timeout_(DEFAULT_TIMEOUT),
           maxevs_(DEFAULT_MAXEVS),
           evs_(NULL) {
 }
@@ -19,9 +18,7 @@ Epoll::~Epoll() {
     Deinit();
 }
 
-int Epoll::Init(const int timeout, const int maxevs) {
-    timeout_ = timeout;
-
+int Epoll::Init(const int maxevs) {
     evs_ = static_cast<ev_pointer >(malloc(maxevs * sizeof(ev_type)));
     if (NULL == evs_) {
         set_err("Alloc memory to events array fail.");
@@ -61,9 +58,9 @@ int Epoll::ModEvent(int fd, Epoll::data_type data, int mask) {
     return CtlEvent(fd, EPOLL_CTL_MOD, data, mask);
 }
 
-int Epoll::WaitEvent(std::deque<FiredEvent> &fires) {
+int Epoll::WaitEvent(std::deque<FiredEvent> &fires, int timeout) {
     int nfds = 0;
-    nfds = epoll_wait(epfd_, evs_, maxevs_, timeout_);
+    nfds = epoll_wait(epfd_, evs_, maxevs_, timeout);
     if (nfds > 0) {
         for (int i = 0; i < nfds; ++i) {
             FiredEvent task = {0, 0};

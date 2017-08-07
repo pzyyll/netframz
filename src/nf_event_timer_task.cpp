@@ -28,20 +28,20 @@ void TimerTask::Bind(handle_t handle) {
     impl_->Bind(handle);
 }
 
-void TimerTask::Start() {
+int TimerTask::Start() {
     struct timeval now = {0, 0};
     gettimeofday(&now, NULL);
     impl_->set_begin(now);
 
-    loop_.AddTimerTask(impl_);
+    return loop_.AddTimerTask(impl_);
 }
 
-void TimerTask::Restart() {
+int TimerTask::Restart() {
     struct timeval now = {0, 0};
     gettimeofday(&now, NULL);
     impl_->set_begin(now);
 
-    loop_.ResetTimerTask(impl_);
+    return loop_.ResetTimerTask(impl_);
 }
 
 void TimerTask::Stop() {
