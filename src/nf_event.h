@@ -8,6 +8,7 @@
 
 #include <map>
 #include <list>
+#include <vector>
 #include <queue>
 #include <string>
 
@@ -69,6 +70,8 @@ private:
 
     bool FindTask(const int fd, iotask_pointer *find);
 
+    void HandleAllIOTask();
+
     void HandleAllTimerTask();
 
     void HandleAllIdleTask();
@@ -81,7 +84,7 @@ private:
     poll_type              poll_;
     TimerMng               timer_mng_;
     TaskMap                file_tasks_;
-    std::deque<FiredEvent> fires_;
+    std::deque<FiredEvent> fires_que_;
     IdleList               idle_tasks_;
     std::string            err_msg_;
 };

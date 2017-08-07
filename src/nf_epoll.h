@@ -1,14 +1,14 @@
 //
 // Created by CaiZhili on 2017/6/29.
 //
-
 #ifndef NETFRAMZ_NF_EPOLL_H
 #define NETFRAMZ_NF_EPOLL_H
 
 #include <sys/epoll.h>
 #include <cstddef>
 #include <string>
-#include <queue>
+#include <vector>
+
 #include "nf_event_config.h"
 
 #define EV_POLLIN EPOLLIN
@@ -42,7 +42,7 @@ public:
 
     int ModEvent(int fd, data_type data, int mask);
 
-    int WaitEvent(std::deque<FiredEvent> &fires, int timeout);
+    int WaitEvent(std::vector<FiredEvent> &fires, int timeout);
 
     int Resize(const size_t maxevs);
 

@@ -58,7 +58,7 @@ int Epoll::ModEvent(int fd, Epoll::data_type data, int mask) {
     return CtlEvent(fd, EPOLL_CTL_MOD, data, mask);
 }
 
-int Epoll::WaitEvent(std::deque<FiredEvent> &fires, int timeout) {
+int Epoll::WaitEvent(std::vector<FiredEvent> &fires, int timeout) {
     int nfds = 0;
     nfds = epoll_wait(epfd_, evs_, maxevs_, timeout);
     if (nfds > 0) {
@@ -117,7 +117,7 @@ int Epoll::CtlEvent(int fd, int op, Epoll::data_type data, int mask) {
             ev.events = mask | EPOLLET | EPOLLRDHUP;
 
             if (epoll_ctl(epfd_, op, fd, &ev) < 0) {
-                set_err("Epoll ctl op(%d) fail|%s", op, strerror(errno));
+                set_err("Epoll(%d) ctl op(%d) fail|%s", epfd_, op, strerror(errno));
                 return RET::RET_FAIL;
             }
             break;

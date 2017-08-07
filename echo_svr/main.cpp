@@ -3,6 +3,7 @@
 #include <cstring>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/wait.h>
 
 #include "server.h"
 #include "mem_check.h"
@@ -32,6 +33,13 @@ static void TermSigHandler(int sig) {
 
 }
 
+static void Sigchld(int sig) {
+    (void)(sig);
+    pid_t pid;
+    int stat;
+    while ( (pid = waitpid(-1, &stat, WNOHANG)) > 0);
+}
+
 int main(int argc, char *argv[]) {
     struct sigaction sig;
     memset(&sig, 0, sizeof(sig));
@@ -39,6 +47,9 @@ int main(int argc, char *argv[]) {
     sigaction(SIGINT, &sig, NULL);
     sigaction(SIGQUIT, &sig, NULL);
     sigaction(SIGABRT, &sig, NULL);
+
+    sig.sa_handler = Sigchld;
+    sigaction(SIGCHLD, &sig, NULL);
 
     if (svr.Init(argc, argv) < 0) {
         cout << "init fail." << endl;

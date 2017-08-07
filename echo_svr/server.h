@@ -51,6 +51,7 @@ public:
 
     void Stop();
 
+protected:
     void Do(Connector &conn);
 
     void Tick(unsigned long now);
@@ -62,7 +63,9 @@ public:
 protected:
     int StartListen();
 
-    int StartTick();
+    int InitTick();
+
+    int InitAcceptTask();
 
     void OnAccept(EventLoop *loopsv, task_data_t data, int mask);
 
@@ -100,8 +103,11 @@ protected:
 
     int Daemon();
 
+    void Fork(int nchild);
+
 private:
     char         *conf_file_;
+    int          listen_fd_;
     IOTaskPtr    accept_task_;
     TimerTaskPtr tick_;
     EventLoop    loop_;

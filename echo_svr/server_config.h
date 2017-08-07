@@ -17,6 +17,7 @@ public:
     int         tick;
     int         timeout;
     int         daemon;
+    int         worker;
     int         log_level;
 };
 

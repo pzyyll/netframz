@@ -33,9 +33,11 @@ void EventLoop::Run() {
     bool exist_task = true;
 
     while (!stop_ && exist_task) {
+        PollTask(waittime_);
+
         HandleAllTimerTask();
 
-        PollTask(waittime_);
+        HandleAllIOTask();
 
         HandleAllIdleTask();
 
@@ -161,15 +163,20 @@ const std::string &EventLoop::get_err_msg() {
 }
 
 void EventLoop::PollTask(int timeout) {
-    int nds = poll_.WaitEvent(fires_, timeout);
+    std::vector<FiredEvent> fires;
+    poll_.WaitEvent(fires, timeout);
+    for (unsigned int i = 0; i < fires.size(); ++i) {
+        fires_que_.push_back(fires[i]);
+    }
+}
 
-    while (!fires_.empty() && nds > 0) {
-        FiredEvent &fire = fires_.back();
+void EventLoop::HandleAllIOTask() {
+    while (!fires_que_.empty()) {
+        FiredEvent &fire = fires_que_.front();
         iotask_pointer task = NULL;
-        if (FindTask(fire.id, &task)) {
+        if (FindTask(fire.id, &task))
             task->Process(this, fire.mask);
-        }
-        fires_.pop_back();
+        fires_que_.pop_front();
     }
 }
 

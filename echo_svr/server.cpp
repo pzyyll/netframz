@@ -15,7 +15,11 @@ using namespace std::placeholders;
 using namespace std;
 using namespace proto;
 
-TServer::TServer() : conf_file_(NULL), accept_task_(NULL), tick_(NULL) {
+TServer::TServer()
+    : conf_file_(NULL),
+      listen_fd_(-1),
+      accept_task_(NULL),
+      tick_(NULL) {
 
 }
 
@@ -42,15 +46,21 @@ int TServer::Init(int argc, char **argv) {
         return FAIL;
     }
 
-    if (loop_.Init() < 0) {
-        return FAIL;
-    }
-
     if (StartListen() < 0) {
         return FAIL;
     }
 
-    if (StartTick() < 0) {
+    Fork(svr_cfg::get_const_instance().worker - 1);
+
+    if (loop_.Init() < 0) {
+        return FAIL;
+    }
+
+    if (InitAcceptTask() < 0) {
+        return FAIL;
+    }
+
+    if (InitTick() < 0) {
         return FAIL;
     }
 
@@ -61,20 +71,20 @@ int TServer::StartListen() {
     //Set server listen
     //1. create socket fd
     //2. bind port and addr
-    int listen_fd = ::socket(AF_INET, SOCK_STREAM, 0);
-    if (listen_fd < 0) {
+    listen_fd_ = ::socket(AF_INET, SOCK_STREAM, 0);
+    if (listen_fd_ < 0) {
         log_err("Socket Fail. %s", strerror(errno));
         return FAIL;
     }
 
-    if (MakeNonblock(listen_fd) < 0) {
+    if (MakeNonblock(listen_fd_) < 0) {
         return FAIL;
     }
 
     int reuse = 1;
-    if (::setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0) {
+    if (::setsockopt(listen_fd_, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0) {
         log_err("Setsockopt for fd(%d) to reuseaddr fail. %s",
-                listen_fd, strerror(errno));
+                listen_fd_, strerror(errno));
         return FAIL;
     }
 
@@ -93,49 +103,52 @@ int TServer::StartListen() {
               svr_cfg::get_const_instance().port, addr.sin_port,
               svr_cfg::get_const_instance().ipv4.c_str());
 
-    if (::bind(listen_fd, (struct sockaddr *) &addr, sizeof(addr)) < 0) {
-        log_err("Bind for listen fd(%d) fail. %s", listen_fd, strerror(errno));
+    if (::bind(listen_fd_, (struct sockaddr *) &addr, sizeof(addr)) < 0) {
+        log_err("Bind for listen fd(%d) fail. %s", listen_fd_, strerror(errno));
         return FAIL;
     }
 
     //3. drive fd to listen
-    if (::listen(listen_fd, 4096) < 0) {
-        log_err("listen fd(%d) fail. %s", listen_fd, strerror(errno));
+    if (::listen(listen_fd_, 4096) < 0) {
+        log_err("listen fd(%d) fail. %s", listen_fd_, strerror(errno));
         return FAIL;
     }
 
-    accept_task_ = new IOTask(loop_, listen_fd, EV_READABLE);
+    log_info("Listen start. fd|%d", listen_fd_);
+    return listen_fd_;
+}
+
+int TServer::InitAcceptTask() {
+    accept_task_ = new IOTask(loop_, listen_fd_, EV_READABLE);
+
     if (NULL == accept_task_) {
         log_err("New fail.");
         return FAIL;
     }
+
     accept_task_->Bind(std::bind(&TServer::OnAccept, this, _1, _2, _3));
-    task_data_t data = {.data = {.ptr = accept_task_}};
-    accept_task_->SetPrivateData(data);
 
     if (accept_task_->Start() < 0) {
         log_err("%s", accept_task_->GetErr().c_str());
         return FAIL;
     }
 
-    log_debug("Listen start. fd|%d", listen_fd);
-    return listen_fd;
+    return SUCCESS;
 }
 
-int TServer::StartTick() {
+int TServer::InitTick() {
     int tick_interval =  svr_cfg::get_const_instance().tick;
     tick_ = new TimerTask(loop_, tick_interval, 1);
     if (NULL == tick_) {
         log_err("New fail.");
         return FAIL;
     }
+
     tick_->Bind(std::bind(&TServer::OnTick, this, _1, _2, _3));
-    task_data_t pridata = {.data = {.ptr = tick_}};
-    tick_->SetPrivateData(pridata);
 
     tick_->Start();
 
-    log_debug("Tick start.");
+    log_info("Tick start.");
     return SUCCESS;
 }
 
@@ -144,13 +157,12 @@ void TServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
     UNUSE(loopsv);
     UNUSE(data);
     UNUSE(mask);
-    int listen_fd = accept_task_->GetFd();
 
     while (true) {
         struct sockaddr_in addr;
         memset(&addr, 0, sizeof(addr));
         socklen_t len = sizeof(addr);
-        int fd = ::accept(listen_fd, (struct sockaddr *) &addr, &len);
+        int fd = ::accept(listen_fd_, (struct sockaddr *) &addr, &len);
         if (fd < 0) {
             if (EAGAIN == errno)
                 break;
@@ -191,7 +203,7 @@ void TServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
 }
 
 void TServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
-    UNUSE(lenth);
+    //UNUSE(lenth);
     unsigned long cid = data.data.id;
     if (err.get_ret() != ErrCode::SUCCESS) {
         log_info("%s", err.get_err_msg().c_str());
@@ -499,7 +511,6 @@ void TServer::CloseConn(unsigned long cid) {
 
 int TServer::Daemon() {
     //Linux 有现成的 daemon() 调用可以将进程转为守护进程
-    //这里作为练习就没有用库提供的调用.
 
     pid_t pid;
 
@@ -533,4 +544,12 @@ int TServer::Daemon() {
     open("/dev/null", O_RDWR);
 
     return SUCCESS;
+}
+
+void TServer::Fork(int nchild) {
+    pid_t pid;
+    for (int i = 0; i < nchild; ++i) {
+        if ( (pid = fork()) == 0)
+            break;
+    }
 }
