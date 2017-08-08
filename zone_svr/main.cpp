@@ -10,7 +10,7 @@
 using namespace std;
 
 
-TServer svr;
+BaseServer svr;
 static void TermSigHandler(int sig) {
     (void)(sig);
     svr.Stop();

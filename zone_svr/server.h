@@ -28,7 +28,7 @@
 #include "nf_event_timer_task.h"
 #include "connector.h"
 
-class TServer {
+class BaseServer {
 public:
     enum Ret {
         FAIL    = -1,
@@ -41,9 +41,9 @@ public:
     typedef std::unordered_map<unsigned long, TimerTaskPtr> timer_map_t;
 
 public:
-    TServer();
+    BaseServer();
 
-    virtual ~TServer();
+    virtual ~BaseServer();
 
     int Init(int argc, char **argv);
 
@@ -51,11 +51,9 @@ public:
 
     void Stop();
 
-    void Do(Connector &conn);
+    virtual void Do(Connector &conn);
 
-    void Tick(unsigned long now);
-
-    long int Response(unsigned long cid, const char *buff, unsigned long size);
+    virtual void Tick(unsigned long now);
 
     //void OnIdle();
 
@@ -101,6 +99,8 @@ protected:
     void CloseConn(unsigned long cid);
 
     int Daemon();
+
+    int Response(unsigned long cid, const char *buff, unsigned long size);
 
 private:
     char         *conf_file_;

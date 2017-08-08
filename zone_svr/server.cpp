@@ -15,18 +15,18 @@ using namespace std::placeholders;
 using namespace std;
 using namespace proto;
 
-TServer::TServer() : conf_file_(NULL), accept_task_(NULL), tick_(NULL) {
+BaseServer::BaseServer() : conf_file_(NULL), accept_task_(NULL), tick_(NULL) {
 
 }
 
-TServer::~TServer() {
+BaseServer::~BaseServer() {
     if (accept_task_)
         delete accept_task_;
     if (tick_)
         delete tick_;
 }
 
-int TServer::Init(int argc, char **argv) {
+int BaseServer::Init(int argc, char **argv) {
     if (GetOption(argc, argv) < 0) {
         return FAIL;
     }
@@ -57,7 +57,7 @@ int TServer::Init(int argc, char **argv) {
     return SUCCESS;
 }
 
-int TServer::StartListen() {
+int BaseServer::StartListen() {
     //Set server listen
     //1. create socket fd
     //2. bind port and addr
@@ -109,7 +109,7 @@ int TServer::StartListen() {
         log_err("New fail.");
         return FAIL;
     }
-    accept_task_->Bind(std::bind(&TServer::OnAccept, this, _1, _2, _3));
+    accept_task_->Bind(std::bind(&BaseServer::OnAccept, this, _1, _2, _3));
     task_data_t data = {.data = {.ptr = accept_task_}};
     accept_task_->SetPrivateData(data);
 
@@ -122,14 +122,14 @@ int TServer::StartListen() {
     return listen_fd;
 }
 
-int TServer::StartTick() {
+int BaseServer::StartTick() {
     int tick_interval =  svr_cfg::get_const_instance().tick;
     tick_ = new TimerTask(loop_, tick_interval, 1);
     if (NULL == tick_) {
         log_err("New fail.");
         return FAIL;
     }
-    tick_->Bind(std::bind(&TServer::OnTick, this, _1, _2, _3));
+    tick_->Bind(std::bind(&BaseServer::OnTick, this, _1, _2, _3));
     task_data_t pridata = {.data = {.ptr = tick_}};
     tick_->SetPrivateData(pridata);
 
@@ -139,7 +139,7 @@ int TServer::StartTick() {
     return SUCCESS;
 }
 
-void TServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
+void BaseServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
     log_debug("OnAccept.");
     UNUSE(loopsv);
     UNUSE(data);
@@ -180,17 +180,17 @@ void TServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
 
         struct ConnCbData cb_data;
         cb_data.pri_data.data.id = conn->GetCID();
-        cb_data.handler = std::bind(&TServer::OnRead, this, _1, _2, _3);
+        cb_data.handler = std::bind(&BaseServer::OnRead, this, _1, _2, _3);
         conn->BeginRecv(cb_data);
 
         task_data_t data = {.data = {.id = conn->GetCID()}};
         timer->SetPrivateData(data);
-        timer->Bind(std::bind(&TServer::OnTimerOut, this, _1, _2, _3));
+        timer->Bind(std::bind(&BaseServer::OnTimerOut, this, _1, _2, _3));
         timer->Start();
     }
 }
 
-void TServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
+void BaseServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
     UNUSE(lenth);
     unsigned long cid = data.data.id;
     if (err.get_ret() != ErrCode::SUCCESS) {
@@ -211,7 +211,7 @@ void TServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
     Do(*conn);
 }
 
-void TServer::Do(Connector &conn) {
+void BaseServer::Do(Connector &conn) {
     log_debug("Do");
     conn.SetLastActTimeToNow();
     while (conn.GetRecvBuff().UsedSize() > 0) {
@@ -240,12 +240,12 @@ void TServer::Do(Connector &conn) {
     }
 }
 
-void TServer::Tick(unsigned long now) {
+void BaseServer::Tick(unsigned long now) {
     log_debug("Tick: %lu", now);
     //Do tick task;
 }
 
-long int TServer::Response(unsigned long cid, const char *buff, unsigned long size) {
+int BaseServer::Response(unsigned long cid, const char *buff, unsigned long size) {
     log_debug("Response: %lu, size: %lu", cid, size);
 
     ConnectorPtr conn = FindConn(cid);
@@ -256,13 +256,13 @@ long int TServer::Response(unsigned long cid, const char *buff, unsigned long si
 
     struct ConnCbData cbdata;
     cbdata.pri_data.data.id = cid;
-    cbdata.handler = std::bind(&TServer::OnWriteErr, this,_1, _2, _3);
+    cbdata.handler = std::bind(&BaseServer::OnWriteErr, this,_1, _2, _3);
     conn->Send(buff, size, cbdata);
 
     return SUCCESS;
 }
 
-void TServer::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
+void BaseServer::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
     UNUSE(lenth);
     unsigned long cid = data.data.id;
     if (err.get_ret() != ErrCode::SUCCESS) {
@@ -272,7 +272,7 @@ void TServer::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
     }
 }
 
-void TServer::OnTick(EventLoop *loopsv, task_data_t data, int mask) {
+void BaseServer::OnTick(EventLoop *loopsv, task_data_t data, int mask) {
     //log_debug("OnTick");
     UNUSE(loopsv);
     UNUSE(data);
@@ -284,7 +284,7 @@ void TServer::OnTick(EventLoop *loopsv, task_data_t data, int mask) {
     Tick(now_ms);
 }
 
-void TServer::OnTimerOut(EventLoop *loopsv, task_data_t data, int mask) {
+void BaseServer::OnTimerOut(EventLoop *loopsv, task_data_t data, int mask) {
     log_debug("OnTimerOut.");
     UNUSE(loopsv);
     UNUSE(mask);
@@ -309,16 +309,16 @@ void TServer::OnTimerOut(EventLoop *loopsv, task_data_t data, int mask) {
     timer->Restart();
 }
 
-void TServer::Run() {
+void BaseServer::Run() {
     loop_.Run();
 }
 
-void TServer::Stop() {
+void BaseServer::Stop() {
     loop_.Stop();
 }
 
 //=====================private===========================//
-int TServer::GetOption(int argc, char **argv) {
+int BaseServer::GetOption(int argc, char **argv) {
     int ret = 0;
     struct option ops[] = {
             {"help",    no_argument,       0, 'h'},
@@ -356,7 +356,7 @@ int TServer::GetOption(int argc, char **argv) {
     return ret;
 }
 
-int TServer::MakeNonblock(int fd) {
+int BaseServer::MakeNonblock(int fd) {
     int val = 0;
     if ((val = fcntl(fd, F_GETFL, 0)) < 0) {
         log_warn("Get fd(%d) stat fail. %s", fd, strerror(errno));
@@ -371,7 +371,7 @@ int TServer::MakeNonblock(int fd) {
     return SUCCESS;
 }
 
-int TServer::SetCliOpt(int fd) {
+int BaseServer::SetCliOpt(int fd) {
     //一般实际缓冲区大小是设置的2倍
     //path:/proc/sys/net/core/w(r)mem_max
     int send_buff_size = 4 * 32768;
@@ -399,7 +399,7 @@ int TServer::SetCliOpt(int fd) {
     return SUCCESS;
 }
 
-TServer::ConnectorPtr TServer::FindConn(unsigned long cid) {
+BaseServer::ConnectorPtr BaseServer::FindConn(unsigned long cid) {
     conn_map_t::iterator itr = conn_map_.find(cid);
     if (itr == conn_map_.end()) {
         return NULL;
@@ -408,7 +408,7 @@ TServer::ConnectorPtr TServer::FindConn(unsigned long cid) {
     return itr->second;
 }
 
-int TServer::CheckMask(int mask) {
+int BaseServer::CheckMask(int mask) {
     if (mask & EV_RDHUP) {
         log_debug("Connect already closed by foreign.");
         return FAIL;
@@ -427,7 +427,7 @@ int TServer::CheckMask(int mask) {
     return SUCCESS;
 }
 
-TServer::ConnectorPtr TServer::CreateConn(int fd) {
+BaseServer::ConnectorPtr BaseServer::CreateConn(int fd) {
     log_debug("Create Connector for fd %d.", fd);
 
     ConnectorPtr cli = new Connector(loop_, fd);
@@ -447,7 +447,7 @@ TServer::ConnectorPtr TServer::CreateConn(int fd) {
     return cli;
 }
 
-void TServer::DelConn(unsigned long cid) {
+void BaseServer::DelConn(unsigned long cid) {
     log_debug("Connect cid %lu will be closed and del.", cid);
 
     ConnectorPtr conn = FindConn(cid);
@@ -459,7 +459,7 @@ void TServer::DelConn(unsigned long cid) {
     DelConn(conn);
 }
 
-void TServer::DelConn(ConnectorPtr conn) {
+void BaseServer::DelConn(ConnectorPtr conn) {
     if (conn) {
         conn->Close();
         conn_map_.erase(conn->GetCID());
@@ -467,7 +467,7 @@ void TServer::DelConn(ConnectorPtr conn) {
     }
 }
 
-TServer::TimerTaskPtr TServer::CreateTimerTask(unsigned long cid) {
+BaseServer::TimerTaskPtr BaseServer::CreateTimerTask(unsigned long cid) {
     log_debug("Create timer task for cid %lu.", cid);
 
     int timeout = svr_cfg::get_const_instance().timeout;
@@ -483,7 +483,7 @@ TServer::TimerTaskPtr TServer::CreateTimerTask(unsigned long cid) {
     return timer;
 }
 
-void TServer::DelTimerTask(unsigned long cid) {
+void BaseServer::DelTimerTask(unsigned long cid) {
     log_debug("DelTimerTask cid %lu", cid);
 
     TimerTaskPtr timer = FindTimer(cid);
@@ -497,7 +497,7 @@ void TServer::DelTimerTask(unsigned long cid) {
     delete timer;
 }
 
-TServer::TimerTaskPtr TServer::FindTimer(unsigned long cid) {
+BaseServer::TimerTaskPtr BaseServer::FindTimer(unsigned long cid) {
     timer_map_t::iterator itr = timer_map_.find(cid);
     if (itr == timer_map_.end()) {
         return NULL;
@@ -506,12 +506,12 @@ TServer::TimerTaskPtr TServer::FindTimer(unsigned long cid) {
     return itr->second;
 }
 
-void TServer::CloseConn(unsigned long cid) {
+void BaseServer::CloseConn(unsigned long cid) {
     DelConn(cid);
     DelTimerTask(cid);
 }
 
-int TServer::Daemon() {
+int BaseServer::Daemon() {
     //Linux 有现成的 daemon() 调用可以将进程转为守护进程
 
     pid_t pid;

@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+message MsgRet {
+    enum ErrCode {
+        SUCCESS = 0;
+        FAIL    = -1;
+    }
+}
+
+message MsgCmd {
+    enum MsgId {
+        MSGINIT  = 0X0;
+        LOGINREQ = 0X1001;
+        LOGINRSP = 0X1002;
+        ZONESYN  = 0X2001;
+        ZONESTAT = 0X2002;
+        CHATREQ  = 0X3001;
+        CHATRSP  = 0X3002;
+        CHATSTAT = 0X3003;
+    }
+}
+
+// LOGINREQ = 0X1001;
+message LoginReq {
+    bytes name = 1;
+}
+
+// LOGINRSP = 0X1002;
+message LoginRsp {
+    int32 ret = 1;
+}
+
+message Persion {
+    bytes name = 1;
+}
+
+message ZonePoint {
+    int32 x = 1;
+    int32 y = 2;
+}
+
+// ZONESYN = 0X2001;
+message ZoneSyn {
+    message Point {
+        int32 x = 1;
+        int32 y = 2;
+    }
+    Persion persion = 1;
+    Point point     = 2;
+}
+
+// ZONESTAT = 0X2002;
+message ZoneStat {
+    repeated ZoneSyn syn_list = 1;
+}
+
+// CHATREQ = 0X3001;
+message ChatReq {
+    bytes name    = 1;
+    bytes content = 2;
+}
+
+// CHATRSP = 0X3002;
+message ChatRsp {
+    int32 ret = 1;
+}
+
+// CHATSTAT = 0X3003;
+message ChatStat {
+    Persion speaker = 1;
+    bytes content   = 2;
+}
