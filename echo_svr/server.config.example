@@ -4,7 +4,7 @@
 port 13399
 
 # ipv4
-ipv4 127.0.0.1
+# ipv4 127.0.0.1
 
 # Tick interval (ms)
 # tick 100
@@ -12,8 +12,11 @@ ipv4 127.0.0.1
 # client time out (ms)
 timeout 60000
 
-# deamon default 0
-# deamon 0
+# daemon default 0
+# daemon 0
+
+# worker default 1
+# worker 2
 
 # log_level default 2
 # log_level 4

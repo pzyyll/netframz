@@ -108,11 +108,6 @@ int TcpClient::connect()
         }
     }
 
-//    if (fcntl(socket_, F_SETFL, arg) < 0) {
-//        snprintf(err_msg_, sizeof(err_msg_), "%s", "fcntl F_SETFL failed");
-//        return -1;
-//   }
-
     return 0;
 }
 

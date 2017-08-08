@@ -16,7 +16,5 @@ int ServerConfig::Init(const char *cfg_file) {
     cfg.GetInt(daemon, "daemon", 0);
     cfg.GetInt(log_level, "log_level", 2);
 
-    std::cout << worker << std::endl;
-
     return 0;
 }
