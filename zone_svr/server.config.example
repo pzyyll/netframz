@@ -1,0 +1,19 @@
+# Simple server config
+
+# port
+port 13399
+
+# ipv4
+ipv4 127.0.0.1
+
+# Tick interval (ms)
+# tick 100
+
+# client time out (ms)
+timeout 60000
+
+# deamon default 0
+# deamon 0
+
+# log_level default 2
+# log_level 4
