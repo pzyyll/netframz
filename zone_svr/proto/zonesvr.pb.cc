@@ -20,16 +20,14 @@ class MsgRetDefaultTypeInternal : public ::google::protobuf::internal::Explicitl
 } _MsgRet_default_instance_;
 class MsgCmdDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<MsgCmd> {
 } _MsgCmd_default_instance_;
+class Persion_PointDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<Persion_Point> {
+} _Persion_Point_default_instance_;
+class PersionDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<Persion> {
+} _Persion_default_instance_;
 class LoginReqDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<LoginReq> {
 } _LoginReq_default_instance_;
 class LoginRspDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<LoginRsp> {
 } _LoginRsp_default_instance_;
-class PersionDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<Persion> {
-} _Persion_default_instance_;
-class ZonePointDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ZonePoint> {
-} _ZonePoint_default_instance_;
-class ZoneSyn_PointDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ZoneSyn_Point> {
-} _ZoneSyn_Point_default_instance_;
 class ZoneSynDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ZoneSyn> {
 } _ZoneSyn_default_instance_;
 class ZoneStatDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ZoneStat> {
@@ -46,7 +44,7 @@ namespace protobuf_zonesvr_2eproto {
 
 namespace {
 
-::google::protobuf::Metadata file_level_metadata[12];
+::google::protobuf::Metadata file_level_metadata[11];
 const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors[2];
 
 }  // namespace
@@ -73,7 +71,6 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
-  { NULL, NULL, 0, -1, -1, false },
 };
 
 const ::google::protobuf::uint32 TableStruct::offsets[] = {
@@ -88,6 +85,20 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Persion_Point, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Persion_Point, x_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Persion_Point, y_),
+  ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Persion, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Persion, name_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Persion, point_),
+  ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginReq, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -99,39 +110,20 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginRsp, ret_),
-  ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Persion, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Persion, name_),
-  ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZonePoint, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZonePoint, x_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZonePoint, y_),
-  ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSyn_Point, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSyn_Point, x_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSyn_Point, y_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginRsp, err_msg_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginRsp, persion_list_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSyn, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSyn, persion_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSyn, point_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneStat, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneStat, syn_list_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneStat, persion_list_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChatReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -145,6 +137,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChatRsp, ret_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChatRsp, err_msg_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChatStat, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -152,31 +145,30 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChatStat, speaker_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChatStat, content_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChatStat, time_),
 };
 
 static const ::google::protobuf::internal::MigrationSchema schemas[] = {
   { 0, -1, sizeof(MsgRet)},
   { 5, -1, sizeof(MsgCmd)},
-  { 10, -1, sizeof(LoginReq)},
-  { 16, -1, sizeof(LoginRsp)},
-  { 22, -1, sizeof(Persion)},
-  { 28, -1, sizeof(ZonePoint)},
-  { 35, -1, sizeof(ZoneSyn_Point)},
-  { 42, -1, sizeof(ZoneSyn)},
-  { 49, -1, sizeof(ZoneStat)},
-  { 55, -1, sizeof(ChatReq)},
-  { 62, -1, sizeof(ChatRsp)},
-  { 68, -1, sizeof(ChatStat)},
+  { 10, -1, sizeof(Persion_Point)},
+  { 17, -1, sizeof(Persion)},
+  { 24, -1, sizeof(LoginReq)},
+  { 30, -1, sizeof(LoginRsp)},
+  { 38, -1, sizeof(ZoneSyn)},
+  { 44, -1, sizeof(ZoneStat)},
+  { 50, -1, sizeof(ChatReq)},
+  { 57, -1, sizeof(ChatRsp)},
+  { 64, -1, sizeof(ChatStat)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&_MsgRet_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_MsgCmd_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&_Persion_Point_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&_Persion_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_LoginReq_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_LoginRsp_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&_Persion_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&_ZonePoint_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneSyn_Point_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneSyn_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneStat_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ChatReq_default_instance_),
@@ -202,7 +194,7 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 12);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 11);
 }
 
 }  // namespace
@@ -212,26 +204,24 @@ void TableStruct::Shutdown() {
   delete file_level_metadata[0].reflection;
   _MsgCmd_default_instance_.Shutdown();
   delete file_level_metadata[1].reflection;
-  _LoginReq_default_instance_.Shutdown();
+  _Persion_Point_default_instance_.Shutdown();
   delete file_level_metadata[2].reflection;
-  _LoginRsp_default_instance_.Shutdown();
-  delete file_level_metadata[3].reflection;
   _Persion_default_instance_.Shutdown();
+  delete file_level_metadata[3].reflection;
+  _LoginReq_default_instance_.Shutdown();
   delete file_level_metadata[4].reflection;
-  _ZonePoint_default_instance_.Shutdown();
+  _LoginRsp_default_instance_.Shutdown();
   delete file_level_metadata[5].reflection;
-  _ZoneSyn_Point_default_instance_.Shutdown();
-  delete file_level_metadata[6].reflection;
   _ZoneSyn_default_instance_.Shutdown();
-  delete file_level_metadata[7].reflection;
+  delete file_level_metadata[6].reflection;
   _ZoneStat_default_instance_.Shutdown();
-  delete file_level_metadata[8].reflection;
+  delete file_level_metadata[7].reflection;
   _ChatReq_default_instance_.Shutdown();
-  delete file_level_metadata[9].reflection;
+  delete file_level_metadata[8].reflection;
   _ChatRsp_default_instance_.Shutdown();
-  delete file_level_metadata[10].reflection;
+  delete file_level_metadata[9].reflection;
   _ChatStat_default_instance_.Shutdown();
-  delete file_level_metadata[11].reflection;
+  delete file_level_metadata[10].reflection;
 }
 
 void TableStruct::InitDefaultsImpl() {
@@ -240,20 +230,19 @@ void TableStruct::InitDefaultsImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
   _MsgRet_default_instance_.DefaultConstruct();
   _MsgCmd_default_instance_.DefaultConstruct();
+  _Persion_Point_default_instance_.DefaultConstruct();
+  _Persion_default_instance_.DefaultConstruct();
   _LoginReq_default_instance_.DefaultConstruct();
   _LoginRsp_default_instance_.DefaultConstruct();
-  _Persion_default_instance_.DefaultConstruct();
-  _ZonePoint_default_instance_.DefaultConstruct();
-  _ZoneSyn_Point_default_instance_.DefaultConstruct();
   _ZoneSyn_default_instance_.DefaultConstruct();
   _ZoneStat_default_instance_.DefaultConstruct();
   _ChatReq_default_instance_.DefaultConstruct();
   _ChatRsp_default_instance_.DefaultConstruct();
   _ChatStat_default_instance_.DefaultConstruct();
+  _Persion_default_instance_.get_mutable()->point_ = const_cast< ::Persion_Point*>(
+      ::Persion_Point::internal_default_instance());
   _ZoneSyn_default_instance_.get_mutable()->persion_ = const_cast< ::Persion*>(
       ::Persion::internal_default_instance());
-  _ZoneSyn_default_instance_.get_mutable()->point_ = const_cast< ::ZoneSyn_Point*>(
-      ::ZoneSyn_Point::internal_default_instance());
   _ChatStat_default_instance_.get_mutable()->speaker_ = const_cast< ::Persion*>(
       ::Persion::internal_default_instance());
 }
@@ -271,19 +260,20 @@ void AddDescriptorsImpl() {
       "z\n\005MsgId\022\013\n\007MSGINIT\020\000\022\r\n\010LOGINREQ\020\201 \022\r\n\010"
       "LOGINRSP\020\202 \022\014\n\007ZONESYN\020\201@\022\r\n\010ZONESTAT\020\202@"
       "\022\014\n\007CHATREQ\020\201`\022\014\n\007CHATRSP\020\202`\022\r\n\010CHATSTAT"
-      "\020\203`\"\030\n\010LoginReq\022\014\n\004name\030\001 \001(\014\"\027\n\010LoginRs"
-      "p\022\013\n\003ret\030\001 \001(\005\"\027\n\007Persion\022\014\n\004name\030\001 \001(\014\""
-      "!\n\tZonePoint\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\"b\n\007Zo"
-      "neSyn\022\031\n\007persion\030\001 \001(\0132\010.Persion\022\035\n\005poin"
-      "t\030\002 \001(\0132\016.ZoneSyn.Point\032\035\n\005Point\022\t\n\001x\030\001 "
-      "\001(\005\022\t\n\001y\030\002 \001(\005\"&\n\010ZoneStat\022\032\n\010syn_list\030\001"
-      " \003(\0132\010.ZoneSyn\"(\n\007ChatReq\022\014\n\004name\030\001 \001(\014\022"
-      "\017\n\007content\030\002 \001(\014\"\026\n\007ChatRsp\022\013\n\003ret\030\001 \001(\005"
-      "\"6\n\010ChatStat\022\031\n\007speaker\030\001 \001(\0132\010.Persion\022"
-      "\017\n\007content\030\002 \001(\014b\006proto3"
+      "\020\203`\"U\n\007Persion\022\014\n\004name\030\001 \001(\014\022\035\n\005point\030\002 "
+      "\001(\0132\016.Persion.Point\032\035\n\005Point\022\t\n\001x\030\001 \001(\005\022"
+      "\t\n\001y\030\002 \001(\005\"\030\n\010LoginReq\022\014\n\004name\030\001 \001(\014\"H\n\010"
+      "LoginRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\036"
+      "\n\014persion_list\030\003 \003(\0132\010.Persion\"$\n\007ZoneSy"
+      "n\022\031\n\007persion\030\001 \001(\0132\010.Persion\"*\n\010ZoneStat"
+      "\022\036\n\014persion_list\030\001 \003(\0132\010.Persion\"(\n\007Chat"
+      "Req\022\014\n\004name\030\001 \001(\014\022\017\n\007content\030\002 \001(\014\"\'\n\007Ch"
+      "atRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\"D\n\010C"
+      "hatStat\022\031\n\007speaker\030\001 \001(\0132\010.Persion\022\017\n\007co"
+      "ntent\030\002 \001(\014\022\014\n\004time\030\003 \001(\rb\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 584);
+      descriptor, 633);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "zonesvr.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -715,6 +705,666 @@ void MsgCmd::InternalSwap(MsgCmd* other) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Persion_Point::kXFieldNumber;
+const int Persion_Point::kYFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+Persion_Point::Persion_Point()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_zonesvr_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:Persion.Point)
+}
+Persion_Point::Persion_Point(const Persion_Point& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&x_, &from.x_,
+    static_cast<size_t>(reinterpret_cast<char*>(&y_) -
+    reinterpret_cast<char*>(&x_)) + sizeof(y_));
+  // @@protoc_insertion_point(copy_constructor:Persion.Point)
+}
+
+void Persion_Point::SharedCtor() {
+  ::memset(&x_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&y_) -
+      reinterpret_cast<char*>(&x_)) + sizeof(y_));
+  _cached_size_ = 0;
+}
+
+Persion_Point::~Persion_Point() {
+  // @@protoc_insertion_point(destructor:Persion.Point)
+  SharedDtor();
+}
+
+void Persion_Point::SharedDtor() {
+}
+
+void Persion_Point::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* Persion_Point::descriptor() {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const Persion_Point& Persion_Point::default_instance() {
+  protobuf_zonesvr_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+Persion_Point* Persion_Point::New(::google::protobuf::Arena* arena) const {
+  Persion_Point* n = new Persion_Point;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void Persion_Point::Clear() {
+// @@protoc_insertion_point(message_clear_start:Persion.Point)
+  ::memset(&x_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&y_) -
+      reinterpret_cast<char*>(&x_)) + sizeof(y_));
+}
+
+bool Persion_Point::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:Persion.Point)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int32 x = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &x_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 y = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &y_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:Persion.Point)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:Persion.Point)
+  return false;
+#undef DO_
+}
+
+void Persion_Point::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:Persion.Point)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 x = 1;
+  if (this->x() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->x(), output);
+  }
+
+  // int32 y = 2;
+  if (this->y() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->y(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:Persion.Point)
+}
+
+::google::protobuf::uint8* Persion_Point::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:Persion.Point)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 x = 1;
+  if (this->x() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->x(), target);
+  }
+
+  // int32 y = 2;
+  if (this->y() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->y(), target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:Persion.Point)
+  return target;
+}
+
+size_t Persion_Point::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Persion.Point)
+  size_t total_size = 0;
+
+  // int32 x = 1;
+  if (this->x() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->x());
+  }
+
+  // int32 y = 2;
+  if (this->y() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->y());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Persion_Point::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Persion.Point)
+  GOOGLE_DCHECK_NE(&from, this);
+  const Persion_Point* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const Persion_Point>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Persion.Point)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Persion.Point)
+    MergeFrom(*source);
+  }
+}
+
+void Persion_Point::MergeFrom(const Persion_Point& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Persion.Point)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.x() != 0) {
+    set_x(from.x());
+  }
+  if (from.y() != 0) {
+    set_y(from.y());
+  }
+}
+
+void Persion_Point::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Persion.Point)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Persion_Point::CopyFrom(const Persion_Point& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Persion.Point)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Persion_Point::IsInitialized() const {
+  return true;
+}
+
+void Persion_Point::Swap(Persion_Point* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void Persion_Point::InternalSwap(Persion_Point* other) {
+  std::swap(x_, other->x_);
+  std::swap(y_, other->y_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata Persion_Point::GetMetadata() const {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// Persion_Point
+
+// int32 x = 1;
+void Persion_Point::clear_x() {
+  x_ = 0;
+}
+::google::protobuf::int32 Persion_Point::x() const {
+  // @@protoc_insertion_point(field_get:Persion.Point.x)
+  return x_;
+}
+void Persion_Point::set_x(::google::protobuf::int32 value) {
+  
+  x_ = value;
+  // @@protoc_insertion_point(field_set:Persion.Point.x)
+}
+
+// int32 y = 2;
+void Persion_Point::clear_y() {
+  y_ = 0;
+}
+::google::protobuf::int32 Persion_Point::y() const {
+  // @@protoc_insertion_point(field_get:Persion.Point.y)
+  return y_;
+}
+void Persion_Point::set_y(::google::protobuf::int32 value) {
+  
+  y_ = value;
+  // @@protoc_insertion_point(field_set:Persion.Point.y)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Persion::kNameFieldNumber;
+const int Persion::kPointFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+Persion::Persion()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_zonesvr_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:Persion)
+}
+Persion::Persion(const Persion& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.name().size() > 0) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  if (from.has_point()) {
+    point_ = new ::Persion_Point(*from.point_);
+  } else {
+    point_ = NULL;
+  }
+  // @@protoc_insertion_point(copy_constructor:Persion)
+}
+
+void Persion::SharedCtor() {
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  point_ = NULL;
+  _cached_size_ = 0;
+}
+
+Persion::~Persion() {
+  // @@protoc_insertion_point(destructor:Persion)
+  SharedDtor();
+}
+
+void Persion::SharedDtor() {
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != internal_default_instance()) {
+    delete point_;
+  }
+}
+
+void Persion::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* Persion::descriptor() {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const Persion& Persion::default_instance() {
+  protobuf_zonesvr_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+Persion* Persion::New(::google::protobuf::Arena* arena) const {
+  Persion* n = new Persion;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void Persion::Clear() {
+// @@protoc_insertion_point(message_clear_start:Persion)
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (GetArenaNoVirtual() == NULL && point_ != NULL) {
+    delete point_;
+  }
+  point_ = NULL;
+}
+
+bool Persion::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:Persion)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // bytes name = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_name()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .Persion.Point point = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_point()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:Persion)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:Persion)
+  return false;
+#undef DO_
+}
+
+void Persion::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:Persion)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bytes name = 1;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      1, this->name(), output);
+  }
+
+  // .Persion.Point point = 2;
+  if (this->has_point()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, *this->point_, output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:Persion)
+}
+
+::google::protobuf::uint8* Persion::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:Persion)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bytes name = 1;
+  if (this->name().size() > 0) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        1, this->name(), target);
+  }
+
+  // .Persion.Point point = 2;
+  if (this->has_point()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageNoVirtualToArray(
+        2, *this->point_, deterministic, target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:Persion)
+  return target;
+}
+
+size_t Persion::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Persion)
+  size_t total_size = 0;
+
+  // bytes name = 1;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->name());
+  }
+
+  // .Persion.Point point = 2;
+  if (this->has_point()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->point_);
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Persion::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Persion)
+  GOOGLE_DCHECK_NE(&from, this);
+  const Persion* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const Persion>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Persion)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Persion)
+    MergeFrom(*source);
+  }
+}
+
+void Persion::MergeFrom(const Persion& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Persion)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.name().size() > 0) {
+
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  if (from.has_point()) {
+    mutable_point()->::Persion_Point::MergeFrom(from.point());
+  }
+}
+
+void Persion::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Persion)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Persion::CopyFrom(const Persion& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Persion)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Persion::IsInitialized() const {
+  return true;
+}
+
+void Persion::Swap(Persion* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void Persion::InternalSwap(Persion* other) {
+  name_.Swap(&other->name_);
+  std::swap(point_, other->point_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata Persion::GetMetadata() const {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// Persion
+
+// bytes name = 1;
+void Persion::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& Persion::name() const {
+  // @@protoc_insertion_point(field_get:Persion.name)
+  return name_.GetNoArena();
+}
+void Persion::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:Persion.name)
+}
+#if LANG_CXX11
+void Persion::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:Persion.name)
+}
+#endif
+void Persion::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Persion.name)
+}
+void Persion::set_name(const void* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Persion.name)
+}
+::std::string* Persion::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:Persion.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* Persion::release_name() {
+  // @@protoc_insertion_point(field_release:Persion.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void Persion::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:Persion.name)
+}
+
+// .Persion.Point point = 2;
+bool Persion::has_point() const {
+  return this != internal_default_instance() && point_ != NULL;
+}
+void Persion::clear_point() {
+  if (GetArenaNoVirtual() == NULL && point_ != NULL) delete point_;
+  point_ = NULL;
+}
+const ::Persion_Point& Persion::point() const {
+  // @@protoc_insertion_point(field_get:Persion.point)
+  return point_ != NULL ? *point_
+                         : *::Persion_Point::internal_default_instance();
+}
+::Persion_Point* Persion::mutable_point() {
+  
+  if (point_ == NULL) {
+    point_ = new ::Persion_Point;
+  }
+  // @@protoc_insertion_point(field_mutable:Persion.point)
+  return point_;
+}
+::Persion_Point* Persion::release_point() {
+  // @@protoc_insertion_point(field_release:Persion.point)
+  
+  ::Persion_Point* temp = point_;
+  point_ = NULL;
+  return temp;
+}
+void Persion::set_allocated_point(::Persion_Point* point) {
+  delete point_;
+  point_ = point;
+  if (point) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Persion.point)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int LoginReq::kNameFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -996,6 +1646,8 @@ void LoginReq::set_allocated_name(::std::string* name) {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int LoginRsp::kRetFieldNumber;
+const int LoginRsp::kErrMsgFieldNumber;
+const int LoginRsp::kPersionListFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 LoginRsp::LoginRsp()
@@ -1009,13 +1661,19 @@ LoginRsp::LoginRsp()
 LoginRsp::LoginRsp(const LoginRsp& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
+      persion_list_(from.persion_list_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  err_msg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.err_msg().size() > 0) {
+    err_msg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.err_msg_);
+  }
   ret_ = from.ret_;
   // @@protoc_insertion_point(copy_constructor:LoginRsp)
 }
 
 void LoginRsp::SharedCtor() {
+  err_msg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ret_ = 0;
   _cached_size_ = 0;
 }
@@ -1026,6 +1684,7 @@ LoginRsp::~LoginRsp() {
 }
 
 void LoginRsp::SharedDtor() {
+  err_msg_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void LoginRsp::SetCachedSize(int size) const {
@@ -1053,6 +1712,8 @@ LoginRsp* LoginRsp::New(::google::protobuf::Arena* arena) const {
 
 void LoginRsp::Clear() {
 // @@protoc_insertion_point(message_clear_start:LoginRsp)
+  persion_list_.Clear();
+  err_msg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ret_ = 0;
 }
 
@@ -1074,6 +1735,30 @@ bool LoginRsp::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &ret_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bytes err_msg = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_err_msg()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .Persion persion_list = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_persion_list()));
         } else {
           goto handle_unusual;
         }
@@ -1112,6 +1797,19 @@ void LoginRsp::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->ret(), output);
   }
 
+  // bytes err_msg = 2;
+  if (this->err_msg().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      2, this->err_msg(), output);
+  }
+
+  // repeated .Persion persion_list = 3;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->persion_list_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, this->persion_list(static_cast<int>(i)), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:LoginRsp)
 }
 
@@ -1127,6 +1825,21 @@ void LoginRsp::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->ret(), target);
   }
 
+  // bytes err_msg = 2;
+  if (this->err_msg().size() > 0) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        2, this->err_msg(), target);
+  }
+
+  // repeated .Persion persion_list = 3;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->persion_list_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageNoVirtualToArray(
+        3, this->persion_list(static_cast<int>(i)), deterministic, target);
+  }
+
   // @@protoc_insertion_point(serialize_to_array_end:LoginRsp)
   return target;
 }
@@ -1134,6 +1847,24 @@ void LoginRsp::SerializeWithCachedSizes(
 size_t LoginRsp::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:LoginRsp)
   size_t total_size = 0;
+
+  // repeated .Persion persion_list = 3;
+  {
+    unsigned int count = static_cast<unsigned int>(this->persion_list_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->persion_list(static_cast<int>(i)));
+    }
+  }
+
+  // bytes err_msg = 2;
+  if (this->err_msg().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->err_msg());
+  }
 
   // int32 ret = 1;
   if (this->ret() != 0) {
@@ -1171,6 +1902,11 @@ void LoginRsp::MergeFrom(const LoginRsp& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  persion_list_.MergeFrom(from.persion_list_);
+  if (from.err_msg().size() > 0) {
+
+    err_msg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.err_msg_);
+  }
   if (from.ret() != 0) {
     set_ret(from.ret());
   }
@@ -1199,6 +1935,8 @@ void LoginRsp::Swap(LoginRsp* other) {
   InternalSwap(other);
 }
 void LoginRsp::InternalSwap(LoginRsp* other) {
+  persion_list_.InternalSwap(&other->persion_list_);
+  err_msg_.Swap(&other->err_msg_);
   std::swap(ret_, other->ret_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -1225,866 +1963,87 @@ void LoginRsp::set_ret(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:LoginRsp.ret)
 }
 
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Persion::kNameFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-Persion::Persion()
-  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    protobuf_zonesvr_2eproto::InitDefaults();
-  }
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:Persion)
+// bytes err_msg = 2;
+void LoginRsp::clear_err_msg() {
+  err_msg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-Persion::Persion(const Persion& from)
-  : ::google::protobuf::Message(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.name().size() > 0) {
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
-  }
-  // @@protoc_insertion_point(copy_constructor:Persion)
+const ::std::string& LoginRsp::err_msg() const {
+  // @@protoc_insertion_point(field_get:LoginRsp.err_msg)
+  return err_msg_.GetNoArena();
 }
-
-void Persion::SharedCtor() {
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _cached_size_ = 0;
-}
-
-Persion::~Persion() {
-  // @@protoc_insertion_point(destructor:Persion)
-  SharedDtor();
-}
-
-void Persion::SharedDtor() {
-  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-
-void Persion::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const ::google::protobuf::Descriptor* Persion::descriptor() {
-  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
-}
-
-const Persion& Persion::default_instance() {
-  protobuf_zonesvr_2eproto::InitDefaults();
-  return *internal_default_instance();
-}
-
-Persion* Persion::New(::google::protobuf::Arena* arena) const {
-  Persion* n = new Persion;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void Persion::Clear() {
-// @@protoc_insertion_point(message_clear_start:Persion)
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-
-bool Persion::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:Persion)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // bytes name = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_name()));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:Persion)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:Persion)
-  return false;
-#undef DO_
-}
-
-void Persion::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:Persion)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // bytes name = 1;
-  if (this->name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      1, this->name(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:Persion)
-}
-
-::google::protobuf::uint8* Persion::InternalSerializeWithCachedSizesToArray(
-    bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:Persion)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // bytes name = 1;
-  if (this->name().size() > 0) {
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        1, this->name(), target);
-  }
-
-  // @@protoc_insertion_point(serialize_to_array_end:Persion)
-  return target;
-}
-
-size_t Persion::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:Persion)
-  size_t total_size = 0;
-
-  // bytes name = 1;
-  if (this->name().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::BytesSize(
-        this->name());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void Persion::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:Persion)
-  GOOGLE_DCHECK_NE(&from, this);
-  const Persion* source =
-      ::google::protobuf::internal::DynamicCastToGenerated<const Persion>(
-          &from);
-  if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Persion)
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:Persion)
-    MergeFrom(*source);
-  }
-}
-
-void Persion::MergeFrom(const Persion& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:Persion)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (from.name().size() > 0) {
-
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
-  }
-}
-
-void Persion::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:Persion)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void Persion::CopyFrom(const Persion& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:Persion)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool Persion::IsInitialized() const {
-  return true;
-}
-
-void Persion::Swap(Persion* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void Persion::InternalSwap(Persion* other) {
-  name_.Swap(&other->name_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::google::protobuf::Metadata Persion::GetMetadata() const {
-  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages];
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// Persion
-
-// bytes name = 1;
-void Persion::clear_name() {
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-const ::std::string& Persion::name() const {
-  // @@protoc_insertion_point(field_get:Persion.name)
-  return name_.GetNoArena();
-}
-void Persion::set_name(const ::std::string& value) {
+void LoginRsp::set_err_msg(const ::std::string& value) {
   
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:Persion.name)
+  err_msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:LoginRsp.err_msg)
 }
 #if LANG_CXX11
-void Persion::set_name(::std::string&& value) {
+void LoginRsp::set_err_msg(::std::string&& value) {
   
-  name_.SetNoArena(
+  err_msg_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:Persion.name)
+  // @@protoc_insertion_point(field_set_rvalue:LoginRsp.err_msg)
 }
 #endif
-void Persion::set_name(const char* value) {
+void LoginRsp::set_err_msg(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:Persion.name)
+  err_msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:LoginRsp.err_msg)
 }
-void Persion::set_name(const void* value, size_t size) {
+void LoginRsp::set_err_msg(const void* value, size_t size) {
   
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  err_msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:Persion.name)
+  // @@protoc_insertion_point(field_set_pointer:LoginRsp.err_msg)
 }
-::std::string* Persion::mutable_name() {
+::std::string* LoginRsp::mutable_err_msg() {
   
-  // @@protoc_insertion_point(field_mutable:Persion.name)
-  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:LoginRsp.err_msg)
+  return err_msg_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* Persion::release_name() {
-  // @@protoc_insertion_point(field_release:Persion.name)
+::std::string* LoginRsp::release_err_msg() {
+  // @@protoc_insertion_point(field_release:LoginRsp.err_msg)
   
-  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return err_msg_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void Persion::set_allocated_name(::std::string* name) {
-  if (name != NULL) {
+void LoginRsp::set_allocated_err_msg(::std::string* err_msg) {
+  if (err_msg != NULL) {
     
   } else {
     
   }
-  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:Persion.name)
+  err_msg_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), err_msg);
+  // @@protoc_insertion_point(field_set_allocated:LoginRsp.err_msg)
 }
 
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int ZonePoint::kXFieldNumber;
-const int ZonePoint::kYFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-ZonePoint::ZonePoint()
-  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    protobuf_zonesvr_2eproto::InitDefaults();
-  }
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:ZonePoint)
+// repeated .Persion persion_list = 3;
+int LoginRsp::persion_list_size() const {
+  return persion_list_.size();
 }
-ZonePoint::ZonePoint(const ZonePoint& from)
-  : ::google::protobuf::Message(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::memcpy(&x_, &from.x_,
-    static_cast<size_t>(reinterpret_cast<char*>(&y_) -
-    reinterpret_cast<char*>(&x_)) + sizeof(y_));
-  // @@protoc_insertion_point(copy_constructor:ZonePoint)
+void LoginRsp::clear_persion_list() {
+  persion_list_.Clear();
 }
-
-void ZonePoint::SharedCtor() {
-  ::memset(&x_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&y_) -
-      reinterpret_cast<char*>(&x_)) + sizeof(y_));
-  _cached_size_ = 0;
+const ::Persion& LoginRsp::persion_list(int index) const {
+  // @@protoc_insertion_point(field_get:LoginRsp.persion_list)
+  return persion_list_.Get(index);
 }
-
-ZonePoint::~ZonePoint() {
-  // @@protoc_insertion_point(destructor:ZonePoint)
-  SharedDtor();
+::Persion* LoginRsp::mutable_persion_list(int index) {
+  // @@protoc_insertion_point(field_mutable:LoginRsp.persion_list)
+  return persion_list_.Mutable(index);
 }
-
-void ZonePoint::SharedDtor() {
+::Persion* LoginRsp::add_persion_list() {
+  // @@protoc_insertion_point(field_add:LoginRsp.persion_list)
+  return persion_list_.Add();
 }
-
-void ZonePoint::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+::google::protobuf::RepeatedPtrField< ::Persion >*
+LoginRsp::mutable_persion_list() {
+  // @@protoc_insertion_point(field_mutable_list:LoginRsp.persion_list)
+  return &persion_list_;
 }
-const ::google::protobuf::Descriptor* ZonePoint::descriptor() {
-  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
-}
-
-const ZonePoint& ZonePoint::default_instance() {
-  protobuf_zonesvr_2eproto::InitDefaults();
-  return *internal_default_instance();
-}
-
-ZonePoint* ZonePoint::New(::google::protobuf::Arena* arena) const {
-  ZonePoint* n = new ZonePoint;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void ZonePoint::Clear() {
-// @@protoc_insertion_point(message_clear_start:ZonePoint)
-  ::memset(&x_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&y_) -
-      reinterpret_cast<char*>(&x_)) + sizeof(y_));
-}
-
-bool ZonePoint::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:ZonePoint)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // int32 x = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &x_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // int32 y = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &y_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:ZonePoint)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:ZonePoint)
-  return false;
-#undef DO_
-}
-
-void ZonePoint::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:ZonePoint)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // int32 x = 1;
-  if (this->x() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->x(), output);
-  }
-
-  // int32 y = 2;
-  if (this->y() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->y(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:ZonePoint)
-}
-
-::google::protobuf::uint8* ZonePoint::InternalSerializeWithCachedSizesToArray(
-    bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:ZonePoint)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // int32 x = 1;
-  if (this->x() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->x(), target);
-  }
-
-  // int32 y = 2;
-  if (this->y() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->y(), target);
-  }
-
-  // @@protoc_insertion_point(serialize_to_array_end:ZonePoint)
-  return target;
-}
-
-size_t ZonePoint::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:ZonePoint)
-  size_t total_size = 0;
-
-  // int32 x = 1;
-  if (this->x() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->x());
-  }
-
-  // int32 y = 2;
-  if (this->y() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->y());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void ZonePoint::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:ZonePoint)
-  GOOGLE_DCHECK_NE(&from, this);
-  const ZonePoint* source =
-      ::google::protobuf::internal::DynamicCastToGenerated<const ZonePoint>(
-          &from);
-  if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ZonePoint)
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:ZonePoint)
-    MergeFrom(*source);
-  }
-}
-
-void ZonePoint::MergeFrom(const ZonePoint& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:ZonePoint)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (from.x() != 0) {
-    set_x(from.x());
-  }
-  if (from.y() != 0) {
-    set_y(from.y());
-  }
-}
-
-void ZonePoint::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:ZonePoint)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void ZonePoint::CopyFrom(const ZonePoint& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:ZonePoint)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool ZonePoint::IsInitialized() const {
-  return true;
-}
-
-void ZonePoint::Swap(ZonePoint* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void ZonePoint::InternalSwap(ZonePoint* other) {
-  std::swap(x_, other->x_);
-  std::swap(y_, other->y_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::google::protobuf::Metadata ZonePoint::GetMetadata() const {
-  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages];
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// ZonePoint
-
-// int32 x = 1;
-void ZonePoint::clear_x() {
-  x_ = 0;
-}
-::google::protobuf::int32 ZonePoint::x() const {
-  // @@protoc_insertion_point(field_get:ZonePoint.x)
-  return x_;
-}
-void ZonePoint::set_x(::google::protobuf::int32 value) {
-  
-  x_ = value;
-  // @@protoc_insertion_point(field_set:ZonePoint.x)
-}
-
-// int32 y = 2;
-void ZonePoint::clear_y() {
-  y_ = 0;
-}
-::google::protobuf::int32 ZonePoint::y() const {
-  // @@protoc_insertion_point(field_get:ZonePoint.y)
-  return y_;
-}
-void ZonePoint::set_y(::google::protobuf::int32 value) {
-  
-  y_ = value;
-  // @@protoc_insertion_point(field_set:ZonePoint.y)
-}
-
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int ZoneSyn_Point::kXFieldNumber;
-const int ZoneSyn_Point::kYFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-ZoneSyn_Point::ZoneSyn_Point()
-  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    protobuf_zonesvr_2eproto::InitDefaults();
-  }
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:ZoneSyn.Point)
-}
-ZoneSyn_Point::ZoneSyn_Point(const ZoneSyn_Point& from)
-  : ::google::protobuf::Message(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::memcpy(&x_, &from.x_,
-    static_cast<size_t>(reinterpret_cast<char*>(&y_) -
-    reinterpret_cast<char*>(&x_)) + sizeof(y_));
-  // @@protoc_insertion_point(copy_constructor:ZoneSyn.Point)
-}
-
-void ZoneSyn_Point::SharedCtor() {
-  ::memset(&x_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&y_) -
-      reinterpret_cast<char*>(&x_)) + sizeof(y_));
-  _cached_size_ = 0;
-}
-
-ZoneSyn_Point::~ZoneSyn_Point() {
-  // @@protoc_insertion_point(destructor:ZoneSyn.Point)
-  SharedDtor();
-}
-
-void ZoneSyn_Point::SharedDtor() {
-}
-
-void ZoneSyn_Point::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const ::google::protobuf::Descriptor* ZoneSyn_Point::descriptor() {
-  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
-}
-
-const ZoneSyn_Point& ZoneSyn_Point::default_instance() {
-  protobuf_zonesvr_2eproto::InitDefaults();
-  return *internal_default_instance();
-}
-
-ZoneSyn_Point* ZoneSyn_Point::New(::google::protobuf::Arena* arena) const {
-  ZoneSyn_Point* n = new ZoneSyn_Point;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void ZoneSyn_Point::Clear() {
-// @@protoc_insertion_point(message_clear_start:ZoneSyn.Point)
-  ::memset(&x_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&y_) -
-      reinterpret_cast<char*>(&x_)) + sizeof(y_));
-}
-
-bool ZoneSyn_Point::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:ZoneSyn.Point)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // int32 x = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &x_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // int32 y = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &y_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:ZoneSyn.Point)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:ZoneSyn.Point)
-  return false;
-#undef DO_
-}
-
-void ZoneSyn_Point::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:ZoneSyn.Point)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // int32 x = 1;
-  if (this->x() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->x(), output);
-  }
-
-  // int32 y = 2;
-  if (this->y() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->y(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:ZoneSyn.Point)
-}
-
-::google::protobuf::uint8* ZoneSyn_Point::InternalSerializeWithCachedSizesToArray(
-    bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:ZoneSyn.Point)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // int32 x = 1;
-  if (this->x() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->x(), target);
-  }
-
-  // int32 y = 2;
-  if (this->y() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->y(), target);
-  }
-
-  // @@protoc_insertion_point(serialize_to_array_end:ZoneSyn.Point)
-  return target;
-}
-
-size_t ZoneSyn_Point::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:ZoneSyn.Point)
-  size_t total_size = 0;
-
-  // int32 x = 1;
-  if (this->x() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->x());
-  }
-
-  // int32 y = 2;
-  if (this->y() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->y());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void ZoneSyn_Point::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:ZoneSyn.Point)
-  GOOGLE_DCHECK_NE(&from, this);
-  const ZoneSyn_Point* source =
-      ::google::protobuf::internal::DynamicCastToGenerated<const ZoneSyn_Point>(
-          &from);
-  if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ZoneSyn.Point)
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:ZoneSyn.Point)
-    MergeFrom(*source);
-  }
-}
-
-void ZoneSyn_Point::MergeFrom(const ZoneSyn_Point& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:ZoneSyn.Point)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (from.x() != 0) {
-    set_x(from.x());
-  }
-  if (from.y() != 0) {
-    set_y(from.y());
-  }
-}
-
-void ZoneSyn_Point::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:ZoneSyn.Point)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void ZoneSyn_Point::CopyFrom(const ZoneSyn_Point& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:ZoneSyn.Point)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool ZoneSyn_Point::IsInitialized() const {
-  return true;
-}
-
-void ZoneSyn_Point::Swap(ZoneSyn_Point* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void ZoneSyn_Point::InternalSwap(ZoneSyn_Point* other) {
-  std::swap(x_, other->x_);
-  std::swap(y_, other->y_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::google::protobuf::Metadata ZoneSyn_Point::GetMetadata() const {
-  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages];
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// ZoneSyn_Point
-
-// int32 x = 1;
-void ZoneSyn_Point::clear_x() {
-  x_ = 0;
-}
-::google::protobuf::int32 ZoneSyn_Point::x() const {
-  // @@protoc_insertion_point(field_get:ZoneSyn.Point.x)
-  return x_;
-}
-void ZoneSyn_Point::set_x(::google::protobuf::int32 value) {
-  
-  x_ = value;
-  // @@protoc_insertion_point(field_set:ZoneSyn.Point.x)
-}
-
-// int32 y = 2;
-void ZoneSyn_Point::clear_y() {
-  y_ = 0;
-}
-::google::protobuf::int32 ZoneSyn_Point::y() const {
-  // @@protoc_insertion_point(field_get:ZoneSyn.Point.y)
-  return y_;
-}
-void ZoneSyn_Point::set_y(::google::protobuf::int32 value) {
-  
-  y_ = value;
-  // @@protoc_insertion_point(field_set:ZoneSyn.Point.y)
+const ::google::protobuf::RepeatedPtrField< ::Persion >&
+LoginRsp::persion_list() const {
+  // @@protoc_insertion_point(field_list:LoginRsp.persion_list)
+  return persion_list_;
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -2093,7 +2052,6 @@ void ZoneSyn_Point::set_y(::google::protobuf::int32 value) {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ZoneSyn::kPersionFieldNumber;
-const int ZoneSyn::kPointFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ZoneSyn::ZoneSyn()
@@ -2114,18 +2072,11 @@ ZoneSyn::ZoneSyn(const ZoneSyn& from)
   } else {
     persion_ = NULL;
   }
-  if (from.has_point()) {
-    point_ = new ::ZoneSyn_Point(*from.point_);
-  } else {
-    point_ = NULL;
-  }
   // @@protoc_insertion_point(copy_constructor:ZoneSyn)
 }
 
 void ZoneSyn::SharedCtor() {
-  ::memset(&persion_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&point_) -
-      reinterpret_cast<char*>(&persion_)) + sizeof(point_));
+  persion_ = NULL;
   _cached_size_ = 0;
 }
 
@@ -2137,9 +2088,6 @@ ZoneSyn::~ZoneSyn() {
 void ZoneSyn::SharedDtor() {
   if (this != internal_default_instance()) {
     delete persion_;
-  }
-  if (this != internal_default_instance()) {
-    delete point_;
   }
 }
 
@@ -2172,10 +2120,6 @@ void ZoneSyn::Clear() {
     delete persion_;
   }
   persion_ = NULL;
-  if (GetArenaNoVirtual() == NULL && point_ != NULL) {
-    delete point_;
-  }
-  point_ = NULL;
 }
 
 bool ZoneSyn::MergePartialFromCodedStream(
@@ -2194,18 +2138,6 @@ bool ZoneSyn::MergePartialFromCodedStream(
             static_cast< ::google::protobuf::uint8>(10u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_persion()));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // .ZoneSyn.Point point = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_point()));
         } else {
           goto handle_unusual;
         }
@@ -2245,12 +2177,6 @@ void ZoneSyn::SerializeWithCachedSizes(
       1, *this->persion_, output);
   }
 
-  // .ZoneSyn.Point point = 2;
-  if (this->has_point()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      2, *this->point_, output);
-  }
-
   // @@protoc_insertion_point(serialize_end:ZoneSyn)
 }
 
@@ -2268,13 +2194,6 @@ void ZoneSyn::SerializeWithCachedSizes(
         1, *this->persion_, deterministic, target);
   }
 
-  // .ZoneSyn.Point point = 2;
-  if (this->has_point()) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessageNoVirtualToArray(
-        2, *this->point_, deterministic, target);
-  }
-
   // @@protoc_insertion_point(serialize_to_array_end:ZoneSyn)
   return target;
 }
@@ -2288,13 +2207,6 @@ size_t ZoneSyn::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->persion_);
-  }
-
-  // .ZoneSyn.Point point = 2;
-  if (this->has_point()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->point_);
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -2329,9 +2241,6 @@ void ZoneSyn::MergeFrom(const ZoneSyn& from) {
   if (from.has_persion()) {
     mutable_persion()->::Persion::MergeFrom(from.persion());
   }
-  if (from.has_point()) {
-    mutable_point()->::ZoneSyn_Point::MergeFrom(from.point());
-  }
 }
 
 void ZoneSyn::CopyFrom(const ::google::protobuf::Message& from) {
@@ -2358,7 +2267,6 @@ void ZoneSyn::Swap(ZoneSyn* other) {
 }
 void ZoneSyn::InternalSwap(ZoneSyn* other) {
   std::swap(persion_, other->persion_);
-  std::swap(point_, other->point_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -2409,51 +2317,12 @@ void ZoneSyn::set_allocated_persion(::Persion* persion) {
   // @@protoc_insertion_point(field_set_allocated:ZoneSyn.persion)
 }
 
-// .ZoneSyn.Point point = 2;
-bool ZoneSyn::has_point() const {
-  return this != internal_default_instance() && point_ != NULL;
-}
-void ZoneSyn::clear_point() {
-  if (GetArenaNoVirtual() == NULL && point_ != NULL) delete point_;
-  point_ = NULL;
-}
-const ::ZoneSyn_Point& ZoneSyn::point() const {
-  // @@protoc_insertion_point(field_get:ZoneSyn.point)
-  return point_ != NULL ? *point_
-                         : *::ZoneSyn_Point::internal_default_instance();
-}
-::ZoneSyn_Point* ZoneSyn::mutable_point() {
-  
-  if (point_ == NULL) {
-    point_ = new ::ZoneSyn_Point;
-  }
-  // @@protoc_insertion_point(field_mutable:ZoneSyn.point)
-  return point_;
-}
-::ZoneSyn_Point* ZoneSyn::release_point() {
-  // @@protoc_insertion_point(field_release:ZoneSyn.point)
-  
-  ::ZoneSyn_Point* temp = point_;
-  point_ = NULL;
-  return temp;
-}
-void ZoneSyn::set_allocated_point(::ZoneSyn_Point* point) {
-  delete point_;
-  point_ = point;
-  if (point) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:ZoneSyn.point)
-}
-
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int ZoneStat::kSynListFieldNumber;
+const int ZoneStat::kPersionListFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ZoneStat::ZoneStat()
@@ -2467,7 +2336,7 @@ ZoneStat::ZoneStat()
 ZoneStat::ZoneStat(const ZoneStat& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
-      syn_list_(from.syn_list_),
+      persion_list_(from.persion_list_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:ZoneStat)
@@ -2510,7 +2379,7 @@ ZoneStat* ZoneStat::New(::google::protobuf::Arena* arena) const {
 
 void ZoneStat::Clear() {
 // @@protoc_insertion_point(message_clear_start:ZoneStat)
-  syn_list_.Clear();
+  persion_list_.Clear();
 }
 
 bool ZoneStat::MergePartialFromCodedStream(
@@ -2523,12 +2392,12 @@ bool ZoneStat::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .ZoneSyn syn_list = 1;
+      // repeated .Persion persion_list = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_syn_list()));
+                input, add_persion_list()));
         } else {
           goto handle_unusual;
         }
@@ -2562,11 +2431,11 @@ void ZoneStat::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .ZoneSyn syn_list = 1;
+  // repeated .Persion persion_list = 1;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->syn_list_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->persion_list_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      1, this->syn_list(static_cast<int>(i)), output);
+      1, this->persion_list(static_cast<int>(i)), output);
   }
 
   // @@protoc_insertion_point(serialize_end:ZoneStat)
@@ -2579,12 +2448,12 @@ void ZoneStat::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .ZoneSyn syn_list = 1;
+  // repeated .Persion persion_list = 1;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->syn_list_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->persion_list_size()); i < n; i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageNoVirtualToArray(
-        1, this->syn_list(static_cast<int>(i)), deterministic, target);
+        1, this->persion_list(static_cast<int>(i)), deterministic, target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:ZoneStat)
@@ -2595,14 +2464,14 @@ size_t ZoneStat::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:ZoneStat)
   size_t total_size = 0;
 
-  // repeated .ZoneSyn syn_list = 1;
+  // repeated .Persion persion_list = 1;
   {
-    unsigned int count = static_cast<unsigned int>(this->syn_list_size());
+    unsigned int count = static_cast<unsigned int>(this->persion_list_size());
     total_size += 1UL * count;
     for (unsigned int i = 0; i < count; i++) {
       total_size +=
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->syn_list(static_cast<int>(i)));
+          this->persion_list(static_cast<int>(i)));
     }
   }
 
@@ -2635,7 +2504,7 @@ void ZoneStat::MergeFrom(const ZoneStat& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  syn_list_.MergeFrom(from.syn_list_);
+  persion_list_.MergeFrom(from.persion_list_);
 }
 
 void ZoneStat::CopyFrom(const ::google::protobuf::Message& from) {
@@ -2661,7 +2530,7 @@ void ZoneStat::Swap(ZoneStat* other) {
   InternalSwap(other);
 }
 void ZoneStat::InternalSwap(ZoneStat* other) {
-  syn_list_.InternalSwap(&other->syn_list_);
+  persion_list_.InternalSwap(&other->persion_list_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -2673,34 +2542,34 @@ void ZoneStat::InternalSwap(ZoneStat* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // ZoneStat
 
-// repeated .ZoneSyn syn_list = 1;
-int ZoneStat::syn_list_size() const {
-  return syn_list_.size();
+// repeated .Persion persion_list = 1;
+int ZoneStat::persion_list_size() const {
+  return persion_list_.size();
 }
-void ZoneStat::clear_syn_list() {
-  syn_list_.Clear();
+void ZoneStat::clear_persion_list() {
+  persion_list_.Clear();
 }
-const ::ZoneSyn& ZoneStat::syn_list(int index) const {
-  // @@protoc_insertion_point(field_get:ZoneStat.syn_list)
-  return syn_list_.Get(index);
+const ::Persion& ZoneStat::persion_list(int index) const {
+  // @@protoc_insertion_point(field_get:ZoneStat.persion_list)
+  return persion_list_.Get(index);
 }
-::ZoneSyn* ZoneStat::mutable_syn_list(int index) {
-  // @@protoc_insertion_point(field_mutable:ZoneStat.syn_list)
-  return syn_list_.Mutable(index);
+::Persion* ZoneStat::mutable_persion_list(int index) {
+  // @@protoc_insertion_point(field_mutable:ZoneStat.persion_list)
+  return persion_list_.Mutable(index);
 }
-::ZoneSyn* ZoneStat::add_syn_list() {
-  // @@protoc_insertion_point(field_add:ZoneStat.syn_list)
-  return syn_list_.Add();
+::Persion* ZoneStat::add_persion_list() {
+  // @@protoc_insertion_point(field_add:ZoneStat.persion_list)
+  return persion_list_.Add();
 }
-::google::protobuf::RepeatedPtrField< ::ZoneSyn >*
-ZoneStat::mutable_syn_list() {
-  // @@protoc_insertion_point(field_mutable_list:ZoneStat.syn_list)
-  return &syn_list_;
+::google::protobuf::RepeatedPtrField< ::Persion >*
+ZoneStat::mutable_persion_list() {
+  // @@protoc_insertion_point(field_mutable_list:ZoneStat.persion_list)
+  return &persion_list_;
 }
-const ::google::protobuf::RepeatedPtrField< ::ZoneSyn >&
-ZoneStat::syn_list() const {
-  // @@protoc_insertion_point(field_list:ZoneStat.syn_list)
-  return syn_list_;
+const ::google::protobuf::RepeatedPtrField< ::Persion >&
+ZoneStat::persion_list() const {
+  // @@protoc_insertion_point(field_list:ZoneStat.persion_list)
+  return persion_list_;
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -3087,6 +2956,7 @@ void ChatReq::set_allocated_content(::std::string* content) {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ChatRsp::kRetFieldNumber;
+const int ChatRsp::kErrMsgFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ChatRsp::ChatRsp()
@@ -3102,11 +2972,16 @@ ChatRsp::ChatRsp(const ChatRsp& from)
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  err_msg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.err_msg().size() > 0) {
+    err_msg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.err_msg_);
+  }
   ret_ = from.ret_;
   // @@protoc_insertion_point(copy_constructor:ChatRsp)
 }
 
 void ChatRsp::SharedCtor() {
+  err_msg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ret_ = 0;
   _cached_size_ = 0;
 }
@@ -3117,6 +2992,7 @@ ChatRsp::~ChatRsp() {
 }
 
 void ChatRsp::SharedDtor() {
+  err_msg_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void ChatRsp::SetCachedSize(int size) const {
@@ -3144,6 +3020,7 @@ ChatRsp* ChatRsp::New(::google::protobuf::Arena* arena) const {
 
 void ChatRsp::Clear() {
 // @@protoc_insertion_point(message_clear_start:ChatRsp)
+  err_msg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ret_ = 0;
 }
 
@@ -3165,6 +3042,18 @@ bool ChatRsp::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &ret_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bytes err_msg = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_err_msg()));
         } else {
           goto handle_unusual;
         }
@@ -3203,6 +3092,12 @@ void ChatRsp::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->ret(), output);
   }
 
+  // bytes err_msg = 2;
+  if (this->err_msg().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      2, this->err_msg(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:ChatRsp)
 }
 
@@ -3218,6 +3113,13 @@ void ChatRsp::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->ret(), target);
   }
 
+  // bytes err_msg = 2;
+  if (this->err_msg().size() > 0) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        2, this->err_msg(), target);
+  }
+
   // @@protoc_insertion_point(serialize_to_array_end:ChatRsp)
   return target;
 }
@@ -3225,6 +3127,13 @@ void ChatRsp::SerializeWithCachedSizes(
 size_t ChatRsp::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:ChatRsp)
   size_t total_size = 0;
+
+  // bytes err_msg = 2;
+  if (this->err_msg().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->err_msg());
+  }
 
   // int32 ret = 1;
   if (this->ret() != 0) {
@@ -3262,6 +3171,10 @@ void ChatRsp::MergeFrom(const ChatRsp& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.err_msg().size() > 0) {
+
+    err_msg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.err_msg_);
+  }
   if (from.ret() != 0) {
     set_ret(from.ret());
   }
@@ -3290,6 +3203,7 @@ void ChatRsp::Swap(ChatRsp* other) {
   InternalSwap(other);
 }
 void ChatRsp::InternalSwap(ChatRsp* other) {
+  err_msg_.Swap(&other->err_msg_);
   std::swap(ret_, other->ret_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -3316,6 +3230,59 @@ void ChatRsp::set_ret(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:ChatRsp.ret)
 }
 
+// bytes err_msg = 2;
+void ChatRsp::clear_err_msg() {
+  err_msg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& ChatRsp::err_msg() const {
+  // @@protoc_insertion_point(field_get:ChatRsp.err_msg)
+  return err_msg_.GetNoArena();
+}
+void ChatRsp::set_err_msg(const ::std::string& value) {
+  
+  err_msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:ChatRsp.err_msg)
+}
+#if LANG_CXX11
+void ChatRsp::set_err_msg(::std::string&& value) {
+  
+  err_msg_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:ChatRsp.err_msg)
+}
+#endif
+void ChatRsp::set_err_msg(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  err_msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:ChatRsp.err_msg)
+}
+void ChatRsp::set_err_msg(const void* value, size_t size) {
+  
+  err_msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:ChatRsp.err_msg)
+}
+::std::string* ChatRsp::mutable_err_msg() {
+  
+  // @@protoc_insertion_point(field_mutable:ChatRsp.err_msg)
+  return err_msg_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* ChatRsp::release_err_msg() {
+  // @@protoc_insertion_point(field_release:ChatRsp.err_msg)
+  
+  return err_msg_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void ChatRsp::set_allocated_err_msg(::std::string* err_msg) {
+  if (err_msg != NULL) {
+    
+  } else {
+    
+  }
+  err_msg_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), err_msg);
+  // @@protoc_insertion_point(field_set_allocated:ChatRsp.err_msg)
+}
+
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
@@ -3323,6 +3290,7 @@ void ChatRsp::set_ret(::google::protobuf::int32 value) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ChatStat::kSpeakerFieldNumber;
 const int ChatStat::kContentFieldNumber;
+const int ChatStat::kTimeFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ChatStat::ChatStat()
@@ -3347,12 +3315,15 @@ ChatStat::ChatStat(const ChatStat& from)
   } else {
     speaker_ = NULL;
   }
+  time_ = from.time_;
   // @@protoc_insertion_point(copy_constructor:ChatStat)
 }
 
 void ChatStat::SharedCtor() {
   content_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  speaker_ = NULL;
+  ::memset(&speaker_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&time_) -
+      reinterpret_cast<char*>(&speaker_)) + sizeof(time_));
   _cached_size_ = 0;
 }
 
@@ -3398,6 +3369,7 @@ void ChatStat::Clear() {
     delete speaker_;
   }
   speaker_ = NULL;
+  time_ = 0u;
 }
 
 bool ChatStat::MergePartialFromCodedStream(
@@ -3428,6 +3400,20 @@ bool ChatStat::MergePartialFromCodedStream(
             static_cast< ::google::protobuf::uint8>(18u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_content()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 time = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &time_)));
         } else {
           goto handle_unusual;
         }
@@ -3473,6 +3459,11 @@ void ChatStat::SerializeWithCachedSizes(
       2, this->content(), output);
   }
 
+  // uint32 time = 3;
+  if (this->time() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->time(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:ChatStat)
 }
 
@@ -3497,6 +3488,11 @@ void ChatStat::SerializeWithCachedSizes(
         2, this->content(), target);
   }
 
+  // uint32 time = 3;
+  if (this->time() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->time(), target);
+  }
+
   // @@protoc_insertion_point(serialize_to_array_end:ChatStat)
   return target;
 }
@@ -3517,6 +3513,13 @@ size_t ChatStat::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->speaker_);
+  }
+
+  // uint32 time = 3;
+  if (this->time() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->time());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -3555,6 +3558,9 @@ void ChatStat::MergeFrom(const ChatStat& from) {
   if (from.has_speaker()) {
     mutable_speaker()->::Persion::MergeFrom(from.speaker());
   }
+  if (from.time() != 0) {
+    set_time(from.time());
+  }
 }
 
 void ChatStat::CopyFrom(const ::google::protobuf::Message& from) {
@@ -3582,6 +3588,7 @@ void ChatStat::Swap(ChatStat* other) {
 void ChatStat::InternalSwap(ChatStat* other) {
   content_.Swap(&other->content_);
   std::swap(speaker_, other->speaker_);
+  std::swap(time_, other->time_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -3683,6 +3690,20 @@ void ChatStat::set_allocated_content(::std::string* content) {
   }
   content_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), content);
   // @@protoc_insertion_point(field_set_allocated:ChatStat.content)
+}
+
+// uint32 time = 3;
+void ChatStat::clear_time() {
+  time_ = 0u;
+}
+::google::protobuf::uint32 ChatStat::time() const {
+  // @@protoc_insertion_point(field_get:ChatStat.time)
+  return time_;
+}
+void ChatStat::set_time(::google::protobuf::uint32 value) {
+  
+  time_ = value;
+  // @@protoc_insertion_point(field_set:ChatStat.time)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

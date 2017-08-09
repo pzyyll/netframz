@@ -7,12 +7,20 @@
 
 #include "player.h"
 
-Player::Player() : x_(0), y_(0) {
+Player::Player() : conn_id_(0) x_(0), y_(0) {
     name_[0] = '\0';
 }
 
 Player::~Player() {
 
+}
+
+void Player::set_conn_id(unsigned long conn_id) {
+    conn_id_ = conn_id;
+}
+
+unsigned long Player::conn_id() {
+    return conn_id_;
 }
 
 void Player::set_name(const char *name) {
@@ -29,13 +37,14 @@ void Player::set_name(const char *name, const unsigned long size) {
 
     unsigned long lenth = size;
     if (lenth > kNameMaxLen)
-        lenth = kNameMaxLen;
+        lenth = kNameMaxLen - 1;
 
     memcpy(name_, name, lenth);
+    name_[lenth] = '\0';
 }
 
-const char *Player::name() {
-    return name_;
+std::string Player::name() {
+    return std::string(name_);
 }
 
 void Player::set_x(int x) {
@@ -43,7 +52,7 @@ void Player::set_x(int x) {
 }
 
 int Player::x() {
-    return x;
+    return x_;
 }
 
 void Player::set_y(int y) {

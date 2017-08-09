@@ -33,6 +33,8 @@ set(SOURCE_FILES
         server.cpp
         log.cpp
         config.cpp
+        zonesvr.cpp
+        player.cpp
         )
 
 add_executable(zonesvr ${SOURCE_FILES} ${NFSOURCE_FILES})

@@ -27,6 +27,7 @@
 #include "nf_event_iotask.h"
 #include "nf_event_timer_task.h"
 #include "connector.h"
+#include "proto.h"
 
 class BaseServer {
 public:
@@ -51,7 +52,9 @@ public:
 
     void Stop();
 
-    virtual void Do(Connector &conn);
+    void Parse(Connector &conn);
+
+    virtual void ProcessCmd(proto::Cmd &cmd, const unsigned long cid);
 
     virtual void Tick(unsigned long now);
 
@@ -99,6 +102,8 @@ protected:
     void CloseConn(unsigned long cid);
 
     int Daemon();
+
+    int Response(unsigned long cid, const proto::Cmd &cmd);
 
     int Response(unsigned long cid, const char *buff, unsigned long size);
 

@@ -4,13 +4,13 @@
 #include <unistd.h>
 #include <signal.h>
 
-#include "server.h"
+#include "zonesvr.h"
 #include "mem_check.h"
 
 using namespace std;
 
 
-BaseServer svr;
+ZoneSvr svr;
 static void TermSigHandler(int sig) {
     (void)(sig);
     svr.Stop();

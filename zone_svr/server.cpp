@@ -7,7 +7,6 @@
 #include "server_config.h"
 #include "log.h"
 #include "mem_check.h"
-#include "proto.h"
 
 #define UNUSE(x) ((void)(x))
 
@@ -207,11 +206,11 @@ void BaseServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
 
     log_debug("rv buff size %lu", lenth);
 
-    //Do
-    Do(*conn);
+    //Parse recv buf
+    Parse(*conn);
 }
 
-void BaseServer::Do(Connector &conn) {
+void BaseServer::Parse(Connector &conn) {
     log_debug("Do");
     conn.SetLastActTimeToNow();
     while (conn.GetRecvBuff().UsedSize() > 0) {
@@ -232,17 +231,30 @@ void BaseServer::Do(Connector &conn) {
         conn.GetRecvBuff().FrontAdvancing(nr);
         log_debug("cli data size: %u", (unsigned)cmd.GetMsgData().size());
 
-        //Echo Test
-        std::string sndstr;
-        cmd.Serialize(sndstr);
-        log_debug("snd: %li", (long int)sndstr.size());
-        Response(conn.GetCID(), sndstr.c_str(), sndstr.size());
+        ProcessCmd(cmd, conn.GetCID());
     }
 }
 
+void BaseServer::ProcessCmd(Cmd &cmd, const unsigned long cid) {
+    log_debug("ProcessCmd");
+
+    //Echo Test
+    std::string sndstr;
+    cmd.Serialize(sndstr);
+    log_debug("snd: %li", (long int)sndstr.size());
+    Response(cid, sndstr.c_str(), sndstr.size());
+}
+
 void BaseServer::Tick(unsigned long now) {
-    log_debug("Tick: %lu", now);
+    //log_debug("Tick: %lu", now);
     //Do tick task;
+}
+
+int BaseServer::Response(unsigned long cid, const proto::Cmd &cmd) {
+    std::string sndstr;
+    cmd.Serialize(sndstr);
+    log_debug("snd: %li", (long int)sndstr.size());
+    return Response(cid, sndstr.c_str(), sndstr.size());
 }
 
 int BaseServer::Response(unsigned long cid, const char *buff, unsigned long size) {
