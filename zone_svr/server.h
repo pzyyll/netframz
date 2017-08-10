@@ -103,9 +103,9 @@ protected:
 
     int Daemon();
 
-    int Response(unsigned long cid, const proto::Cmd &cmd);
+    int Response(proto::Cmd &cmd, unsigned long cid);
 
-    int Response(unsigned long cid, const char *buff, unsigned long size);
+    int Response(const char *buff, unsigned long size, unsigned long cid);
 
 private:
     char         *conf_file_;

@@ -20,11 +20,11 @@ public:
 
     ~PlayerManage();
 
-    Player *AddPlayer(const std::string name, const unsigned long cid);
+    Player *AddPlayer(const std::string &name, const unsigned long cid);
 
-    Player *GetPlayer(const std::string name);
+    Player *GetPlayer(const std::string &name);
 
-    void DelPlayer(const std::string name);
+    void DelPlayer(const std::string &name);
 
     PlayerMapConstItr begin() { return player_map_.begin(); }
 

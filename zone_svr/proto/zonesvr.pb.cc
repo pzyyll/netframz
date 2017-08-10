@@ -24,14 +24,18 @@ class Persion_PointDefaultTypeInternal : public ::google::protobuf::internal::Ex
 } _Persion_Point_default_instance_;
 class PersionDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<Persion> {
 } _Persion_default_instance_;
+class ZoneStatDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ZoneStat> {
+} _ZoneStat_default_instance_;
 class LoginReqDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<LoginReq> {
 } _LoginReq_default_instance_;
 class LoginRspDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<LoginRsp> {
 } _LoginRsp_default_instance_;
+class ZoneSynReqDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ZoneSynReq> {
+} _ZoneSynReq_default_instance_;
+class ZoneSynRspDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ZoneSynRsp> {
+} _ZoneSynRsp_default_instance_;
 class ZoneSynDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ZoneSyn> {
 } _ZoneSyn_default_instance_;
-class ZoneStatDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ZoneStat> {
-} _ZoneStat_default_instance_;
 class ChatReqDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ChatReq> {
 } _ChatReq_default_instance_;
 class ChatRspDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ChatRsp> {
@@ -44,7 +48,7 @@ namespace protobuf_zonesvr_2eproto {
 
 namespace {
 
-::google::protobuf::Metadata file_level_metadata[11];
+::google::protobuf::Metadata file_level_metadata[13];
 const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors[2];
 
 }  // namespace
@@ -60,6 +64,8 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::AuxillaryParseTableField
 };
 PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
     TableStruct::schema[] = {
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
@@ -99,6 +105,12 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Persion, name_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Persion, point_),
   ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneStat, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneStat, persion_list_),
+  ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginReq, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -111,19 +123,27 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginRsp, ret_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginRsp, err_msg_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginRsp, persion_list_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginRsp, zone_stat_),
+  ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSynReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSynReq, persion_),
+  ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSynRsp, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSynRsp, ret_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSynRsp, err_msg_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSynRsp, zone_stat_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSyn, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSyn, persion_),
-  ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneStat, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneStat, persion_list_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSyn, zone_stat_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChatReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -153,13 +173,15 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] = {
   { 5, -1, sizeof(MsgCmd)},
   { 10, -1, sizeof(Persion_Point)},
   { 17, -1, sizeof(Persion)},
-  { 24, -1, sizeof(LoginReq)},
-  { 30, -1, sizeof(LoginRsp)},
-  { 38, -1, sizeof(ZoneSyn)},
-  { 44, -1, sizeof(ZoneStat)},
-  { 50, -1, sizeof(ChatReq)},
-  { 57, -1, sizeof(ChatRsp)},
-  { 64, -1, sizeof(ChatStat)},
+  { 24, -1, sizeof(ZoneStat)},
+  { 30, -1, sizeof(LoginReq)},
+  { 36, -1, sizeof(LoginRsp)},
+  { 44, -1, sizeof(ZoneSynReq)},
+  { 50, -1, sizeof(ZoneSynRsp)},
+  { 58, -1, sizeof(ZoneSyn)},
+  { 64, -1, sizeof(ChatReq)},
+  { 71, -1, sizeof(ChatRsp)},
+  { 78, -1, sizeof(ChatStat)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -167,10 +189,12 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&_MsgCmd_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_Persion_Point_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_Persion_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneStat_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_LoginReq_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_LoginRsp_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneSynReq_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneSynRsp_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneSyn_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneStat_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ChatReq_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ChatRsp_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ChatStat_default_instance_),
@@ -194,7 +218,7 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 11);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 13);
 }
 
 }  // namespace
@@ -208,20 +232,24 @@ void TableStruct::Shutdown() {
   delete file_level_metadata[2].reflection;
   _Persion_default_instance_.Shutdown();
   delete file_level_metadata[3].reflection;
-  _LoginReq_default_instance_.Shutdown();
-  delete file_level_metadata[4].reflection;
-  _LoginRsp_default_instance_.Shutdown();
-  delete file_level_metadata[5].reflection;
-  _ZoneSyn_default_instance_.Shutdown();
-  delete file_level_metadata[6].reflection;
   _ZoneStat_default_instance_.Shutdown();
+  delete file_level_metadata[4].reflection;
+  _LoginReq_default_instance_.Shutdown();
+  delete file_level_metadata[5].reflection;
+  _LoginRsp_default_instance_.Shutdown();
+  delete file_level_metadata[6].reflection;
+  _ZoneSynReq_default_instance_.Shutdown();
   delete file_level_metadata[7].reflection;
-  _ChatReq_default_instance_.Shutdown();
+  _ZoneSynRsp_default_instance_.Shutdown();
   delete file_level_metadata[8].reflection;
-  _ChatRsp_default_instance_.Shutdown();
+  _ZoneSyn_default_instance_.Shutdown();
   delete file_level_metadata[9].reflection;
-  _ChatStat_default_instance_.Shutdown();
+  _ChatReq_default_instance_.Shutdown();
   delete file_level_metadata[10].reflection;
+  _ChatRsp_default_instance_.Shutdown();
+  delete file_level_metadata[11].reflection;
+  _ChatStat_default_instance_.Shutdown();
+  delete file_level_metadata[12].reflection;
 }
 
 void TableStruct::InitDefaultsImpl() {
@@ -232,17 +260,25 @@ void TableStruct::InitDefaultsImpl() {
   _MsgCmd_default_instance_.DefaultConstruct();
   _Persion_Point_default_instance_.DefaultConstruct();
   _Persion_default_instance_.DefaultConstruct();
+  _ZoneStat_default_instance_.DefaultConstruct();
   _LoginReq_default_instance_.DefaultConstruct();
   _LoginRsp_default_instance_.DefaultConstruct();
+  _ZoneSynReq_default_instance_.DefaultConstruct();
+  _ZoneSynRsp_default_instance_.DefaultConstruct();
   _ZoneSyn_default_instance_.DefaultConstruct();
-  _ZoneStat_default_instance_.DefaultConstruct();
   _ChatReq_default_instance_.DefaultConstruct();
   _ChatRsp_default_instance_.DefaultConstruct();
   _ChatStat_default_instance_.DefaultConstruct();
   _Persion_default_instance_.get_mutable()->point_ = const_cast< ::Persion_Point*>(
       ::Persion_Point::internal_default_instance());
-  _ZoneSyn_default_instance_.get_mutable()->persion_ = const_cast< ::Persion*>(
+  _LoginRsp_default_instance_.get_mutable()->zone_stat_ = const_cast< ::ZoneStat*>(
+      ::ZoneStat::internal_default_instance());
+  _ZoneSynReq_default_instance_.get_mutable()->persion_ = const_cast< ::Persion*>(
       ::Persion::internal_default_instance());
+  _ZoneSynRsp_default_instance_.get_mutable()->zone_stat_ = const_cast< ::ZoneStat*>(
+      ::ZoneStat::internal_default_instance());
+  _ZoneSyn_default_instance_.get_mutable()->zone_stat_ = const_cast< ::ZoneStat*>(
+      ::ZoneStat::internal_default_instance());
   _ChatStat_default_instance_.get_mutable()->speaker_ = const_cast< ::Persion*>(
       ::Persion::internal_default_instance());
 }
@@ -256,24 +292,28 @@ void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] = {
       "\n\rzonesvr.proto\"3\n\006MsgRet\")\n\007ErrCode\022\013\n\007"
-      "SUCCESS\020\000\022\021\n\004FAIL\020\377\377\377\377\377\377\377\377\377\001\"\204\001\n\006MsgCmd\""
-      "z\n\005MsgId\022\013\n\007MSGINIT\020\000\022\r\n\010LOGINREQ\020\201 \022\r\n\010"
-      "LOGINRSP\020\202 \022\014\n\007ZONESYN\020\201@\022\r\n\010ZONESTAT\020\202@"
-      "\022\014\n\007CHATREQ\020\201`\022\014\n\007CHATRSP\020\202`\022\r\n\010CHATSTAT"
-      "\020\203`\"U\n\007Persion\022\014\n\004name\030\001 \001(\014\022\035\n\005point\030\002 "
-      "\001(\0132\016.Persion.Point\032\035\n\005Point\022\t\n\001x\030\001 \001(\005\022"
-      "\t\n\001y\030\002 \001(\005\"\030\n\010LoginReq\022\014\n\004name\030\001 \001(\014\"H\n\010"
-      "LoginRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\036"
-      "\n\014persion_list\030\003 \003(\0132\010.Persion\"$\n\007ZoneSy"
-      "n\022\031\n\007persion\030\001 \001(\0132\010.Persion\"*\n\010ZoneStat"
-      "\022\036\n\014persion_list\030\001 \003(\0132\010.Persion\"(\n\007Chat"
-      "Req\022\014\n\004name\030\001 \001(\014\022\017\n\007content\030\002 \001(\014\"\'\n\007Ch"
-      "atRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\"D\n\010C"
-      "hatStat\022\031\n\007speaker\030\001 \001(\0132\010.Persion\022\017\n\007co"
-      "ntent\030\002 \001(\014\022\014\n\004time\030\003 \001(\rb\006proto3"
+      "SUCCESS\020\000\022\021\n\004FAIL\020\377\377\377\377\377\377\377\377\377\001\"\242\001\n\006MsgCmd\""
+      "\227\001\n\005MsgId\022\013\n\007MSGINIT\020\000\022\016\n\tLOGIN_REQ\020\201 \022\016"
+      "\n\tLOGIN_RSP\020\202 \022\021\n\014ZONE_SYN_REQ\020\201@\022\021\n\014ZON"
+      "E_SYN_RSP\020\202@\022\r\n\010ZONE_SYN\020\203@\022\r\n\010CHAT_REQ\020"
+      "\201`\022\r\n\010CHAT_RSP\020\202`\022\016\n\tCHAT_STAT\020\203`\"U\n\007Per"
+      "sion\022\014\n\004name\030\001 \001(\014\022\035\n\005point\030\002 \001(\0132\016.Pers"
+      "ion.Point\032\035\n\005Point\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005"
+      "\"*\n\010ZoneStat\022\036\n\014persion_list\030\001 \003(\0132\010.Per"
+      "sion\"\030\n\010LoginReq\022\014\n\004name\030\001 \001(\014\"F\n\010LoginR"
+      "sp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\034\n\tzone"
+      "_stat\030\003 \001(\0132\t.ZoneStat\"\'\n\nZoneSynReq\022\031\n\007"
+      "persion\030\001 \001(\0132\010.Persion\"H\n\nZoneSynRsp\022\013\n"
+      "\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\034\n\tzone_stat"
+      "\030\003 \001(\0132\t.ZoneStat\"\'\n\007ZoneSyn\022\034\n\tzone_sta"
+      "t\030\001 \001(\0132\t.ZoneStat\"(\n\007ChatReq\022\014\n\004name\030\001 "
+      "\001(\014\022\017\n\007content\030\002 \001(\014\"\'\n\007ChatRsp\022\013\n\003ret\030\001"
+      " \001(\005\022\017\n\007err_msg\030\002 \001(\014\"D\n\010ChatStat\022\031\n\007spe"
+      "aker\030\001 \001(\0132\010.Persion\022\017\n\007content\030\002 \001(\014\022\014\n"
+      "\004time\030\003 \001(\rb\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 633);
+      descriptor, 779);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "zonesvr.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -325,6 +365,7 @@ bool MsgCmd_MsgId_IsValid(int value) {
     case 4098:
     case 8193:
     case 8194:
+    case 8195:
     case 12289:
     case 12290:
     case 12291:
@@ -336,13 +377,14 @@ bool MsgCmd_MsgId_IsValid(int value) {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const MsgCmd_MsgId MsgCmd::MSGINIT;
-const MsgCmd_MsgId MsgCmd::LOGINREQ;
-const MsgCmd_MsgId MsgCmd::LOGINRSP;
-const MsgCmd_MsgId MsgCmd::ZONESYN;
-const MsgCmd_MsgId MsgCmd::ZONESTAT;
-const MsgCmd_MsgId MsgCmd::CHATREQ;
-const MsgCmd_MsgId MsgCmd::CHATRSP;
-const MsgCmd_MsgId MsgCmd::CHATSTAT;
+const MsgCmd_MsgId MsgCmd::LOGIN_REQ;
+const MsgCmd_MsgId MsgCmd::LOGIN_RSP;
+const MsgCmd_MsgId MsgCmd::ZONE_SYN_REQ;
+const MsgCmd_MsgId MsgCmd::ZONE_SYN_RSP;
+const MsgCmd_MsgId MsgCmd::ZONE_SYN;
+const MsgCmd_MsgId MsgCmd::CHAT_REQ;
+const MsgCmd_MsgId MsgCmd::CHAT_RSP;
+const MsgCmd_MsgId MsgCmd::CHAT_STAT;
 const MsgCmd_MsgId MsgCmd::MsgId_MIN;
 const MsgCmd_MsgId MsgCmd::MsgId_MAX;
 const int MsgCmd::MsgId_ARRAYSIZE;
@@ -1365,6 +1407,261 @@ void Persion::set_allocated_point(::Persion_Point* point) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ZoneStat::kPersionListFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ZoneStat::ZoneStat()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_zonesvr_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ZoneStat)
+}
+ZoneStat::ZoneStat(const ZoneStat& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      persion_list_(from.persion_list_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:ZoneStat)
+}
+
+void ZoneStat::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+ZoneStat::~ZoneStat() {
+  // @@protoc_insertion_point(destructor:ZoneStat)
+  SharedDtor();
+}
+
+void ZoneStat::SharedDtor() {
+}
+
+void ZoneStat::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ZoneStat::descriptor() {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const ZoneStat& ZoneStat::default_instance() {
+  protobuf_zonesvr_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+ZoneStat* ZoneStat::New(::google::protobuf::Arena* arena) const {
+  ZoneStat* n = new ZoneStat;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void ZoneStat::Clear() {
+// @@protoc_insertion_point(message_clear_start:ZoneStat)
+  persion_list_.Clear();
+}
+
+bool ZoneStat::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ZoneStat)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .Persion persion_list = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_persion_list()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ZoneStat)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ZoneStat)
+  return false;
+#undef DO_
+}
+
+void ZoneStat::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ZoneStat)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .Persion persion_list = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->persion_list_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->persion_list(static_cast<int>(i)), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:ZoneStat)
+}
+
+::google::protobuf::uint8* ZoneStat::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:ZoneStat)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .Persion persion_list = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->persion_list_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageNoVirtualToArray(
+        1, this->persion_list(static_cast<int>(i)), deterministic, target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:ZoneStat)
+  return target;
+}
+
+size_t ZoneStat::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ZoneStat)
+  size_t total_size = 0;
+
+  // repeated .Persion persion_list = 1;
+  {
+    unsigned int count = static_cast<unsigned int>(this->persion_list_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->persion_list(static_cast<int>(i)));
+    }
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ZoneStat::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ZoneStat)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ZoneStat* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const ZoneStat>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ZoneStat)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ZoneStat)
+    MergeFrom(*source);
+  }
+}
+
+void ZoneStat::MergeFrom(const ZoneStat& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ZoneStat)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  persion_list_.MergeFrom(from.persion_list_);
+}
+
+void ZoneStat::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ZoneStat)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ZoneStat::CopyFrom(const ZoneStat& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ZoneStat)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ZoneStat::IsInitialized() const {
+  return true;
+}
+
+void ZoneStat::Swap(ZoneStat* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ZoneStat::InternalSwap(ZoneStat* other) {
+  persion_list_.InternalSwap(&other->persion_list_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata ZoneStat::GetMetadata() const {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// ZoneStat
+
+// repeated .Persion persion_list = 1;
+int ZoneStat::persion_list_size() const {
+  return persion_list_.size();
+}
+void ZoneStat::clear_persion_list() {
+  persion_list_.Clear();
+}
+const ::Persion& ZoneStat::persion_list(int index) const {
+  // @@protoc_insertion_point(field_get:ZoneStat.persion_list)
+  return persion_list_.Get(index);
+}
+::Persion* ZoneStat::mutable_persion_list(int index) {
+  // @@protoc_insertion_point(field_mutable:ZoneStat.persion_list)
+  return persion_list_.Mutable(index);
+}
+::Persion* ZoneStat::add_persion_list() {
+  // @@protoc_insertion_point(field_add:ZoneStat.persion_list)
+  return persion_list_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::Persion >*
+ZoneStat::mutable_persion_list() {
+  // @@protoc_insertion_point(field_mutable_list:ZoneStat.persion_list)
+  return &persion_list_;
+}
+const ::google::protobuf::RepeatedPtrField< ::Persion >&
+ZoneStat::persion_list() const {
+  // @@protoc_insertion_point(field_list:ZoneStat.persion_list)
+  return persion_list_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int LoginReq::kNameFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -1647,7 +1944,7 @@ void LoginReq::set_allocated_name(::std::string* name) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int LoginRsp::kRetFieldNumber;
 const int LoginRsp::kErrMsgFieldNumber;
-const int LoginRsp::kPersionListFieldNumber;
+const int LoginRsp::kZoneStatFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 LoginRsp::LoginRsp()
@@ -1661,12 +1958,16 @@ LoginRsp::LoginRsp()
 LoginRsp::LoginRsp(const LoginRsp& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
-      persion_list_(from.persion_list_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   err_msg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.err_msg().size() > 0) {
     err_msg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.err_msg_);
+  }
+  if (from.has_zone_stat()) {
+    zone_stat_ = new ::ZoneStat(*from.zone_stat_);
+  } else {
+    zone_stat_ = NULL;
   }
   ret_ = from.ret_;
   // @@protoc_insertion_point(copy_constructor:LoginRsp)
@@ -1674,7 +1975,9 @@ LoginRsp::LoginRsp(const LoginRsp& from)
 
 void LoginRsp::SharedCtor() {
   err_msg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ret_ = 0;
+  ::memset(&zone_stat_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&ret_) -
+      reinterpret_cast<char*>(&zone_stat_)) + sizeof(ret_));
   _cached_size_ = 0;
 }
 
@@ -1685,6 +1988,9 @@ LoginRsp::~LoginRsp() {
 
 void LoginRsp::SharedDtor() {
   err_msg_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != internal_default_instance()) {
+    delete zone_stat_;
+  }
 }
 
 void LoginRsp::SetCachedSize(int size) const {
@@ -1712,8 +2018,11 @@ LoginRsp* LoginRsp::New(::google::protobuf::Arena* arena) const {
 
 void LoginRsp::Clear() {
 // @@protoc_insertion_point(message_clear_start:LoginRsp)
-  persion_list_.Clear();
   err_msg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (GetArenaNoVirtual() == NULL && zone_stat_ != NULL) {
+    delete zone_stat_;
+  }
+  zone_stat_ = NULL;
   ret_ = 0;
 }
 
@@ -1753,12 +2062,12 @@ bool LoginRsp::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .Persion persion_list = 3;
+      // .ZoneStat zone_stat = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(26u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_persion_list()));
+               input, mutable_zone_stat()));
         } else {
           goto handle_unusual;
         }
@@ -1803,11 +2112,10 @@ void LoginRsp::SerializeWithCachedSizes(
       2, this->err_msg(), output);
   }
 
-  // repeated .Persion persion_list = 3;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->persion_list_size()); i < n; i++) {
+  // .ZoneStat zone_stat = 3;
+  if (this->has_zone_stat()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      3, this->persion_list(static_cast<int>(i)), output);
+      3, *this->zone_stat_, output);
   }
 
   // @@protoc_insertion_point(serialize_end:LoginRsp)
@@ -1832,12 +2140,11 @@ void LoginRsp::SerializeWithCachedSizes(
         2, this->err_msg(), target);
   }
 
-  // repeated .Persion persion_list = 3;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->persion_list_size()); i < n; i++) {
+  // .ZoneStat zone_stat = 3;
+  if (this->has_zone_stat()) {
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageNoVirtualToArray(
-        3, this->persion_list(static_cast<int>(i)), deterministic, target);
+        3, *this->zone_stat_, deterministic, target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:LoginRsp)
@@ -1848,22 +2155,18 @@ size_t LoginRsp::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:LoginRsp)
   size_t total_size = 0;
 
-  // repeated .Persion persion_list = 3;
-  {
-    unsigned int count = static_cast<unsigned int>(this->persion_list_size());
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->persion_list(static_cast<int>(i)));
-    }
-  }
-
   // bytes err_msg = 2;
   if (this->err_msg().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->err_msg());
+  }
+
+  // .ZoneStat zone_stat = 3;
+  if (this->has_zone_stat()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->zone_stat_);
   }
 
   // int32 ret = 1;
@@ -1902,10 +2205,12 @@ void LoginRsp::MergeFrom(const LoginRsp& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  persion_list_.MergeFrom(from.persion_list_);
   if (from.err_msg().size() > 0) {
 
     err_msg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.err_msg_);
+  }
+  if (from.has_zone_stat()) {
+    mutable_zone_stat()->::ZoneStat::MergeFrom(from.zone_stat());
   }
   if (from.ret() != 0) {
     set_ret(from.ret());
@@ -1935,8 +2240,8 @@ void LoginRsp::Swap(LoginRsp* other) {
   InternalSwap(other);
 }
 void LoginRsp::InternalSwap(LoginRsp* other) {
-  persion_list_.InternalSwap(&other->persion_list_);
   err_msg_.Swap(&other->err_msg_);
+  std::swap(zone_stat_, other->zone_stat_);
   std::swap(ret_, other->ret_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -2016,34 +2321,43 @@ void LoginRsp::set_allocated_err_msg(::std::string* err_msg) {
   // @@protoc_insertion_point(field_set_allocated:LoginRsp.err_msg)
 }
 
-// repeated .Persion persion_list = 3;
-int LoginRsp::persion_list_size() const {
-  return persion_list_.size();
+// .ZoneStat zone_stat = 3;
+bool LoginRsp::has_zone_stat() const {
+  return this != internal_default_instance() && zone_stat_ != NULL;
 }
-void LoginRsp::clear_persion_list() {
-  persion_list_.Clear();
+void LoginRsp::clear_zone_stat() {
+  if (GetArenaNoVirtual() == NULL && zone_stat_ != NULL) delete zone_stat_;
+  zone_stat_ = NULL;
 }
-const ::Persion& LoginRsp::persion_list(int index) const {
-  // @@protoc_insertion_point(field_get:LoginRsp.persion_list)
-  return persion_list_.Get(index);
+const ::ZoneStat& LoginRsp::zone_stat() const {
+  // @@protoc_insertion_point(field_get:LoginRsp.zone_stat)
+  return zone_stat_ != NULL ? *zone_stat_
+                         : *::ZoneStat::internal_default_instance();
 }
-::Persion* LoginRsp::mutable_persion_list(int index) {
-  // @@protoc_insertion_point(field_mutable:LoginRsp.persion_list)
-  return persion_list_.Mutable(index);
+::ZoneStat* LoginRsp::mutable_zone_stat() {
+  
+  if (zone_stat_ == NULL) {
+    zone_stat_ = new ::ZoneStat;
+  }
+  // @@protoc_insertion_point(field_mutable:LoginRsp.zone_stat)
+  return zone_stat_;
 }
-::Persion* LoginRsp::add_persion_list() {
-  // @@protoc_insertion_point(field_add:LoginRsp.persion_list)
-  return persion_list_.Add();
+::ZoneStat* LoginRsp::release_zone_stat() {
+  // @@protoc_insertion_point(field_release:LoginRsp.zone_stat)
+  
+  ::ZoneStat* temp = zone_stat_;
+  zone_stat_ = NULL;
+  return temp;
 }
-::google::protobuf::RepeatedPtrField< ::Persion >*
-LoginRsp::mutable_persion_list() {
-  // @@protoc_insertion_point(field_mutable_list:LoginRsp.persion_list)
-  return &persion_list_;
-}
-const ::google::protobuf::RepeatedPtrField< ::Persion >&
-LoginRsp::persion_list() const {
-  // @@protoc_insertion_point(field_list:LoginRsp.persion_list)
-  return persion_list_;
+void LoginRsp::set_allocated_zone_stat(::ZoneStat* zone_stat) {
+  delete zone_stat_;
+  zone_stat_ = zone_stat;
+  if (zone_stat) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:LoginRsp.zone_stat)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -2051,7 +2365,701 @@ LoginRsp::persion_list() const {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int ZoneSyn::kPersionFieldNumber;
+const int ZoneSynReq::kPersionFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ZoneSynReq::ZoneSynReq()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_zonesvr_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ZoneSynReq)
+}
+ZoneSynReq::ZoneSynReq(const ZoneSynReq& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.has_persion()) {
+    persion_ = new ::Persion(*from.persion_);
+  } else {
+    persion_ = NULL;
+  }
+  // @@protoc_insertion_point(copy_constructor:ZoneSynReq)
+}
+
+void ZoneSynReq::SharedCtor() {
+  persion_ = NULL;
+  _cached_size_ = 0;
+}
+
+ZoneSynReq::~ZoneSynReq() {
+  // @@protoc_insertion_point(destructor:ZoneSynReq)
+  SharedDtor();
+}
+
+void ZoneSynReq::SharedDtor() {
+  if (this != internal_default_instance()) {
+    delete persion_;
+  }
+}
+
+void ZoneSynReq::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ZoneSynReq::descriptor() {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const ZoneSynReq& ZoneSynReq::default_instance() {
+  protobuf_zonesvr_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+ZoneSynReq* ZoneSynReq::New(::google::protobuf::Arena* arena) const {
+  ZoneSynReq* n = new ZoneSynReq;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void ZoneSynReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:ZoneSynReq)
+  if (GetArenaNoVirtual() == NULL && persion_ != NULL) {
+    delete persion_;
+  }
+  persion_ = NULL;
+}
+
+bool ZoneSynReq::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ZoneSynReq)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // .Persion persion = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_persion()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ZoneSynReq)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ZoneSynReq)
+  return false;
+#undef DO_
+}
+
+void ZoneSynReq::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ZoneSynReq)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .Persion persion = 1;
+  if (this->has_persion()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, *this->persion_, output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:ZoneSynReq)
+}
+
+::google::protobuf::uint8* ZoneSynReq::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:ZoneSynReq)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .Persion persion = 1;
+  if (this->has_persion()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageNoVirtualToArray(
+        1, *this->persion_, deterministic, target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:ZoneSynReq)
+  return target;
+}
+
+size_t ZoneSynReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ZoneSynReq)
+  size_t total_size = 0;
+
+  // .Persion persion = 1;
+  if (this->has_persion()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->persion_);
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ZoneSynReq::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ZoneSynReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ZoneSynReq* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const ZoneSynReq>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ZoneSynReq)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ZoneSynReq)
+    MergeFrom(*source);
+  }
+}
+
+void ZoneSynReq::MergeFrom(const ZoneSynReq& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ZoneSynReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.has_persion()) {
+    mutable_persion()->::Persion::MergeFrom(from.persion());
+  }
+}
+
+void ZoneSynReq::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ZoneSynReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ZoneSynReq::CopyFrom(const ZoneSynReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ZoneSynReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ZoneSynReq::IsInitialized() const {
+  return true;
+}
+
+void ZoneSynReq::Swap(ZoneSynReq* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ZoneSynReq::InternalSwap(ZoneSynReq* other) {
+  std::swap(persion_, other->persion_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata ZoneSynReq::GetMetadata() const {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// ZoneSynReq
+
+// .Persion persion = 1;
+bool ZoneSynReq::has_persion() const {
+  return this != internal_default_instance() && persion_ != NULL;
+}
+void ZoneSynReq::clear_persion() {
+  if (GetArenaNoVirtual() == NULL && persion_ != NULL) delete persion_;
+  persion_ = NULL;
+}
+const ::Persion& ZoneSynReq::persion() const {
+  // @@protoc_insertion_point(field_get:ZoneSynReq.persion)
+  return persion_ != NULL ? *persion_
+                         : *::Persion::internal_default_instance();
+}
+::Persion* ZoneSynReq::mutable_persion() {
+  
+  if (persion_ == NULL) {
+    persion_ = new ::Persion;
+  }
+  // @@protoc_insertion_point(field_mutable:ZoneSynReq.persion)
+  return persion_;
+}
+::Persion* ZoneSynReq::release_persion() {
+  // @@protoc_insertion_point(field_release:ZoneSynReq.persion)
+  
+  ::Persion* temp = persion_;
+  persion_ = NULL;
+  return temp;
+}
+void ZoneSynReq::set_allocated_persion(::Persion* persion) {
+  delete persion_;
+  persion_ = persion;
+  if (persion) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:ZoneSynReq.persion)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ZoneSynRsp::kRetFieldNumber;
+const int ZoneSynRsp::kErrMsgFieldNumber;
+const int ZoneSynRsp::kZoneStatFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ZoneSynRsp::ZoneSynRsp()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_zonesvr_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ZoneSynRsp)
+}
+ZoneSynRsp::ZoneSynRsp(const ZoneSynRsp& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  err_msg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.err_msg().size() > 0) {
+    err_msg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.err_msg_);
+  }
+  if (from.has_zone_stat()) {
+    zone_stat_ = new ::ZoneStat(*from.zone_stat_);
+  } else {
+    zone_stat_ = NULL;
+  }
+  ret_ = from.ret_;
+  // @@protoc_insertion_point(copy_constructor:ZoneSynRsp)
+}
+
+void ZoneSynRsp::SharedCtor() {
+  err_msg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&zone_stat_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&ret_) -
+      reinterpret_cast<char*>(&zone_stat_)) + sizeof(ret_));
+  _cached_size_ = 0;
+}
+
+ZoneSynRsp::~ZoneSynRsp() {
+  // @@protoc_insertion_point(destructor:ZoneSynRsp)
+  SharedDtor();
+}
+
+void ZoneSynRsp::SharedDtor() {
+  err_msg_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != internal_default_instance()) {
+    delete zone_stat_;
+  }
+}
+
+void ZoneSynRsp::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ZoneSynRsp::descriptor() {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const ZoneSynRsp& ZoneSynRsp::default_instance() {
+  protobuf_zonesvr_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+ZoneSynRsp* ZoneSynRsp::New(::google::protobuf::Arena* arena) const {
+  ZoneSynRsp* n = new ZoneSynRsp;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void ZoneSynRsp::Clear() {
+// @@protoc_insertion_point(message_clear_start:ZoneSynRsp)
+  err_msg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (GetArenaNoVirtual() == NULL && zone_stat_ != NULL) {
+    delete zone_stat_;
+  }
+  zone_stat_ = NULL;
+  ret_ = 0;
+}
+
+bool ZoneSynRsp::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ZoneSynRsp)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int32 ret = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &ret_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bytes err_msg = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_err_msg()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .ZoneStat zone_stat = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_zone_stat()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ZoneSynRsp)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ZoneSynRsp)
+  return false;
+#undef DO_
+}
+
+void ZoneSynRsp::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ZoneSynRsp)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 ret = 1;
+  if (this->ret() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->ret(), output);
+  }
+
+  // bytes err_msg = 2;
+  if (this->err_msg().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      2, this->err_msg(), output);
+  }
+
+  // .ZoneStat zone_stat = 3;
+  if (this->has_zone_stat()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, *this->zone_stat_, output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:ZoneSynRsp)
+}
+
+::google::protobuf::uint8* ZoneSynRsp::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:ZoneSynRsp)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 ret = 1;
+  if (this->ret() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->ret(), target);
+  }
+
+  // bytes err_msg = 2;
+  if (this->err_msg().size() > 0) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        2, this->err_msg(), target);
+  }
+
+  // .ZoneStat zone_stat = 3;
+  if (this->has_zone_stat()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageNoVirtualToArray(
+        3, *this->zone_stat_, deterministic, target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:ZoneSynRsp)
+  return target;
+}
+
+size_t ZoneSynRsp::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ZoneSynRsp)
+  size_t total_size = 0;
+
+  // bytes err_msg = 2;
+  if (this->err_msg().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->err_msg());
+  }
+
+  // .ZoneStat zone_stat = 3;
+  if (this->has_zone_stat()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->zone_stat_);
+  }
+
+  // int32 ret = 1;
+  if (this->ret() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->ret());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ZoneSynRsp::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ZoneSynRsp)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ZoneSynRsp* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const ZoneSynRsp>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ZoneSynRsp)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ZoneSynRsp)
+    MergeFrom(*source);
+  }
+}
+
+void ZoneSynRsp::MergeFrom(const ZoneSynRsp& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ZoneSynRsp)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.err_msg().size() > 0) {
+
+    err_msg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.err_msg_);
+  }
+  if (from.has_zone_stat()) {
+    mutable_zone_stat()->::ZoneStat::MergeFrom(from.zone_stat());
+  }
+  if (from.ret() != 0) {
+    set_ret(from.ret());
+  }
+}
+
+void ZoneSynRsp::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ZoneSynRsp)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ZoneSynRsp::CopyFrom(const ZoneSynRsp& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ZoneSynRsp)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ZoneSynRsp::IsInitialized() const {
+  return true;
+}
+
+void ZoneSynRsp::Swap(ZoneSynRsp* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ZoneSynRsp::InternalSwap(ZoneSynRsp* other) {
+  err_msg_.Swap(&other->err_msg_);
+  std::swap(zone_stat_, other->zone_stat_);
+  std::swap(ret_, other->ret_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata ZoneSynRsp::GetMetadata() const {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// ZoneSynRsp
+
+// int32 ret = 1;
+void ZoneSynRsp::clear_ret() {
+  ret_ = 0;
+}
+::google::protobuf::int32 ZoneSynRsp::ret() const {
+  // @@protoc_insertion_point(field_get:ZoneSynRsp.ret)
+  return ret_;
+}
+void ZoneSynRsp::set_ret(::google::protobuf::int32 value) {
+  
+  ret_ = value;
+  // @@protoc_insertion_point(field_set:ZoneSynRsp.ret)
+}
+
+// bytes err_msg = 2;
+void ZoneSynRsp::clear_err_msg() {
+  err_msg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& ZoneSynRsp::err_msg() const {
+  // @@protoc_insertion_point(field_get:ZoneSynRsp.err_msg)
+  return err_msg_.GetNoArena();
+}
+void ZoneSynRsp::set_err_msg(const ::std::string& value) {
+  
+  err_msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:ZoneSynRsp.err_msg)
+}
+#if LANG_CXX11
+void ZoneSynRsp::set_err_msg(::std::string&& value) {
+  
+  err_msg_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:ZoneSynRsp.err_msg)
+}
+#endif
+void ZoneSynRsp::set_err_msg(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  err_msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:ZoneSynRsp.err_msg)
+}
+void ZoneSynRsp::set_err_msg(const void* value, size_t size) {
+  
+  err_msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:ZoneSynRsp.err_msg)
+}
+::std::string* ZoneSynRsp::mutable_err_msg() {
+  
+  // @@protoc_insertion_point(field_mutable:ZoneSynRsp.err_msg)
+  return err_msg_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* ZoneSynRsp::release_err_msg() {
+  // @@protoc_insertion_point(field_release:ZoneSynRsp.err_msg)
+  
+  return err_msg_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void ZoneSynRsp::set_allocated_err_msg(::std::string* err_msg) {
+  if (err_msg != NULL) {
+    
+  } else {
+    
+  }
+  err_msg_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), err_msg);
+  // @@protoc_insertion_point(field_set_allocated:ZoneSynRsp.err_msg)
+}
+
+// .ZoneStat zone_stat = 3;
+bool ZoneSynRsp::has_zone_stat() const {
+  return this != internal_default_instance() && zone_stat_ != NULL;
+}
+void ZoneSynRsp::clear_zone_stat() {
+  if (GetArenaNoVirtual() == NULL && zone_stat_ != NULL) delete zone_stat_;
+  zone_stat_ = NULL;
+}
+const ::ZoneStat& ZoneSynRsp::zone_stat() const {
+  // @@protoc_insertion_point(field_get:ZoneSynRsp.zone_stat)
+  return zone_stat_ != NULL ? *zone_stat_
+                         : *::ZoneStat::internal_default_instance();
+}
+::ZoneStat* ZoneSynRsp::mutable_zone_stat() {
+  
+  if (zone_stat_ == NULL) {
+    zone_stat_ = new ::ZoneStat;
+  }
+  // @@protoc_insertion_point(field_mutable:ZoneSynRsp.zone_stat)
+  return zone_stat_;
+}
+::ZoneStat* ZoneSynRsp::release_zone_stat() {
+  // @@protoc_insertion_point(field_release:ZoneSynRsp.zone_stat)
+  
+  ::ZoneStat* temp = zone_stat_;
+  zone_stat_ = NULL;
+  return temp;
+}
+void ZoneSynRsp::set_allocated_zone_stat(::ZoneStat* zone_stat) {
+  delete zone_stat_;
+  zone_stat_ = zone_stat;
+  if (zone_stat) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:ZoneSynRsp.zone_stat)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ZoneSyn::kZoneStatFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ZoneSyn::ZoneSyn()
@@ -2067,16 +3075,16 @@ ZoneSyn::ZoneSyn(const ZoneSyn& from)
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  if (from.has_persion()) {
-    persion_ = new ::Persion(*from.persion_);
+  if (from.has_zone_stat()) {
+    zone_stat_ = new ::ZoneStat(*from.zone_stat_);
   } else {
-    persion_ = NULL;
+    zone_stat_ = NULL;
   }
   // @@protoc_insertion_point(copy_constructor:ZoneSyn)
 }
 
 void ZoneSyn::SharedCtor() {
-  persion_ = NULL;
+  zone_stat_ = NULL;
   _cached_size_ = 0;
 }
 
@@ -2087,7 +3095,7 @@ ZoneSyn::~ZoneSyn() {
 
 void ZoneSyn::SharedDtor() {
   if (this != internal_default_instance()) {
-    delete persion_;
+    delete zone_stat_;
   }
 }
 
@@ -2116,10 +3124,10 @@ ZoneSyn* ZoneSyn::New(::google::protobuf::Arena* arena) const {
 
 void ZoneSyn::Clear() {
 // @@protoc_insertion_point(message_clear_start:ZoneSyn)
-  if (GetArenaNoVirtual() == NULL && persion_ != NULL) {
-    delete persion_;
+  if (GetArenaNoVirtual() == NULL && zone_stat_ != NULL) {
+    delete zone_stat_;
   }
-  persion_ = NULL;
+  zone_stat_ = NULL;
 }
 
 bool ZoneSyn::MergePartialFromCodedStream(
@@ -2132,12 +3140,12 @@ bool ZoneSyn::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .Persion persion = 1;
+      // .ZoneStat zone_stat = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_persion()));
+               input, mutable_zone_stat()));
         } else {
           goto handle_unusual;
         }
@@ -2171,10 +3179,10 @@ void ZoneSyn::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .Persion persion = 1;
-  if (this->has_persion()) {
+  // .ZoneStat zone_stat = 1;
+  if (this->has_zone_stat()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      1, *this->persion_, output);
+      1, *this->zone_stat_, output);
   }
 
   // @@protoc_insertion_point(serialize_end:ZoneSyn)
@@ -2187,11 +3195,11 @@ void ZoneSyn::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .Persion persion = 1;
-  if (this->has_persion()) {
+  // .ZoneStat zone_stat = 1;
+  if (this->has_zone_stat()) {
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageNoVirtualToArray(
-        1, *this->persion_, deterministic, target);
+        1, *this->zone_stat_, deterministic, target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:ZoneSyn)
@@ -2202,11 +3210,11 @@ size_t ZoneSyn::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:ZoneSyn)
   size_t total_size = 0;
 
-  // .Persion persion = 1;
-  if (this->has_persion()) {
+  // .ZoneStat zone_stat = 1;
+  if (this->has_zone_stat()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->persion_);
+        *this->zone_stat_);
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -2238,8 +3246,8 @@ void ZoneSyn::MergeFrom(const ZoneSyn& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.has_persion()) {
-    mutable_persion()->::Persion::MergeFrom(from.persion());
+  if (from.has_zone_stat()) {
+    mutable_zone_stat()->::ZoneStat::MergeFrom(from.zone_stat());
   }
 }
 
@@ -2266,7 +3274,7 @@ void ZoneSyn::Swap(ZoneSyn* other) {
   InternalSwap(other);
 }
 void ZoneSyn::InternalSwap(ZoneSyn* other) {
-  std::swap(persion_, other->persion_);
+  std::swap(zone_stat_, other->zone_stat_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -2278,298 +3286,43 @@ void ZoneSyn::InternalSwap(ZoneSyn* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // ZoneSyn
 
-// .Persion persion = 1;
-bool ZoneSyn::has_persion() const {
-  return this != internal_default_instance() && persion_ != NULL;
+// .ZoneStat zone_stat = 1;
+bool ZoneSyn::has_zone_stat() const {
+  return this != internal_default_instance() && zone_stat_ != NULL;
 }
-void ZoneSyn::clear_persion() {
-  if (GetArenaNoVirtual() == NULL && persion_ != NULL) delete persion_;
-  persion_ = NULL;
+void ZoneSyn::clear_zone_stat() {
+  if (GetArenaNoVirtual() == NULL && zone_stat_ != NULL) delete zone_stat_;
+  zone_stat_ = NULL;
 }
-const ::Persion& ZoneSyn::persion() const {
-  // @@protoc_insertion_point(field_get:ZoneSyn.persion)
-  return persion_ != NULL ? *persion_
-                         : *::Persion::internal_default_instance();
+const ::ZoneStat& ZoneSyn::zone_stat() const {
+  // @@protoc_insertion_point(field_get:ZoneSyn.zone_stat)
+  return zone_stat_ != NULL ? *zone_stat_
+                         : *::ZoneStat::internal_default_instance();
 }
-::Persion* ZoneSyn::mutable_persion() {
+::ZoneStat* ZoneSyn::mutable_zone_stat() {
   
-  if (persion_ == NULL) {
-    persion_ = new ::Persion;
+  if (zone_stat_ == NULL) {
+    zone_stat_ = new ::ZoneStat;
   }
-  // @@protoc_insertion_point(field_mutable:ZoneSyn.persion)
-  return persion_;
+  // @@protoc_insertion_point(field_mutable:ZoneSyn.zone_stat)
+  return zone_stat_;
 }
-::Persion* ZoneSyn::release_persion() {
-  // @@protoc_insertion_point(field_release:ZoneSyn.persion)
+::ZoneStat* ZoneSyn::release_zone_stat() {
+  // @@protoc_insertion_point(field_release:ZoneSyn.zone_stat)
   
-  ::Persion* temp = persion_;
-  persion_ = NULL;
+  ::ZoneStat* temp = zone_stat_;
+  zone_stat_ = NULL;
   return temp;
 }
-void ZoneSyn::set_allocated_persion(::Persion* persion) {
-  delete persion_;
-  persion_ = persion;
-  if (persion) {
+void ZoneSyn::set_allocated_zone_stat(::ZoneStat* zone_stat) {
+  delete zone_stat_;
+  zone_stat_ = zone_stat;
+  if (zone_stat) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:ZoneSyn.persion)
-}
-
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int ZoneStat::kPersionListFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-ZoneStat::ZoneStat()
-  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    protobuf_zonesvr_2eproto::InitDefaults();
-  }
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:ZoneStat)
-}
-ZoneStat::ZoneStat(const ZoneStat& from)
-  : ::google::protobuf::Message(),
-      _internal_metadata_(NULL),
-      persion_list_(from.persion_list_),
-      _cached_size_(0) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:ZoneStat)
-}
-
-void ZoneStat::SharedCtor() {
-  _cached_size_ = 0;
-}
-
-ZoneStat::~ZoneStat() {
-  // @@protoc_insertion_point(destructor:ZoneStat)
-  SharedDtor();
-}
-
-void ZoneStat::SharedDtor() {
-}
-
-void ZoneStat::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const ::google::protobuf::Descriptor* ZoneStat::descriptor() {
-  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
-}
-
-const ZoneStat& ZoneStat::default_instance() {
-  protobuf_zonesvr_2eproto::InitDefaults();
-  return *internal_default_instance();
-}
-
-ZoneStat* ZoneStat::New(::google::protobuf::Arena* arena) const {
-  ZoneStat* n = new ZoneStat;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void ZoneStat::Clear() {
-// @@protoc_insertion_point(message_clear_start:ZoneStat)
-  persion_list_.Clear();
-}
-
-bool ZoneStat::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:ZoneStat)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .Persion persion_list = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_persion_list()));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:ZoneStat)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:ZoneStat)
-  return false;
-#undef DO_
-}
-
-void ZoneStat::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:ZoneStat)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // repeated .Persion persion_list = 1;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->persion_list_size()); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      1, this->persion_list(static_cast<int>(i)), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:ZoneStat)
-}
-
-::google::protobuf::uint8* ZoneStat::InternalSerializeWithCachedSizesToArray(
-    bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:ZoneStat)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // repeated .Persion persion_list = 1;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->persion_list_size()); i < n; i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessageNoVirtualToArray(
-        1, this->persion_list(static_cast<int>(i)), deterministic, target);
-  }
-
-  // @@protoc_insertion_point(serialize_to_array_end:ZoneStat)
-  return target;
-}
-
-size_t ZoneStat::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:ZoneStat)
-  size_t total_size = 0;
-
-  // repeated .Persion persion_list = 1;
-  {
-    unsigned int count = static_cast<unsigned int>(this->persion_list_size());
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->persion_list(static_cast<int>(i)));
-    }
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void ZoneStat::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:ZoneStat)
-  GOOGLE_DCHECK_NE(&from, this);
-  const ZoneStat* source =
-      ::google::protobuf::internal::DynamicCastToGenerated<const ZoneStat>(
-          &from);
-  if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ZoneStat)
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:ZoneStat)
-    MergeFrom(*source);
-  }
-}
-
-void ZoneStat::MergeFrom(const ZoneStat& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:ZoneStat)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  persion_list_.MergeFrom(from.persion_list_);
-}
-
-void ZoneStat::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:ZoneStat)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void ZoneStat::CopyFrom(const ZoneStat& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:ZoneStat)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool ZoneStat::IsInitialized() const {
-  return true;
-}
-
-void ZoneStat::Swap(ZoneStat* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void ZoneStat::InternalSwap(ZoneStat* other) {
-  persion_list_.InternalSwap(&other->persion_list_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::google::protobuf::Metadata ZoneStat::GetMetadata() const {
-  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages];
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// ZoneStat
-
-// repeated .Persion persion_list = 1;
-int ZoneStat::persion_list_size() const {
-  return persion_list_.size();
-}
-void ZoneStat::clear_persion_list() {
-  persion_list_.Clear();
-}
-const ::Persion& ZoneStat::persion_list(int index) const {
-  // @@protoc_insertion_point(field_get:ZoneStat.persion_list)
-  return persion_list_.Get(index);
-}
-::Persion* ZoneStat::mutable_persion_list(int index) {
-  // @@protoc_insertion_point(field_mutable:ZoneStat.persion_list)
-  return persion_list_.Mutable(index);
-}
-::Persion* ZoneStat::add_persion_list() {
-  // @@protoc_insertion_point(field_add:ZoneStat.persion_list)
-  return persion_list_.Add();
-}
-::google::protobuf::RepeatedPtrField< ::Persion >*
-ZoneStat::mutable_persion_list() {
-  // @@protoc_insertion_point(field_mutable_list:ZoneStat.persion_list)
-  return &persion_list_;
-}
-const ::google::protobuf::RepeatedPtrField< ::Persion >&
-ZoneStat::persion_list() const {
-  // @@protoc_insertion_point(field_list:ZoneStat.persion_list)
-  return persion_list_;
+  // @@protoc_insertion_point(field_set_allocated:ZoneSyn.zone_stat)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

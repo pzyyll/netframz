@@ -64,6 +64,12 @@ extern ZoneStatDefaultTypeInternal _ZoneStat_default_instance_;
 class ZoneSyn;
 class ZoneSynDefaultTypeInternal;
 extern ZoneSynDefaultTypeInternal _ZoneSyn_default_instance_;
+class ZoneSynReq;
+class ZoneSynReqDefaultTypeInternal;
+extern ZoneSynReqDefaultTypeInternal _ZoneSynReq_default_instance_;
+class ZoneSynRsp;
+class ZoneSynRspDefaultTypeInternal;
+extern ZoneSynRspDefaultTypeInternal _ZoneSynRsp_default_instance_;
 
 namespace protobuf_zonesvr_2eproto {
 // Internal implementation detail -- do not call these.
@@ -102,19 +108,20 @@ inline bool MsgRet_ErrCode_Parse(
 }
 enum MsgCmd_MsgId {
   MsgCmd_MsgId_MSGINIT = 0,
-  MsgCmd_MsgId_LOGINREQ = 4097,
-  MsgCmd_MsgId_LOGINRSP = 4098,
-  MsgCmd_MsgId_ZONESYN = 8193,
-  MsgCmd_MsgId_ZONESTAT = 8194,
-  MsgCmd_MsgId_CHATREQ = 12289,
-  MsgCmd_MsgId_CHATRSP = 12290,
-  MsgCmd_MsgId_CHATSTAT = 12291,
+  MsgCmd_MsgId_LOGIN_REQ = 4097,
+  MsgCmd_MsgId_LOGIN_RSP = 4098,
+  MsgCmd_MsgId_ZONE_SYN_REQ = 8193,
+  MsgCmd_MsgId_ZONE_SYN_RSP = 8194,
+  MsgCmd_MsgId_ZONE_SYN = 8195,
+  MsgCmd_MsgId_CHAT_REQ = 12289,
+  MsgCmd_MsgId_CHAT_RSP = 12290,
+  MsgCmd_MsgId_CHAT_STAT = 12291,
   MsgCmd_MsgId_MsgCmd_MsgId_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   MsgCmd_MsgId_MsgCmd_MsgId_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool MsgCmd_MsgId_IsValid(int value);
 const MsgCmd_MsgId MsgCmd_MsgId_MsgId_MIN = MsgCmd_MsgId_MSGINIT;
-const MsgCmd_MsgId MsgCmd_MsgId_MsgId_MAX = MsgCmd_MsgId_CHATSTAT;
+const MsgCmd_MsgId MsgCmd_MsgId_MsgId_MAX = MsgCmd_MsgId_CHAT_STAT;
 const int MsgCmd_MsgId_MsgId_ARRAYSIZE = MsgCmd_MsgId_MsgId_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* MsgCmd_MsgId_descriptor();
@@ -293,20 +300,22 @@ class MsgCmd : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   typedef MsgCmd_MsgId MsgId;
   static const MsgId MSGINIT =
     MsgCmd_MsgId_MSGINIT;
-  static const MsgId LOGINREQ =
-    MsgCmd_MsgId_LOGINREQ;
-  static const MsgId LOGINRSP =
-    MsgCmd_MsgId_LOGINRSP;
-  static const MsgId ZONESYN =
-    MsgCmd_MsgId_ZONESYN;
-  static const MsgId ZONESTAT =
-    MsgCmd_MsgId_ZONESTAT;
-  static const MsgId CHATREQ =
-    MsgCmd_MsgId_CHATREQ;
-  static const MsgId CHATRSP =
-    MsgCmd_MsgId_CHATRSP;
-  static const MsgId CHATSTAT =
-    MsgCmd_MsgId_CHATSTAT;
+  static const MsgId LOGIN_REQ =
+    MsgCmd_MsgId_LOGIN_REQ;
+  static const MsgId LOGIN_RSP =
+    MsgCmd_MsgId_LOGIN_RSP;
+  static const MsgId ZONE_SYN_REQ =
+    MsgCmd_MsgId_ZONE_SYN_REQ;
+  static const MsgId ZONE_SYN_RSP =
+    MsgCmd_MsgId_ZONE_SYN_RSP;
+  static const MsgId ZONE_SYN =
+    MsgCmd_MsgId_ZONE_SYN;
+  static const MsgId CHAT_REQ =
+    MsgCmd_MsgId_CHAT_REQ;
+  static const MsgId CHAT_RSP =
+    MsgCmd_MsgId_CHAT_RSP;
+  static const MsgId CHAT_STAT =
+    MsgCmd_MsgId_CHAT_STAT;
   static inline bool MsgId_IsValid(int value) {
     return MsgCmd_MsgId_IsValid(value);
   }
@@ -526,6 +535,92 @@ class Persion : public ::google::protobuf::Message /* @@protoc_insertion_point(c
 };
 // -------------------------------------------------------------------
 
+class ZoneStat : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ZoneStat) */ {
+ public:
+  ZoneStat();
+  virtual ~ZoneStat();
+
+  ZoneStat(const ZoneStat& from);
+
+  inline ZoneStat& operator=(const ZoneStat& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ZoneStat& default_instance();
+
+  static inline const ZoneStat* internal_default_instance() {
+    return reinterpret_cast<const ZoneStat*>(
+               &_ZoneStat_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    4;
+
+  void Swap(ZoneStat* other);
+
+  // implements Message ----------------------------------------------
+
+  inline ZoneStat* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  ZoneStat* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const ZoneStat& from);
+  void MergeFrom(const ZoneStat& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(ZoneStat* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .Persion persion_list = 1;
+  int persion_list_size() const;
+  void clear_persion_list();
+  static const int kPersionListFieldNumber = 1;
+  const ::Persion& persion_list(int index) const;
+  ::Persion* mutable_persion_list(int index);
+  ::Persion* add_persion_list();
+  ::google::protobuf::RepeatedPtrField< ::Persion >*
+      mutable_persion_list();
+  const ::google::protobuf::RepeatedPtrField< ::Persion >&
+      persion_list() const;
+
+  // @@protoc_insertion_point(class_scope:ZoneStat)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::Persion > persion_list_;
+  mutable int _cached_size_;
+  friend struct protobuf_zonesvr_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class LoginReq : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:LoginReq) */ {
  public:
   LoginReq();
@@ -546,7 +641,7 @@ class LoginReq : public ::google::protobuf::Message /* @@protoc_insertion_point(
                &_LoginReq_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
+    5;
 
   void Swap(LoginReq* other);
 
@@ -634,7 +729,7 @@ class LoginRsp : public ::google::protobuf::Message /* @@protoc_insertion_point(
                &_LoginRsp_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
+    6;
 
   void Swap(LoginRsp* other);
 
@@ -678,17 +773,193 @@ class LoginRsp : public ::google::protobuf::Message /* @@protoc_insertion_point(
 
   // accessors -------------------------------------------------------
 
-  // repeated .Persion persion_list = 3;
-  int persion_list_size() const;
-  void clear_persion_list();
-  static const int kPersionListFieldNumber = 3;
-  const ::Persion& persion_list(int index) const;
-  ::Persion* mutable_persion_list(int index);
-  ::Persion* add_persion_list();
-  ::google::protobuf::RepeatedPtrField< ::Persion >*
-      mutable_persion_list();
-  const ::google::protobuf::RepeatedPtrField< ::Persion >&
-      persion_list() const;
+  // bytes err_msg = 2;
+  void clear_err_msg();
+  static const int kErrMsgFieldNumber = 2;
+  const ::std::string& err_msg() const;
+  void set_err_msg(const ::std::string& value);
+  #if LANG_CXX11
+  void set_err_msg(::std::string&& value);
+  #endif
+  void set_err_msg(const char* value);
+  void set_err_msg(const void* value, size_t size);
+  ::std::string* mutable_err_msg();
+  ::std::string* release_err_msg();
+  void set_allocated_err_msg(::std::string* err_msg);
+
+  // .ZoneStat zone_stat = 3;
+  bool has_zone_stat() const;
+  void clear_zone_stat();
+  static const int kZoneStatFieldNumber = 3;
+  const ::ZoneStat& zone_stat() const;
+  ::ZoneStat* mutable_zone_stat();
+  ::ZoneStat* release_zone_stat();
+  void set_allocated_zone_stat(::ZoneStat* zone_stat);
+
+  // int32 ret = 1;
+  void clear_ret();
+  static const int kRetFieldNumber = 1;
+  ::google::protobuf::int32 ret() const;
+  void set_ret(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:LoginRsp)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr err_msg_;
+  ::ZoneStat* zone_stat_;
+  ::google::protobuf::int32 ret_;
+  mutable int _cached_size_;
+  friend struct protobuf_zonesvr_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class ZoneSynReq : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ZoneSynReq) */ {
+ public:
+  ZoneSynReq();
+  virtual ~ZoneSynReq();
+
+  ZoneSynReq(const ZoneSynReq& from);
+
+  inline ZoneSynReq& operator=(const ZoneSynReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ZoneSynReq& default_instance();
+
+  static inline const ZoneSynReq* internal_default_instance() {
+    return reinterpret_cast<const ZoneSynReq*>(
+               &_ZoneSynReq_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    7;
+
+  void Swap(ZoneSynReq* other);
+
+  // implements Message ----------------------------------------------
+
+  inline ZoneSynReq* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  ZoneSynReq* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const ZoneSynReq& from);
+  void MergeFrom(const ZoneSynReq& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(ZoneSynReq* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .Persion persion = 1;
+  bool has_persion() const;
+  void clear_persion();
+  static const int kPersionFieldNumber = 1;
+  const ::Persion& persion() const;
+  ::Persion* mutable_persion();
+  ::Persion* release_persion();
+  void set_allocated_persion(::Persion* persion);
+
+  // @@protoc_insertion_point(class_scope:ZoneSynReq)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::Persion* persion_;
+  mutable int _cached_size_;
+  friend struct protobuf_zonesvr_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class ZoneSynRsp : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ZoneSynRsp) */ {
+ public:
+  ZoneSynRsp();
+  virtual ~ZoneSynRsp();
+
+  ZoneSynRsp(const ZoneSynRsp& from);
+
+  inline ZoneSynRsp& operator=(const ZoneSynRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ZoneSynRsp& default_instance();
+
+  static inline const ZoneSynRsp* internal_default_instance() {
+    return reinterpret_cast<const ZoneSynRsp*>(
+               &_ZoneSynRsp_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    8;
+
+  void Swap(ZoneSynRsp* other);
+
+  // implements Message ----------------------------------------------
+
+  inline ZoneSynRsp* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  ZoneSynRsp* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const ZoneSynRsp& from);
+  void MergeFrom(const ZoneSynRsp& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(ZoneSynRsp* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
 
   // bytes err_msg = 2;
   void clear_err_msg();
@@ -704,18 +975,27 @@ class LoginRsp : public ::google::protobuf::Message /* @@protoc_insertion_point(
   ::std::string* release_err_msg();
   void set_allocated_err_msg(::std::string* err_msg);
 
+  // .ZoneStat zone_stat = 3;
+  bool has_zone_stat() const;
+  void clear_zone_stat();
+  static const int kZoneStatFieldNumber = 3;
+  const ::ZoneStat& zone_stat() const;
+  ::ZoneStat* mutable_zone_stat();
+  ::ZoneStat* release_zone_stat();
+  void set_allocated_zone_stat(::ZoneStat* zone_stat);
+
   // int32 ret = 1;
   void clear_ret();
   static const int kRetFieldNumber = 1;
   ::google::protobuf::int32 ret() const;
   void set_ret(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:LoginRsp)
+  // @@protoc_insertion_point(class_scope:ZoneSynRsp)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::Persion > persion_list_;
   ::google::protobuf::internal::ArenaStringPtr err_msg_;
+  ::ZoneStat* zone_stat_;
   ::google::protobuf::int32 ret_;
   mutable int _cached_size_;
   friend struct protobuf_zonesvr_2eproto::TableStruct;
@@ -742,7 +1022,7 @@ class ZoneSyn : public ::google::protobuf::Message /* @@protoc_insertion_point(c
                &_ZoneSyn_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    9;
 
   void Swap(ZoneSyn* other);
 
@@ -786,106 +1066,20 @@ class ZoneSyn : public ::google::protobuf::Message /* @@protoc_insertion_point(c
 
   // accessors -------------------------------------------------------
 
-  // .Persion persion = 1;
-  bool has_persion() const;
-  void clear_persion();
-  static const int kPersionFieldNumber = 1;
-  const ::Persion& persion() const;
-  ::Persion* mutable_persion();
-  ::Persion* release_persion();
-  void set_allocated_persion(::Persion* persion);
+  // .ZoneStat zone_stat = 1;
+  bool has_zone_stat() const;
+  void clear_zone_stat();
+  static const int kZoneStatFieldNumber = 1;
+  const ::ZoneStat& zone_stat() const;
+  ::ZoneStat* mutable_zone_stat();
+  ::ZoneStat* release_zone_stat();
+  void set_allocated_zone_stat(::ZoneStat* zone_stat);
 
   // @@protoc_insertion_point(class_scope:ZoneSyn)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::Persion* persion_;
-  mutable int _cached_size_;
-  friend struct protobuf_zonesvr_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
-class ZoneStat : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ZoneStat) */ {
- public:
-  ZoneStat();
-  virtual ~ZoneStat();
-
-  ZoneStat(const ZoneStat& from);
-
-  inline ZoneStat& operator=(const ZoneStat& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const ZoneStat& default_instance();
-
-  static inline const ZoneStat* internal_default_instance() {
-    return reinterpret_cast<const ZoneStat*>(
-               &_ZoneStat_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
-
-  void Swap(ZoneStat* other);
-
-  // implements Message ----------------------------------------------
-
-  inline ZoneStat* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  ZoneStat* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void CopyFrom(const ZoneStat& from);
-  void MergeFrom(const ZoneStat& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const PROTOBUF_FINAL;
-  void InternalSwap(ZoneStat* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // repeated .Persion persion_list = 1;
-  int persion_list_size() const;
-  void clear_persion_list();
-  static const int kPersionListFieldNumber = 1;
-  const ::Persion& persion_list(int index) const;
-  ::Persion* mutable_persion_list(int index);
-  ::Persion* add_persion_list();
-  ::google::protobuf::RepeatedPtrField< ::Persion >*
-      mutable_persion_list();
-  const ::google::protobuf::RepeatedPtrField< ::Persion >&
-      persion_list() const;
-
-  // @@protoc_insertion_point(class_scope:ZoneStat)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::Persion > persion_list_;
+  ::ZoneStat* zone_stat_;
   mutable int _cached_size_;
   friend struct protobuf_zonesvr_2eproto::TableStruct;
 };
@@ -911,7 +1105,7 @@ class ChatReq : public ::google::protobuf::Message /* @@protoc_insertion_point(c
                &_ChatReq_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    10;
 
   void Swap(ChatReq* other);
 
@@ -1014,7 +1208,7 @@ class ChatRsp : public ::google::protobuf::Message /* @@protoc_insertion_point(c
                &_ChatRsp_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    11;
 
   void Swap(ChatRsp* other);
 
@@ -1109,7 +1303,7 @@ class ChatStat : public ::google::protobuf::Message /* @@protoc_insertion_point(
                &_ChatStat_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    12;
 
   void Swap(ChatStat* other);
 
@@ -1334,6 +1528,40 @@ inline void Persion::set_allocated_point(::Persion_Point* point) {
 
 // -------------------------------------------------------------------
 
+// ZoneStat
+
+// repeated .Persion persion_list = 1;
+inline int ZoneStat::persion_list_size() const {
+  return persion_list_.size();
+}
+inline void ZoneStat::clear_persion_list() {
+  persion_list_.Clear();
+}
+inline const ::Persion& ZoneStat::persion_list(int index) const {
+  // @@protoc_insertion_point(field_get:ZoneStat.persion_list)
+  return persion_list_.Get(index);
+}
+inline ::Persion* ZoneStat::mutable_persion_list(int index) {
+  // @@protoc_insertion_point(field_mutable:ZoneStat.persion_list)
+  return persion_list_.Mutable(index);
+}
+inline ::Persion* ZoneStat::add_persion_list() {
+  // @@protoc_insertion_point(field_add:ZoneStat.persion_list)
+  return persion_list_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::Persion >*
+ZoneStat::mutable_persion_list() {
+  // @@protoc_insertion_point(field_mutable_list:ZoneStat.persion_list)
+  return &persion_list_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::Persion >&
+ZoneStat::persion_list() const {
+  // @@protoc_insertion_point(field_list:ZoneStat.persion_list)
+  return persion_list_;
+}
+
+// -------------------------------------------------------------------
+
 // LoginReq
 
 // bytes name = 1;
@@ -1460,69 +1688,78 @@ inline void LoginRsp::set_allocated_err_msg(::std::string* err_msg) {
   // @@protoc_insertion_point(field_set_allocated:LoginRsp.err_msg)
 }
 
-// repeated .Persion persion_list = 3;
-inline int LoginRsp::persion_list_size() const {
-  return persion_list_.size();
+// .ZoneStat zone_stat = 3;
+inline bool LoginRsp::has_zone_stat() const {
+  return this != internal_default_instance() && zone_stat_ != NULL;
 }
-inline void LoginRsp::clear_persion_list() {
-  persion_list_.Clear();
+inline void LoginRsp::clear_zone_stat() {
+  if (GetArenaNoVirtual() == NULL && zone_stat_ != NULL) delete zone_stat_;
+  zone_stat_ = NULL;
 }
-inline const ::Persion& LoginRsp::persion_list(int index) const {
-  // @@protoc_insertion_point(field_get:LoginRsp.persion_list)
-  return persion_list_.Get(index);
+inline const ::ZoneStat& LoginRsp::zone_stat() const {
+  // @@protoc_insertion_point(field_get:LoginRsp.zone_stat)
+  return zone_stat_ != NULL ? *zone_stat_
+                         : *::ZoneStat::internal_default_instance();
 }
-inline ::Persion* LoginRsp::mutable_persion_list(int index) {
-  // @@protoc_insertion_point(field_mutable:LoginRsp.persion_list)
-  return persion_list_.Mutable(index);
+inline ::ZoneStat* LoginRsp::mutable_zone_stat() {
+  
+  if (zone_stat_ == NULL) {
+    zone_stat_ = new ::ZoneStat;
+  }
+  // @@protoc_insertion_point(field_mutable:LoginRsp.zone_stat)
+  return zone_stat_;
 }
-inline ::Persion* LoginRsp::add_persion_list() {
-  // @@protoc_insertion_point(field_add:LoginRsp.persion_list)
-  return persion_list_.Add();
+inline ::ZoneStat* LoginRsp::release_zone_stat() {
+  // @@protoc_insertion_point(field_release:LoginRsp.zone_stat)
+  
+  ::ZoneStat* temp = zone_stat_;
+  zone_stat_ = NULL;
+  return temp;
 }
-inline ::google::protobuf::RepeatedPtrField< ::Persion >*
-LoginRsp::mutable_persion_list() {
-  // @@protoc_insertion_point(field_mutable_list:LoginRsp.persion_list)
-  return &persion_list_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::Persion >&
-LoginRsp::persion_list() const {
-  // @@protoc_insertion_point(field_list:LoginRsp.persion_list)
-  return persion_list_;
+inline void LoginRsp::set_allocated_zone_stat(::ZoneStat* zone_stat) {
+  delete zone_stat_;
+  zone_stat_ = zone_stat;
+  if (zone_stat) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:LoginRsp.zone_stat)
 }
 
 // -------------------------------------------------------------------
 
-// ZoneSyn
+// ZoneSynReq
 
 // .Persion persion = 1;
-inline bool ZoneSyn::has_persion() const {
+inline bool ZoneSynReq::has_persion() const {
   return this != internal_default_instance() && persion_ != NULL;
 }
-inline void ZoneSyn::clear_persion() {
+inline void ZoneSynReq::clear_persion() {
   if (GetArenaNoVirtual() == NULL && persion_ != NULL) delete persion_;
   persion_ = NULL;
 }
-inline const ::Persion& ZoneSyn::persion() const {
-  // @@protoc_insertion_point(field_get:ZoneSyn.persion)
+inline const ::Persion& ZoneSynReq::persion() const {
+  // @@protoc_insertion_point(field_get:ZoneSynReq.persion)
   return persion_ != NULL ? *persion_
                          : *::Persion::internal_default_instance();
 }
-inline ::Persion* ZoneSyn::mutable_persion() {
+inline ::Persion* ZoneSynReq::mutable_persion() {
   
   if (persion_ == NULL) {
     persion_ = new ::Persion;
   }
-  // @@protoc_insertion_point(field_mutable:ZoneSyn.persion)
+  // @@protoc_insertion_point(field_mutable:ZoneSynReq.persion)
   return persion_;
 }
-inline ::Persion* ZoneSyn::release_persion() {
-  // @@protoc_insertion_point(field_release:ZoneSyn.persion)
+inline ::Persion* ZoneSynReq::release_persion() {
+  // @@protoc_insertion_point(field_release:ZoneSynReq.persion)
   
   ::Persion* temp = persion_;
   persion_ = NULL;
   return temp;
 }
-inline void ZoneSyn::set_allocated_persion(::Persion* persion) {
+inline void ZoneSynReq::set_allocated_persion(::Persion* persion) {
   delete persion_;
   persion_ = persion;
   if (persion) {
@@ -1530,41 +1767,160 @@ inline void ZoneSyn::set_allocated_persion(::Persion* persion) {
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:ZoneSyn.persion)
+  // @@protoc_insertion_point(field_set_allocated:ZoneSynReq.persion)
 }
 
 // -------------------------------------------------------------------
 
-// ZoneStat
+// ZoneSynRsp
 
-// repeated .Persion persion_list = 1;
-inline int ZoneStat::persion_list_size() const {
-  return persion_list_.size();
+// int32 ret = 1;
+inline void ZoneSynRsp::clear_ret() {
+  ret_ = 0;
 }
-inline void ZoneStat::clear_persion_list() {
-  persion_list_.Clear();
+inline ::google::protobuf::int32 ZoneSynRsp::ret() const {
+  // @@protoc_insertion_point(field_get:ZoneSynRsp.ret)
+  return ret_;
 }
-inline const ::Persion& ZoneStat::persion_list(int index) const {
-  // @@protoc_insertion_point(field_get:ZoneStat.persion_list)
-  return persion_list_.Get(index);
+inline void ZoneSynRsp::set_ret(::google::protobuf::int32 value) {
+  
+  ret_ = value;
+  // @@protoc_insertion_point(field_set:ZoneSynRsp.ret)
 }
-inline ::Persion* ZoneStat::mutable_persion_list(int index) {
-  // @@protoc_insertion_point(field_mutable:ZoneStat.persion_list)
-  return persion_list_.Mutable(index);
+
+// bytes err_msg = 2;
+inline void ZoneSynRsp::clear_err_msg() {
+  err_msg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::Persion* ZoneStat::add_persion_list() {
-  // @@protoc_insertion_point(field_add:ZoneStat.persion_list)
-  return persion_list_.Add();
+inline const ::std::string& ZoneSynRsp::err_msg() const {
+  // @@protoc_insertion_point(field_get:ZoneSynRsp.err_msg)
+  return err_msg_.GetNoArena();
 }
-inline ::google::protobuf::RepeatedPtrField< ::Persion >*
-ZoneStat::mutable_persion_list() {
-  // @@protoc_insertion_point(field_mutable_list:ZoneStat.persion_list)
-  return &persion_list_;
+inline void ZoneSynRsp::set_err_msg(const ::std::string& value) {
+  
+  err_msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:ZoneSynRsp.err_msg)
 }
-inline const ::google::protobuf::RepeatedPtrField< ::Persion >&
-ZoneStat::persion_list() const {
-  // @@protoc_insertion_point(field_list:ZoneStat.persion_list)
-  return persion_list_;
+#if LANG_CXX11
+inline void ZoneSynRsp::set_err_msg(::std::string&& value) {
+  
+  err_msg_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:ZoneSynRsp.err_msg)
+}
+#endif
+inline void ZoneSynRsp::set_err_msg(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  err_msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:ZoneSynRsp.err_msg)
+}
+inline void ZoneSynRsp::set_err_msg(const void* value, size_t size) {
+  
+  err_msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:ZoneSynRsp.err_msg)
+}
+inline ::std::string* ZoneSynRsp::mutable_err_msg() {
+  
+  // @@protoc_insertion_point(field_mutable:ZoneSynRsp.err_msg)
+  return err_msg_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* ZoneSynRsp::release_err_msg() {
+  // @@protoc_insertion_point(field_release:ZoneSynRsp.err_msg)
+  
+  return err_msg_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void ZoneSynRsp::set_allocated_err_msg(::std::string* err_msg) {
+  if (err_msg != NULL) {
+    
+  } else {
+    
+  }
+  err_msg_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), err_msg);
+  // @@protoc_insertion_point(field_set_allocated:ZoneSynRsp.err_msg)
+}
+
+// .ZoneStat zone_stat = 3;
+inline bool ZoneSynRsp::has_zone_stat() const {
+  return this != internal_default_instance() && zone_stat_ != NULL;
+}
+inline void ZoneSynRsp::clear_zone_stat() {
+  if (GetArenaNoVirtual() == NULL && zone_stat_ != NULL) delete zone_stat_;
+  zone_stat_ = NULL;
+}
+inline const ::ZoneStat& ZoneSynRsp::zone_stat() const {
+  // @@protoc_insertion_point(field_get:ZoneSynRsp.zone_stat)
+  return zone_stat_ != NULL ? *zone_stat_
+                         : *::ZoneStat::internal_default_instance();
+}
+inline ::ZoneStat* ZoneSynRsp::mutable_zone_stat() {
+  
+  if (zone_stat_ == NULL) {
+    zone_stat_ = new ::ZoneStat;
+  }
+  // @@protoc_insertion_point(field_mutable:ZoneSynRsp.zone_stat)
+  return zone_stat_;
+}
+inline ::ZoneStat* ZoneSynRsp::release_zone_stat() {
+  // @@protoc_insertion_point(field_release:ZoneSynRsp.zone_stat)
+  
+  ::ZoneStat* temp = zone_stat_;
+  zone_stat_ = NULL;
+  return temp;
+}
+inline void ZoneSynRsp::set_allocated_zone_stat(::ZoneStat* zone_stat) {
+  delete zone_stat_;
+  zone_stat_ = zone_stat;
+  if (zone_stat) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:ZoneSynRsp.zone_stat)
+}
+
+// -------------------------------------------------------------------
+
+// ZoneSyn
+
+// .ZoneStat zone_stat = 1;
+inline bool ZoneSyn::has_zone_stat() const {
+  return this != internal_default_instance() && zone_stat_ != NULL;
+}
+inline void ZoneSyn::clear_zone_stat() {
+  if (GetArenaNoVirtual() == NULL && zone_stat_ != NULL) delete zone_stat_;
+  zone_stat_ = NULL;
+}
+inline const ::ZoneStat& ZoneSyn::zone_stat() const {
+  // @@protoc_insertion_point(field_get:ZoneSyn.zone_stat)
+  return zone_stat_ != NULL ? *zone_stat_
+                         : *::ZoneStat::internal_default_instance();
+}
+inline ::ZoneStat* ZoneSyn::mutable_zone_stat() {
+  
+  if (zone_stat_ == NULL) {
+    zone_stat_ = new ::ZoneStat;
+  }
+  // @@protoc_insertion_point(field_mutable:ZoneSyn.zone_stat)
+  return zone_stat_;
+}
+inline ::ZoneStat* ZoneSyn::release_zone_stat() {
+  // @@protoc_insertion_point(field_release:ZoneSyn.zone_stat)
+  
+  ::ZoneStat* temp = zone_stat_;
+  zone_stat_ = NULL;
+  return temp;
+}
+inline void ZoneSyn::set_allocated_zone_stat(::ZoneStat* zone_stat) {
+  delete zone_stat_;
+  zone_stat_ = zone_stat;
+  if (zone_stat) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:ZoneSyn.zone_stat)
 }
 
 // -------------------------------------------------------------------
@@ -1859,6 +2215,10 @@ inline void ChatStat::set_time(::google::protobuf::uint32 value) {
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

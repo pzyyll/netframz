@@ -7,26 +7,37 @@
 
 static const int kNameMaxLen = 256;
 
+struct Point {
+    Point(int xt = 0, int yt = 0) : x(xt), y(yt) {  }
+    ~Point() {  }
+
+    int x, y;
+};
+
 class Player {
 public:
     Player();
     ~Player();
 
+    void set_name(const std::string &name);
+    std::string name();
+
     void set_conn_id(unsigned long conn_id);
     unsigned long conn_id();
 
-    void set_name(const char *name);
-    void set_name(const char *name, const unsigned long size);
-    std::string char *name();
+    void set_last_act_time(unsigned long last_act_time);
+    unsigned long last_act_time();
 
-    void set_x(int x);
-    int x();
+    void set_last_point(Point &last_point);
+    Point &last_point();
 
-    void set_y(int y);
-    int y();
+    void set_point(Point point);
+    Point &point();
 
 private:
-    unsigned long conn_id_;
     char name_[kNameMaxLen];
-    int x_, y_;
+    unsigned long conn_id_;
+    unsigned long last_act_time_;
+    Point last_point_;
+    Point point_;
 };

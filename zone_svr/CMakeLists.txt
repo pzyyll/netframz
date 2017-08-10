@@ -35,9 +35,13 @@ set(SOURCE_FILES
         config.cpp
         zonesvr.cpp
         player.cpp
+        player_manage.cpp
         )
 
-add_executable(zonesvr ${SOURCE_FILES} ${NFSOURCE_FILES})
+set(PROTO_FILES proto/zonesvr.pb.cc)
+
+add_executable(zonesvr ${SOURCE_FILES} ${NFSOURCE_FILES} ${PROTO_FILES})
 
 #target_link_libraries(netframz -lboostsystem)
 #target_link_libraries(test_svr -lglog)
+target_link_libraries(zonesvr -lprotobuf)

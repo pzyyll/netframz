@@ -15,12 +15,6 @@ struct MsgHeader {
 
 #define MAX_CMD_LEN (1024 * 1024)
 
-enum MsgType {
-    ZONE_LOGING = 0X0001,
-    ZONE_STAT   = 0x1001,
-    ZONE_CHAT   = 0x1002,
-};
-
 class Cmd {
 public:
     Cmd() { }
@@ -79,6 +73,7 @@ public:
 protected:
     unsigned int type_;
     std::string msg_data_;
+
     char err_[256];
 };
 

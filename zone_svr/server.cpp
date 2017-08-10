@@ -239,10 +239,7 @@ void BaseServer::ProcessCmd(Cmd &cmd, const unsigned long cid) {
     log_debug("ProcessCmd");
 
     //Echo Test
-    std::string sndstr;
-    cmd.Serialize(sndstr);
-    log_debug("snd: %li", (long int)sndstr.size());
-    Response(cid, sndstr.c_str(), sndstr.size());
+    Response(cmd, cid);
 }
 
 void BaseServer::Tick(unsigned long now) {
@@ -250,14 +247,15 @@ void BaseServer::Tick(unsigned long now) {
     //Do tick task;
 }
 
-int BaseServer::Response(unsigned long cid, const proto::Cmd &cmd) {
+int BaseServer::Response(proto::Cmd &cmd, unsigned long cid) {
     std::string sndstr;
     cmd.Serialize(sndstr);
     log_debug("snd: %li", (long int)sndstr.size());
-    return Response(cid, sndstr.c_str(), sndstr.size());
+
+    return Response(sndstr.c_str(), sndstr.size(), cid);
 }
 
-int BaseServer::Response(unsigned long cid, const char *buff, unsigned long size) {
+int BaseServer::Response(const char *buff, unsigned long size, unsigned long cid) {
     log_debug("Response: %lu, size: %lu", cid, size);
 
     ConnectorPtr conn = FindConn(cid);

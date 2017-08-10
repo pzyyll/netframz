@@ -13,7 +13,7 @@ PlayerManage::~PlayerManage() {
 
 }
 
-Player *Player::AddPlayer(const std::string name, const unsigned int cid) {
+Player *PlayerManage::AddPlayer(const std::string &name, const unsigned long cid) {
     Player *player = NULL;
     if ( (player = GetPlayer(name)) != NULL) {
         return NULL;
@@ -21,7 +21,7 @@ Player *Player::AddPlayer(const std::string name, const unsigned int cid) {
 
     player = new Player;
     if (NULL == player) {
-        reutrn NULL;
+        return NULL;
     }
 
     player->set_name(name.c_str());
@@ -30,14 +30,14 @@ Player *Player::AddPlayer(const std::string name, const unsigned int cid) {
     return player;
 }
 
-Player *Player::GetPlayer(const std::string name) {
+Player *PlayerManage::GetPlayer(const std::string &name) {
     PlayerMapItr itr = player_map_.find(name);
     if (itr != player_map_.end())
         return itr->second;
     return NULL;
 }
 
-void Player::DelPlayer(const std::string name) {
+void PlayerManage::DelPlayer(const std::string &name) {
     PlayerMapItr itr = player_map_.find(name);
     if (itr != player_map_.end()) {
         delete itr->second;

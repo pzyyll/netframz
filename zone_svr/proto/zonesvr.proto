@@ -9,14 +9,15 @@ message MsgRet {
 
 message MsgCmd {
     enum MsgId {
-        MSGINIT  = 0X0;
-        LOGINREQ = 0X1001;
-        LOGINRSP = 0X1002;
-        ZONESYN  = 0X2001;
-        ZONESTAT = 0X2002;
-        CHATREQ  = 0X3001;
-        CHATRSP  = 0X3002;
-        CHATSTAT = 0X3003;
+        MSGINIT       = 0X0;
+        LOGIN_REQ     = 0X1001;
+        LOGIN_RSP     = 0X1002;
+        ZONE_SYN_REQ  = 0X2001;
+        ZONE_SYN_RSP  = 0X2002;
+        ZONE_SYN      = 0X2003;
+        CHAT_REQ      = 0X3001;
+        CHAT_RSP      = 0X3002;
+        CHAT_STAT     = 0X3003;
     }
 }
 
@@ -29,42 +30,52 @@ message Persion {
     Point point = 2;
 }
 
-// LOGINREQ = 0X1001;
-message LoginReq {
-    bytes name = 1;
-}
-
-// LOGINRSP = 0X1002;
-message LoginRsp {
-    int32 ret = 1;
-    bytes err_msg = 2;
-    repeated Persion persion_list = 3;
-}
-
-
-// ZONESYN = 0X2001;
-message ZoneSyn {
-    Persion persion = 1;
-}
-
-// ZONESTAT = 0X2002;
 message ZoneStat {
     repeated Persion persion_list = 1;
 }
 
-// CHATREQ = 0X3001;
+// LOGIN_REQ = 0X1001;
+message LoginReq {
+    bytes name = 1;
+}
+
+// LOGIN_RSP = 0X1002;
+message LoginRsp {
+    int32 ret = 1;
+    bytes err_msg = 2;
+    ZoneStat zone_stat = 3;
+}
+
+// ZONE_SYN_REQ = 0X2001;
+message ZoneSynReq {
+    Persion persion = 1;
+}
+
+// ZONE_SYN_RSP = 0X2002;
+message ZoneSynRsp {
+    int32 ret = 1;
+    bytes err_msg = 2;
+    ZoneStat zone_stat = 3;
+}
+
+// ZONE_SYN = 0X2003
+message ZoneSyn {
+    ZoneStat zone_stat = 1;
+}
+
+// CHAT_REQ = 0X3001;
 message ChatReq {
     bytes name    = 1;
     bytes content = 2;
 }
 
-// CHATRSP = 0X3002;
+// CHAT_RSP = 0X3002;
 message ChatRsp {
     int32 ret = 1;
     bytes err_msg = 2;
 }
 
-// CHATSTAT = 0X3003;
+// CHAT_STAT = 0X3003;
 message ChatStat {
     Persion speaker = 1;
     bytes content   = 2;

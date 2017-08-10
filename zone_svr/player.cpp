@@ -7,12 +7,25 @@
 
 #include "player.h"
 
-Player::Player() : conn_id_(0) x_(0), y_(0) {
+Player::Player() : conn_id_(0), last_act_time_(0), last_point_(), point_() {
     name_[0] = '\0';
 }
 
 Player::~Player() {
 
+}
+
+void Player::set_name(const std::string &name) {
+    unsigned long lenth = name.size();
+    if (lenth > kNameMaxLen)
+        lenth = kNameMaxLen - 1;
+
+    memcpy(name_, name.c_str(), lenth);
+    name_[lenth] = '\0';
+}
+
+std::string Player::name() {
+    return std::string(name_);
 }
 
 void Player::set_conn_id(unsigned long conn_id) {
@@ -23,42 +36,26 @@ unsigned long Player::conn_id() {
     return conn_id_;
 }
 
-void Player::set_name(const char *name) {
-    if (!name)
-        return;
-
-    memset(name_, 0, sizeof(name_));
-    strncpy(name_, name, sizeof(name_) - 1);
+void Player::set_last_act_time(unsigned long last_act_time) {
+    last_act_time_ = last_act_time;
 }
 
-void Player::set_name(const char *name, const unsigned long size) {
-    if (!name)
-        return;
-
-    unsigned long lenth = size;
-    if (lenth > kNameMaxLen)
-        lenth = kNameMaxLen - 1;
-
-    memcpy(name_, name, lenth);
-    name_[lenth] = '\0';
+unsigned long Player::last_act_time() {
+    return last_act_time_;
 }
 
-std::string Player::name() {
-    return std::string(name_);
+void Player::set_last_point(Point &last_point) {
+    last_point_ = last_point;
 }
 
-void Player::set_x(int x) {
-    x_ = x;
+Point &Player::last_point() {
+    return last_point_;
 }
 
-int Player::x() {
-    return x_;
+void Player::set_point(Point point) {
+    point_ = point;
 }
 
-void Player::set_y(int y) {
-    y_ = y;
-}
-
-int Player::y() {
-    return y_;
+Point &Player::point() {
+    return point_;
 }
