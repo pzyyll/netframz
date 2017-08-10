@@ -19,11 +19,20 @@ Persion *persion;
 map<std::string, Persion *> persions_map;
 
 int BuffHandle(const char *buff, const unsigned int len);
-int SendToSvr(Cmd &cmd);
-int RecvFromSvr();
+int SendMsgToSvr(TcpClient &cli, const ::google::protobuf::Message &msg, const unsigned int type);
+int RecvFromSvr(TcpClient &cli, char *buff, unsigned int &len);
+
+void ProcessLogin(TcpClient &cli);
+void ProcessMove(TcpClient &cli);
+//void ProcessChat(TcpClient &cli);
 
 void ProcessRspCmd(Cmd &cmd);
-void ProcessLogin(const std::string &name);
+void ProcessLoginRsp(const std::string &data);
+void ProcessZoneSynRsp(const std::string &data);
+void ProcessChatRsp(const std::string &data);
+void ProcessZoneSyn(const std::string &data);
+//void ProcessChatStat(const std::string &data);
+
 void InputOption(const std::string &option);
 
 int main(int argc, char *argv[]) {
@@ -39,37 +48,6 @@ int main(int argc, char *argv[]) {
 
     string a;
     while (cin >> a) {
-        if ("recv" == a) {
-            unsigned int len = sizeof(recvbuff) - rv_len;
-            int ret = cli.recv((void *)(recvbuff + rv_len), len);
-            if (ret < 0) {
-                cout << cli.get_err_msg() << endl;
-                continue;
-            }
-            cout << "recv: " <<  len << endl;
-            rv_len += len;
-            cout << "rv_len: " << rv_len << endl;
-
-            int hn = BuffHandle(recvbuff, rv_len);
-            if (hn < 0) {
-                return 0;
-            }
-            rv_len -= hn;
-            memmove(recvbuff, recvbuff + hn, rv_len);
-            continue;
-        }
-        Cmd cmd;
-        cmd.SetMsgData(a);
-        cmd.SetType(0);
-
-        string snd;
-        cmd.Serialize(snd);
-        cout << "snd: " << snd.size() << endl;
-        int ns = cli.send((void *)snd.c_str(), snd.size());
-        if (ns < 0) {
-            cout << cli.get_err_msg() << endl;
-            return 0;
-        }
     }
 
     return 0;
@@ -99,11 +77,18 @@ int BuffHandle(const char *buff, const unsigned int len) {
     return usepos;
 }
 
-int SendToSvr(Cmd &cmd) {
-    string snd;
-    cmd.Serialize(snd);
-    cout << "snd: " << snd.size() << endl;
-    int ns = cli.send((void *)snd.c_str(), snd.size());
+int SendMsgToSvr(TcpClient &cli, const ::google::protobuf::Message &msg, const unsigned int type) {
+    std::string str;
+    req.SerializeToString(&str);
+
+    Cmd cmd;
+    cmd.SetType(type);
+    cmd.SetMsgData(str);
+
+    str.clear();
+    cmd.Serialize(str);
+    cout << "snd: " << str.size() << endl;
+    int ns = cli.send((void *)str.c_str(), str.size());
     if (ns < 0) {
         cout << cli.get_err_msg() << endl;
         return -1;
@@ -111,23 +96,17 @@ int SendToSvr(Cmd &cmd) {
     return 0;
 }
 
-int RecvFromSvr() {
+int RecvFromSvr(TcpClient &cli, char *recvbuff, unsigned int &rv_len) {
     unsigned int len = sizeof(recvbuff) - rv_len;
     int ret = cli.recv((void *)(recvbuff + rv_len), len);
     if (ret < 0) {
         cout << cli.get_err_msg() << endl;
-        continue;
+        return -1;
     }
     cout << "recv: " <<  len << endl;
     rv_len += len;
     cout << "rv_len: " << rv_len << endl;
-
-    int hn = BuffHandle(recvbuff, rv_len);
-    if (hn < 0) {
-        return 0;
-    }
-    rv_len -= hn;
-    memmove(recvbuff, recvbuff + hn, rv_len);
+    return (int)len;
 }
 
 void ProcessRspCmd(Cmd &cmd) {
@@ -151,16 +130,22 @@ void ProcessLogin(const std::string &name) {
     LoginReq req;
     req.set_name(name);
 
-    std::string str;
-    req.SerializeToString(&str);
-
-    Cmd cmd;
-    cmd.SetType(MsgCmd::LOGIN_REQ);
-    cmd.SetMsgData(str);
-
-    SendToSvr(cmd);
+    
 }
 
 void InputOption(const std::string &option) {
     //todo
+    if (option == "h") {
+
+    } else if (option == "l") {
+
+    } else if (option == "j") {
+
+    } else if (option == "k") {
+        
+    } else if (option == "u") {
+
+    } else if (option == "q") {
+
+    }
 }
