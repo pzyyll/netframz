@@ -107,6 +107,7 @@ void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long ci
     SendToClient(rsp, MsgCmd::ZONE_SYN_RSP, cid);
 }
 
+//todo modify
 void ZoneSvr::ScanAndSynPlayerPosition(ZoneStat &stat, Player &player) {
     log_debug("ScanAndSynPlayerPosition");
 
@@ -114,7 +115,7 @@ void ZoneSvr::ScanAndSynPlayerPosition(ZoneStat &stat, Player &player) {
     ZoneSyn syn;
     Persion *syn_persion = syn.mutable_zone_stat()->add_persion_list();
 
-    assert(syn_persion == NULL);
+    assert(syn_persion != NULL);
 
     syn_persion->set_name(player.name());
     syn_persion->mutable_point()->set_x(player.point().x);
@@ -127,7 +128,7 @@ void ZoneSvr::ScanAndSynPlayerPosition(ZoneStat &stat, Player &player) {
         if (pry_player->name() != player.name()) {
             Persion *persion = stat.add_persion_list();
 
-            assert(persion == NULL);
+            assert(persion != NULL);
 
             persion->set_name(pry_player->name());
             persion->mutable_point()->set_x(pry_player->point().x);

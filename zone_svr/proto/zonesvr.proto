@@ -28,6 +28,7 @@ message Persion {
     }
     bytes name  = 1;
     Point point = 2;
+    uint32 id   = 3;
 }
 
 message ZoneStat {

@@ -5,35 +5,56 @@
 #include <string>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <pthread.h>
 
 #include "tcp_client.h"
 #include "proto.h"
 #include "proto/zonesvr.pb.h"
 
+#define MAX_X 100
+#define MAX_Y 100
+
 using namespace std;
 using namespace proto;
 
+TcpClient cli;
 char recvbuff[1024 * 1024 * 10];
 unsigned int rv_len;
-Persion *persion;
-map<std::string, Persion *> persions_map;
+
+Persion persion;
+map<std::string, Persion> persions_map;
+int login_success = 0;
+int is_exit = 1;
+pthread_t recv_thread;
+
+struct Pos {
+    int x;
+    int y;
+};
+
+void *recv_hld(void *args);
+
+int recv_wait;
+int RecvWait(int sec);
 
 int BuffHandle(const char *buff, const unsigned int len);
 int SendMsgToSvr(TcpClient &cli, const ::google::protobuf::Message &msg, const unsigned int type);
 int RecvFromSvr(TcpClient &cli, char *buff, unsigned int &len);
 
-void ProcessLogin(TcpClient &cli);
-void ProcessMove(TcpClient &cli);
-//void ProcessChat(TcpClient &cli);
+int Login();
+int ProcessLogin(const std::string &name);
+void ProcessMove(Pos mv_direct);
+//void ProcessChat(const std::string &content);
 
 void ProcessRspCmd(Cmd &cmd);
 void ProcessLoginRsp(const std::string &data);
-void ProcessZoneSynRsp(const std::string &data);
-void ProcessChatRsp(const std::string &data);
-void ProcessZoneSyn(const std::string &data);
+//void ProcessZoneSynRsp(const std::string &data);
+//void ProcessChatRsp(const std::string &data);
+//void ProcessZoneSyn(const std::string &data);
 //void ProcessChatStat(const std::string &data);
 
-void InputOption(const std::string &option);
+void PrintStat();
+int InputOption();
 
 int main(int argc, char *argv[]) {
     if (argc < 3) {
@@ -42,15 +63,49 @@ int main(int argc, char *argv[]) {
     }
 
     int port = atoi(argv[2]);
-    TcpClient cli;
 
-    cli.init(argv[1], port, -1, -1);
+    if (cli.init(argv[1], port, -1, -1) < 0) {
+        cout << "Tcp client init fail." << endl;
+        return 0;
+    }
 
-    string a;
-    while (cin >> a) {
+    if (pthread_create(&recv_thread, NULL, recv_hld, NULL) != 0) {
+        cout << "Create recv hld fail." << endl;
+        return 0;
+    }
+
+    if (Login() < 0) {
+        return 0;
+    }
+
+    PrintStat();
+
+    while (true) {
+        if (is_exit || InputOption() < 0)
+            break;
     }
 
     return 0;
+}
+
+void *recv_hld(void *args) {
+    while (true) {
+        if (RecvFromSvr(cli, recvbuff, rv_len) < 0) {
+            is_exit = 1;
+            break;
+        }
+
+        int hn = BuffHandle(recvbuff, rv_len);
+        if (hn < 0) {
+            is_exit = 1;
+            break;
+        }
+
+        rv_len -= hn;
+        memmove(recvbuff, recvbuff + hn, rv_len);
+    }
+
+    pthread_exit(NULL);
 }
 
 int BuffHandle(const char *buff, const unsigned int len) {
@@ -79,7 +134,7 @@ int BuffHandle(const char *buff, const unsigned int len) {
 
 int SendMsgToSvr(TcpClient &cli, const ::google::protobuf::Message &msg, const unsigned int type) {
     std::string str;
-    req.SerializeToString(&str);
+    msg.SerializeToString(&str);
 
     Cmd cmd;
     cmd.SetType(type);
@@ -112,6 +167,7 @@ int RecvFromSvr(TcpClient &cli, char *recvbuff, unsigned int &rv_len) {
 void ProcessRspCmd(Cmd &cmd) {
     switch (cmd.GetType()) {
         case MsgCmd::LOGIN_RSP:
+            ProcessLoginRsp(cmd.GetMsgData());
             break;
         case MsgCmd::ZONE_SYN_RSP:
             break;
@@ -126,26 +182,121 @@ void ProcessRspCmd(Cmd &cmd) {
     }
 }
 
-void ProcessLogin(const std::string &name) {
+int Login() {
+    cout << "entry: " << endl;
+    std::string name;
+    cin >> name;
+
+    return ProcessLogin(name);
+}
+
+int ProcessLogin(const std::string &name) {
     LoginReq req;
     req.set_name(name);
 
-    
+    SendMsgToSvr(cli, req, MsgCmd::LOGIN_REQ);
+
+    if (RecvWait(5) < 0) {
+        cout << "time out." << endl;
+        return -1;
+    }
+    return 0;
 }
 
-void InputOption(const std::string &option) {
+void ProcessMove(Pos mv_direct) {
+
+}
+
+
+int InputOption() {
     //todo
-    if (option == "h") {
+    int ret = 0;
+    std::string option;
 
-    } else if (option == "l") {
-
-    } else if (option == "j") {
-
-    } else if (option == "k") {
-        
-    } else if (option == "u") {
-
-    } else if (option == "q") {
-
+    std::cin >> option;
+    if (option.size() != 1) {
+        cout << "Option invalid." << endl;
+        return ret;
     }
+
+    struct Pos pos = { 0, 0 };
+    switch (option[0]) {
+        case 'h':
+            pos.x = -1;
+            ProcessMove(pos);
+            break;
+        case 'i':
+            pos.x = +1;
+            ProcessMove(pos);
+            break;
+        case 'j':
+            pos.y = +1;
+            ProcessMove(pos);
+            break;
+        case 'k':
+            pos.y = -1;
+            ProcessMove(pos);
+            break;
+        case 'c':
+            break;
+        case 'q':
+            ret = -1;
+            break;
+        default:
+            break;
+    }
+
+    return ret;
+}
+
+#define TIME_INTERVAL 1000
+int RecvWait(int sec) {
+    recv_wait = 1;
+    int usec = 0;
+    while (recv_wait) {
+        usleep(TIME_INTERVAL);
+        usec += TIME_INTERVAL;
+        if (sec * 1000000 <= usec)
+            break;
+    }
+
+    if (recv_wait)
+        return -1;
+
+    return 0;
+}
+
+void ProcessLoginRsp(const std::string &data) {
+    LoginRsp rsp;
+    if (!rsp.ParseFromString(data)) {
+        return;
+    }
+
+    if (rsp.ret() != MsgRet::SUCCESS) {
+        cout << rsp.err_msg() << endl;
+        return;
+    }
+
+    for (int i = 0; i < rsp.zone_stat().persion_list_size(); ++i) {
+        const Persion &persion = rsp.zone_stat().persion_list(i);
+        persions_map[persion.name()] = persion;
+    }
+
+    recv_wait = 0;
+    is_exit = 0;
+}
+
+void PrintStat() {
+    printf("All online:\n");
+    printf("%s(%d,%d)(*)\n", persion.name().c_str(),
+                            persion.point().x(),
+                            persion.point().y());
+
+    map<std::string, Persion>::iterator itr;
+    for (itr = persions_map.begin(); itr != persions_map.end(); ++itr) {
+        Persion &per = itr->second;
+        printf("%s(%d, %d)\n", per.name().c_str(), per.point().x(), per.point().y());
+    }
+
+    printf("Chat:\n");
 }

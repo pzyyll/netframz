@@ -8,7 +8,7 @@ add_definitions(
         -W -Wall
         -DLINUX_EPOLL
         -DNF_TIMER_WHEEL
-        -DMEM_CHECK
+        #        -DMEM_CHECK
         )
 
 set(CMAKE_CXX_STANDARD 11)
@@ -17,7 +17,7 @@ set(CMAKE_BUILD_TYPE debug CACHE STRING "set build type debug")
 set(NFSOURCE_FILES
         ../src/nf_event.cpp
         ../src/nf_epoll.cpp
-        ../src/nf_mem_check.cpp
+        #../src/nf_mem_check.cpp
         ../src/nf_event_iotask.cpp
         ../src/nf_event_iotask_impl.cpp
         ../src/nf_event_timer_task.cpp

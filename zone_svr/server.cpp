@@ -516,6 +516,12 @@ BaseServer::TimerTaskPtr BaseServer::FindTimer(unsigned long cid) {
     return itr->second;
 }
 
+bool BaseServer::CheckConnect(unsigned long cid) {
+    if (FindConn(cid))
+        return true;
+    return false;
+}
+
 void BaseServer::CloseConn(unsigned long cid) {
     DelConn(cid);
     DelTimerTask(cid);

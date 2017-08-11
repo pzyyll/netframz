@@ -99,6 +99,8 @@ protected:
 
     TimerTaskPtr FindTimer(unsigned long cid);
 
+    bool CheckConnect(unsigned long cid);
+
     void CloseConn(unsigned long cid);
 
     int Daemon();

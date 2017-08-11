@@ -27,6 +27,8 @@ Player *PlayerManage::AddPlayer(const std::string &name, const unsigned long cid
     player->set_name(name.c_str());
     player->set_conn_id(cid);
 
+    player_map_.insert(std::make_pair(name, player));
+
     return player;
 }
 
