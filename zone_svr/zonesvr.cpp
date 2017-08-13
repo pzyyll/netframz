@@ -57,7 +57,13 @@ void ZoneSvr::ProcessLogin(const std::string &buff, const unsigned long cid) {
             break;
         }
 
-        ScanAndSynPlayerPosition(*rsp.mutable_zone_stat(), *player);
+        std::vector<Player *> vec_players;
+        
+        GetOnlinePlayers(vec_players);
+
+        SynPlayerPos(*player, vec_players);
+
+        FillZoneStat(*rsp.mutable_zone_stat(), vec_players);
 
     } while (false);
 
@@ -99,7 +105,13 @@ void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long ci
         player->set_last_point(player->point());
         player->set_point(Point(nx, ny));
 
-        ScanAndSynPlayerPosition(*rsp.mutable_zone_stat(), *player);
+        std::vector<Player *> vec_players;
+        
+        GetOnlinePlayers(vec_players);
+
+        SynPlayerPos(*player, vec_players);
+
+        FillZoneStat(*rsp.mutable_zone_stat(), vec_players);
 
     } while (false);
 
@@ -136,6 +148,50 @@ void ZoneSvr::ScanAndSynPlayerPosition(ZoneStat &stat, Player &player) {
 
             SendToClient(syn, MsgCmd::ZONE_SYN, pry_player->conn_id());
         }
+    }
+}
+
+void ZoneSvr::GetOnlinePlayers(vector<Player *> &vec_players) {
+    PlayerManage::PlayerMapConstItr itr = player_mng_.begin();
+    for ( ; itr != player_mng_.end(); ++itr) {
+        Player *pry_player = itr->second;
+        assert(pry_player != NULL);
+
+        if (CheckConnect(pry_player->conn_id())) {
+            vec_players.push_back(pry_player);
+        } else {
+            //todo detach offline player, but not here.
+        }
+    }
+}
+
+void ZoneSvr::SynPlayerPos(Player &player, const std::vector<Player *> &vec_players) {
+    //Prepare the ZoneSyn of login player send to every online player
+    ZoneSyn syn;
+    Persion *syn_persion = syn.mutable_zone_stat()->add_persion_list();
+
+    assert(syn_persion != NULL);
+
+    syn_persion->set_name(player.name());
+    syn_persion->mutable_point()->set_x(player.point().x);
+    syn_persion->mutable_point()->set_y(player.point().y);
+
+    //Scan all online player and add position info of these player to player rsp
+    for (int i = 0; i < vec_players.size(); ++i) {
+        assert(vec_players[i]);
+        SendToClient(syn, MsgCmd::ZONE_SYN, vec_players[i]->conn_id());
+    }
+}
+
+void ZoneSvr::FillZoneStat(ZoneStat &stat, const std::vector<Player *> &vec_players) {
+    for (int i = 0; i < vec_players.size(); ++i) {
+        Player *player = vec_players[i];
+        Persion *persion = stat.add_persion_list();
+        assert(persion != NULL);
+
+        persion->set_name(player->name());
+        persion->mutable_point()->set_x(player->point().x);
+        persion->mutable_point()->set_y(player->point().y);
     }
 }
 

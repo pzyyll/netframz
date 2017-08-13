@@ -373,7 +373,7 @@ int BaseServer::MakeNonblock(int fd) {
     }
 
     val |= O_NONBLOCK;
-    if (::fcntl(fd, F_SETFL, val) < 0) {
+    if (fcntl(fd, F_SETFL, val) < 0) {
         log_warn("Set fd(%d) non-block fail. %s", fd, strerror(errno));
         return FAIL;
     }
@@ -384,8 +384,8 @@ int BaseServer::MakeNonblock(int fd) {
 int BaseServer::SetCliOpt(int fd) {
     //一般实际缓冲区大小是设置的2倍
     //path:/proc/sys/net/core/w(r)mem_max
-    int send_buff_size = 4 * 32768;
-    int recv_buff_size = 4 * 32768;
+    int send_buff_size = 2 * 65536;
+    int recv_buff_size = 2 * 65536;
 
     if (::setsockopt(fd, SOL_SOCKET, SO_SNDBUF,
                      (void *) &send_buff_size, sizeof(send_buff_size)) < 0) {
