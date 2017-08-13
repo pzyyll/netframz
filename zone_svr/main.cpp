@@ -40,6 +40,9 @@ int main(int argc, char *argv[]) {
     sigaction(SIGQUIT, &sig, NULL);
     sigaction(SIGABRT, &sig, NULL);
 
+    sig.sa_handler = SIG_IGN;
+    sigaction(SIGPIPE, &sig, NULL);
+
     if (svr.Init(argc, argv) < 0) {
         cout << "init fail." << endl;
         return -1;
