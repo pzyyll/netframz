@@ -147,7 +147,7 @@ void ZoneSvr::ProcessChat(const std::string &buff, const unsigned long cid) {
 
         ChatStat cs;
         Persion &speaker = *cs.mutable_speaker();
-        speaker.set_name(player.name());
+        speaker.set_name(player->name());
         speaker.mutable_point()->set_x(player->point().x);
         speaker.mutable_point()->set_y(player->point().y);
         cs.set_content(req.content());
@@ -224,14 +224,14 @@ void ZoneSvr::SynPlayerPos(Player &player, const std::vector<Player *> &vec_play
     syn_persion->mutable_point()->set_y(player.point().y);
 
     //Scan all online player and add position info of these player to player rsp
-    for (int i = 0; i < vec_players.size(); ++i) {
+    for (unsigned int i = 0; i < vec_players.size(); ++i) {
         assert(vec_players[i]);
         SendToClient(syn, MsgCmd::ZONE_SYN, vec_players[i]->conn_id());
     }
 }
 
 void ZoneSvr::FillZoneStat(ZoneStat &stat, const std::vector<Player *> &vec_players) {
-    for (int i = 0; i < vec_players.size(); ++i) {
+    for (unsigned int i = 0; i < vec_players.size(); ++i) {
         Player *player = vec_players[i];
         Persion *persion = stat.add_persion_list();
         assert(persion != NULL);
