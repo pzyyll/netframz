@@ -27,7 +27,7 @@ void ZoneSvr::ProcessCmd(proto::Cmd &cmd, const unsigned long cid) {
             ProcessPositionSyn(cmd.GetMsgData(), cid);
             break;
         case MsgCmd::CHAT_REQ:
-//            ProcessChat(cmd.GetMsgData(), cid);
+            ProcessChat(cmd.GetMsgData(), cid);
             break;
         default:
             log_warn("Cmd Type Err. Type(%u)", (unsigned)cmd.GetType());
@@ -92,15 +92,20 @@ void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long ci
             break;
         }
 
-        int nx, ny, ox, oy;
-        ox = player->last_point().x;
-        oy = player->last_point().y;
+
+//	        int nx, ny, ox, oy;
+//	        ox = player->last_point().x;
+//	        oy = player->last_point().y;
+//	        nx = req.persion().point().x();
+//	        ny = req.persion().point().y();
+//	        if (ox == nx && oy == ny) {
+//	            log_debug("position not change.");
+//	            break;
+//	        }
+
+        int nx, ny;
         nx = req.persion().point().x();
         ny = req.persion().point().y();
-        if (ox == nx && oy == ny) {
-            log_debug("position not change.");
-            break;
-        }
 
         player->set_last_point(player->point());
         player->set_point(Point(nx, ny));
@@ -117,6 +122,48 @@ void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long ci
 
     rsp.set_ret(ret);
     SendToClient(rsp, MsgCmd::ZONE_SYN_RSP, cid);
+}
+
+void ZoneSvr::ProcessChat(const std::string &buff, const unsigned long cid) {
+    log_debug("ProcessChat");
+
+    ChatReq req;
+    ChatRsp rsp;
+
+    int ret = MsgRet::SUCCESS;
+
+    do {
+        if ( (ret = Parse(req, buff)) != MsgRet::SUCCESS) {
+            rsp.set_err_msg("Parse req fail.");
+            break;
+        }
+        
+        Player *player = player_mng_.GetPlayer(req.name());
+        if (!player) {
+            ret = MsgRet::FAIL;
+            rsp.set_err_msg("player is not exist.");
+            break;
+        }
+
+        ChatStat cs;
+        Persion &speaker = *cs.mutable_speaker();
+        speaker.set_name(player.name());
+        speaker.mutable_point()->set_x(player->point().x);
+        speaker.mutable_point()->set_y(player->point().y);
+        cs.set_content(req.content());
+        cs.set_time(time(NULL));
+
+        std::vector<Player *> vec_players;
+        
+        GetOnlinePlayers(vec_players);
+
+        for (unsigned int i = 0; i < vec_players.size(); ++i) {
+            SendToClient(cs, MsgCmd::CHAT_STAT, player->conn_id());
+        }
+    } while (false);
+
+    rsp.set_ret(ret);
+    SendToClient(rsp, MsgCmd::CHAT_RSP, cid);
 }
 
 //todo modify
