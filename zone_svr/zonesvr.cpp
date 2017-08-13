@@ -151,7 +151,7 @@ void ZoneSvr::ScanAndSynPlayerPosition(ZoneStat &stat, Player &player) {
     }
 }
 
-void ZoneSvr::GetOnlinePlayers(vector<Player *> &vec_players) {
+void ZoneSvr::GetOnlinePlayers(std::vector<Player *> &vec_players) {
     PlayerManage::PlayerMapConstItr itr = player_mng_.begin();
     for ( ; itr != player_mng_.end(); ++itr) {
         Player *pry_player = itr->second;
