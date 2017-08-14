@@ -213,7 +213,7 @@ void ZoneSvr::FillZoneStat(ZoneStat &stat, const std::vector<Player *> &vec_play
 void ZoneSvr::SendToClient(const ::google::protobuf::Message &msg,
                            const unsigned int type,
                            const unsigned long cid) {
-    log_debug("SendToClient|%s", msg.ShortDebugString().c_str());
+    log_debug("SendToClient|%s|cid %lu|", msg.ShortDebugString().c_str(), cid);
 
     std::string msg_data;
     msg.SerializeToString(&msg_data);

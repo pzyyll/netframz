@@ -117,7 +117,7 @@ int InputOption() {
             pos.x = -1;
             Move(pos);
             break;
-        case 'i':
+        case 'l':
             pos.x = +1;
             Move(pos);
             break;
@@ -180,8 +180,8 @@ void recv_cb(EventLoop *loop, task_data_t data, int mask) {
 
     rv_len += nr;
 
-    std::cout << "nr: " << nr;
-    std::cout << ", rv_len: " << rv_len;
+    //std::cout << "nr: " << nr;
+    //std::cout << ", rv_len: " << rv_len << endl;
     //todo process buff
     int np = ProcessBuff(rv_buff, rv_len);
 
@@ -408,7 +408,7 @@ int Move(Pos mv_direct) {
 }
 
 int Chat() {
-    std::cout << "content : " << std::endl;
+    std::cout << "content : ";
     std::string content;
     std::cin >> content;
 
