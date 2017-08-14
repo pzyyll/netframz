@@ -83,6 +83,8 @@ int MakeBlockStatus(int fd, bool block) {
 
 /////////////////////////////////////////////////////////
 #define MAX_SHOW_MSGS 10
+#define MAX_COL 100
+#define MAX_ROW 100
 
 static int sock_fd;
 static char rv_buff[1024 * 1024];
@@ -204,25 +206,29 @@ int ProcessBuff(const char *buff, const unsigned int lenth) {
 }
 
 int ProcessCmd(proto::Cmd &cmd) {
+    int ret = 0;
     switch (cmd.GetType()) {
         case MsgCmd::LOGIN_RSP:
-            ProcessLoginRsp(cmd.GetMsgData());
+            ret = ProcessLoginRsp(cmd.GetMsgData());
             break;
         case MsgCmd::ZONE_SYN_RSP:
-            ProcessZoneSynRsp(cmd.GetMsgData());
+            ret = ProcessZoneSynRsp(cmd.GetMsgData());
             break;
         case MsgCmd::ZONE_SYN:
-            ProcessZoneSyn(cmd.GetMsgData());
+            ret = ProcessZoneSyn(cmd.GetMsgData());
             break;
         case MsgCmd::CHAT_RSP:
-            ProcessChatRsp(cmd.GetMsgData());
+            ret = ProcessChatRsp(cmd.GetMsgData());
             break;
         case MsgCmd::CHAT_STAT:
-            ProcessChatStat(cmd.GetMsgDatq());
+            ret = ProcessChatStat(cmd.GetMsgDatq());
             break;
         default:
+            ret = -1;
             break;
     }
+
+    return ret;
 }
 
 int ProcessLoginRsp(const std::string &data) {
@@ -296,6 +302,8 @@ int ProcessChatRsp(const std::string &data) {
         std::cout << rsp.err_msg() << std::endl;
         return -1;
     }
+
+    return 0;
 }
 
 int ProcessChatStat(const std::string &data) {
@@ -315,6 +323,8 @@ int ProcessChatStat(const std::string &data) {
     chat_msgs.push_back(show_str);
 
     FreshShow();
+
+    return 0;
 }
 
 void FreshShow() {
@@ -336,7 +346,7 @@ void FreshShow() {
 }
 
 int Login() {
-    std::cout << "login name: ";
+    std::cout << "entry name: ";
     std::string name;
     std::cin >> name;
 
@@ -344,10 +354,50 @@ int Login() {
     req.set_name(name);
 
     login_wait = 0;
-    SendMsgToSvr(req, MsgCmd::LOGIN_REQ);
+    if (SendMsgToSvr(req, MsgCmd::LOGIN_REQ) < 0)
+        return -1;
 
     std::cout << "loging..." << std::endl;
     while (!login_wait) usleep(100);
+
+    persion.set_name(name);
+    persion.mutable_point()->set_x(0);
+    persion.mutable_point()->set_y(0);
+
+    return 0;
+}
+
+int Move(Pos mv_direct) {
+    int x = persion.point().x();
+    int y = persion.point().y();
+
+    x += mv_direct.x;
+    y += mv_direct.y;
+
+    if (x < 0) x = 0;
+    if (x > MAX_COL) x = MAX_COL;
+    if (y < 0) y = 0;
+    if (y > MAX_ROW) y = MAX_ROW;
+
+    persion.mutable_point()->set_x(x);
+    persion.mutable_point()->set_y(y);
+
+    ZoneSynReq req;
+    req.mutable_persion()->CopyFrom(persion);
+
+    return SendMsgToSvr(req, MsgCmd::ZONE_SYN_REQ);;
+}
+
+int Chat() {
+    std::cout << "content : " << std::endl;
+    std::string content;
+    std::cin >> content;
+
+    ChatReq req;
+    req.set_name(persion.name());
+    req.set_content(content);
+
+    return SendMsgToSvr(req, MsgCmd::CHAT_REQ);
 }
 
 int SendMsgToSvr(::google::protobuf::Message &msg, unsigned int type) {
