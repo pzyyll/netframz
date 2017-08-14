@@ -104,6 +104,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Persion, name_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Persion, point_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Persion, id_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneStat, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -173,15 +174,15 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] = {
   { 5, -1, sizeof(MsgCmd)},
   { 10, -1, sizeof(Persion_Point)},
   { 17, -1, sizeof(Persion)},
-  { 24, -1, sizeof(ZoneStat)},
-  { 30, -1, sizeof(LoginReq)},
-  { 36, -1, sizeof(LoginRsp)},
-  { 44, -1, sizeof(ZoneSynReq)},
-  { 50, -1, sizeof(ZoneSynRsp)},
-  { 58, -1, sizeof(ZoneSyn)},
-  { 64, -1, sizeof(ChatReq)},
-  { 71, -1, sizeof(ChatRsp)},
-  { 78, -1, sizeof(ChatStat)},
+  { 25, -1, sizeof(ZoneStat)},
+  { 31, -1, sizeof(LoginReq)},
+  { 37, -1, sizeof(LoginRsp)},
+  { 45, -1, sizeof(ZoneSynReq)},
+  { 51, -1, sizeof(ZoneSynRsp)},
+  { 59, -1, sizeof(ZoneSyn)},
+  { 65, -1, sizeof(ChatReq)},
+  { 72, -1, sizeof(ChatRsp)},
+  { 79, -1, sizeof(ChatStat)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -296,24 +297,24 @@ void AddDescriptorsImpl() {
       "\227\001\n\005MsgId\022\013\n\007MSGINIT\020\000\022\016\n\tLOGIN_REQ\020\201 \022\016"
       "\n\tLOGIN_RSP\020\202 \022\021\n\014ZONE_SYN_REQ\020\201@\022\021\n\014ZON"
       "E_SYN_RSP\020\202@\022\r\n\010ZONE_SYN\020\203@\022\r\n\010CHAT_REQ\020"
-      "\201`\022\r\n\010CHAT_RSP\020\202`\022\016\n\tCHAT_STAT\020\203`\"U\n\007Per"
+      "\201`\022\r\n\010CHAT_RSP\020\202`\022\016\n\tCHAT_STAT\020\203`\"a\n\007Per"
       "sion\022\014\n\004name\030\001 \001(\014\022\035\n\005point\030\002 \001(\0132\016.Pers"
-      "ion.Point\032\035\n\005Point\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005"
-      "\"*\n\010ZoneStat\022\036\n\014persion_list\030\001 \003(\0132\010.Per"
-      "sion\"\030\n\010LoginReq\022\014\n\004name\030\001 \001(\014\"F\n\010LoginR"
-      "sp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\034\n\tzone"
-      "_stat\030\003 \001(\0132\t.ZoneStat\"\'\n\nZoneSynReq\022\031\n\007"
-      "persion\030\001 \001(\0132\010.Persion\"H\n\nZoneSynRsp\022\013\n"
-      "\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\034\n\tzone_stat"
-      "\030\003 \001(\0132\t.ZoneStat\"\'\n\007ZoneSyn\022\034\n\tzone_sta"
-      "t\030\001 \001(\0132\t.ZoneStat\"(\n\007ChatReq\022\014\n\004name\030\001 "
-      "\001(\014\022\017\n\007content\030\002 \001(\014\"\'\n\007ChatRsp\022\013\n\003ret\030\001"
-      " \001(\005\022\017\n\007err_msg\030\002 \001(\014\"D\n\010ChatStat\022\031\n\007spe"
-      "aker\030\001 \001(\0132\010.Persion\022\017\n\007content\030\002 \001(\014\022\014\n"
-      "\004time\030\003 \001(\rb\006proto3"
+      "ion.Point\022\n\n\002id\030\003 \001(\r\032\035\n\005Point\022\t\n\001x\030\001 \001("
+      "\005\022\t\n\001y\030\002 \001(\005\"*\n\010ZoneStat\022\036\n\014persion_list"
+      "\030\001 \003(\0132\010.Persion\"\030\n\010LoginReq\022\014\n\004name\030\001 \001"
+      "(\014\"F\n\010LoginRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002"
+      " \001(\014\022\034\n\tzone_stat\030\003 \001(\0132\t.ZoneStat\"\'\n\nZo"
+      "neSynReq\022\031\n\007persion\030\001 \001(\0132\010.Persion\"H\n\nZ"
+      "oneSynRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022"
+      "\034\n\tzone_stat\030\003 \001(\0132\t.ZoneStat\"\'\n\007ZoneSyn"
+      "\022\034\n\tzone_stat\030\001 \001(\0132\t.ZoneStat\"(\n\007ChatRe"
+      "q\022\014\n\004name\030\001 \001(\014\022\017\n\007content\030\002 \001(\014\"\'\n\007Chat"
+      "Rsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\"D\n\010Cha"
+      "tStat\022\031\n\007speaker\030\001 \001(\0132\010.Persion\022\017\n\007cont"
+      "ent\030\002 \001(\014\022\014\n\004time\030\003 \001(\rb\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 779);
+      descriptor, 791);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "zonesvr.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -1040,6 +1041,7 @@ void Persion_Point::set_y(::google::protobuf::int32 value) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Persion::kNameFieldNumber;
 const int Persion::kPointFieldNumber;
+const int Persion::kIdFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Persion::Persion()
@@ -1064,12 +1066,15 @@ Persion::Persion(const Persion& from)
   } else {
     point_ = NULL;
   }
+  id_ = from.id_;
   // @@protoc_insertion_point(copy_constructor:Persion)
 }
 
 void Persion::SharedCtor() {
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  point_ = NULL;
+  ::memset(&point_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&id_) -
+      reinterpret_cast<char*>(&point_)) + sizeof(id_));
   _cached_size_ = 0;
 }
 
@@ -1115,6 +1120,7 @@ void Persion::Clear() {
     delete point_;
   }
   point_ = NULL;
+  id_ = 0u;
 }
 
 bool Persion::MergePartialFromCodedStream(
@@ -1145,6 +1151,20 @@ bool Persion::MergePartialFromCodedStream(
             static_cast< ::google::protobuf::uint8>(18u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_point()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 id = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &id_)));
         } else {
           goto handle_unusual;
         }
@@ -1190,6 +1210,11 @@ void Persion::SerializeWithCachedSizes(
       2, *this->point_, output);
   }
 
+  // uint32 id = 3;
+  if (this->id() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->id(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:Persion)
 }
 
@@ -1214,6 +1239,11 @@ void Persion::SerializeWithCachedSizes(
         2, *this->point_, deterministic, target);
   }
 
+  // uint32 id = 3;
+  if (this->id() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->id(), target);
+  }
+
   // @@protoc_insertion_point(serialize_to_array_end:Persion)
   return target;
 }
@@ -1234,6 +1264,13 @@ size_t Persion::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->point_);
+  }
+
+  // uint32 id = 3;
+  if (this->id() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->id());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -1272,6 +1309,9 @@ void Persion::MergeFrom(const Persion& from) {
   if (from.has_point()) {
     mutable_point()->::Persion_Point::MergeFrom(from.point());
   }
+  if (from.id() != 0) {
+    set_id(from.id());
+  }
 }
 
 void Persion::CopyFrom(const ::google::protobuf::Message& from) {
@@ -1299,6 +1339,7 @@ void Persion::Swap(Persion* other) {
 void Persion::InternalSwap(Persion* other) {
   name_.Swap(&other->name_);
   std::swap(point_, other->point_);
+  std::swap(id_, other->id_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -1400,6 +1441,20 @@ void Persion::set_allocated_point(::Persion_Point* point) {
     
   }
   // @@protoc_insertion_point(field_set_allocated:Persion.point)
+}
+
+// uint32 id = 3;
+void Persion::clear_id() {
+  id_ = 0u;
+}
+::google::protobuf::uint32 Persion::id() const {
+  // @@protoc_insertion_point(field_get:Persion.id)
+  return id_;
+}
+void Persion::set_id(::google::protobuf::uint32 value) {
+  
+  id_ = value;
+  // @@protoc_insertion_point(field_set:Persion.id)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

@@ -524,12 +524,19 @@ class Persion : public ::google::protobuf::Message /* @@protoc_insertion_point(c
   ::Persion_Point* release_point();
   void set_allocated_point(::Persion_Point* point);
 
+  // uint32 id = 3;
+  void clear_id();
+  static const int kIdFieldNumber = 3;
+  ::google::protobuf::uint32 id() const;
+  void set_id(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:Persion)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr name_;
   ::Persion_Point* point_;
+  ::google::protobuf::uint32 id_;
   mutable int _cached_size_;
   friend struct protobuf_zonesvr_2eproto::TableStruct;
 };
@@ -1524,6 +1531,20 @@ inline void Persion::set_allocated_point(::Persion_Point* point) {
     
   }
   // @@protoc_insertion_point(field_set_allocated:Persion.point)
+}
+
+// uint32 id = 3;
+inline void Persion::clear_id() {
+  id_ = 0u;
+}
+inline ::google::protobuf::uint32 Persion::id() const {
+  // @@protoc_insertion_point(field_get:Persion.id)
+  return id_;
+}
+inline void Persion::set_id(::google::protobuf::uint32 value) {
+  
+  id_ = value;
+  // @@protoc_insertion_point(field_set:Persion.id)
 }
 
 // -------------------------------------------------------------------

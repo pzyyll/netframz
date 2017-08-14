@@ -58,7 +58,7 @@ void ZoneSvr::ProcessLogin(const std::string &buff, const unsigned long cid) {
         }
 
         std::vector<Player *> vec_players;
-        
+
         GetOnlinePlayers(vec_players);
 
         SynPlayerPos(*player, vec_players);
@@ -111,7 +111,7 @@ void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long ci
         player->set_point(Point(nx, ny));
 
         std::vector<Player *> vec_players;
-        
+
         GetOnlinePlayers(vec_players);
 
         SynPlayerPos(*player, vec_players);
@@ -137,7 +137,7 @@ void ZoneSvr::ProcessChat(const std::string &buff, const unsigned long cid) {
             rsp.set_err_msg("Parse req fail.");
             break;
         }
-        
+
         Player *player = player_mng_.GetPlayer(req.name());
         if (!player) {
             ret = MsgRet::FAIL;
@@ -154,7 +154,7 @@ void ZoneSvr::ProcessChat(const std::string &buff, const unsigned long cid) {
         cs.set_time(time(NULL));
 
         std::vector<Player *> vec_players;
-        
+
         GetOnlinePlayers(vec_players);
 
         for (unsigned int i = 0; i < vec_players.size(); ++i) {
@@ -164,38 +164,6 @@ void ZoneSvr::ProcessChat(const std::string &buff, const unsigned long cid) {
 
     rsp.set_ret(ret);
     SendToClient(rsp, MsgCmd::CHAT_RSP, cid);
-}
-
-//todo modify
-void ZoneSvr::ScanAndSynPlayerPosition(ZoneStat &stat, Player &player) {
-    log_debug("ScanAndSynPlayerPosition");
-
-    //Prepare the ZoneSyn of login player send to every online player
-    ZoneSyn syn;
-    Persion *syn_persion = syn.mutable_zone_stat()->add_persion_list();
-
-    assert(syn_persion != NULL);
-
-    syn_persion->set_name(player.name());
-    syn_persion->mutable_point()->set_x(player.point().x);
-    syn_persion->mutable_point()->set_y(player.point().y);
-
-    //Scan all online player and add position info of these player to player rsp
-    PlayerManage::PlayerMapConstItr itr = player_mng_.begin();
-    for ( ; itr != player_mng_.end(); ++itr) {
-        Player *pry_player = itr->second;
-        if (pry_player->name() != player.name()) {
-            Persion *persion = stat.add_persion_list();
-
-            assert(persion != NULL);
-
-            persion->set_name(pry_player->name());
-            persion->mutable_point()->set_x(pry_player->point().x);
-            persion->mutable_point()->set_y(pry_player->point().y);
-
-            SendToClient(syn, MsgCmd::ZONE_SYN, pry_player->conn_id());
-        }
-    }
 }
 
 void ZoneSvr::GetOnlinePlayers(std::vector<Player *> &vec_players) {

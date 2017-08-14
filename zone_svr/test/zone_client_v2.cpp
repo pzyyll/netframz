@@ -59,6 +59,8 @@ int main(int argc, char *argv[]) {
     req.set_name("czlvvv");
     SendMsgToSvr(cli, req, MsgCmd::LOGIN_REQ);
 
+    sleep(1);
+
     unsigned int len = sizeof(recvbuff);
     if (cli.recv((void *)recvbuff, len, sizeof(MsgHeader)) < 0) {
         cout << cli.get_err_msg() << endl;
@@ -85,6 +87,8 @@ int main(int argc, char *argv[]) {
 
     SendMsgToSvr(cli, syn_req, MsgCmd::ZONE_SYN_REQ);
 
+    sleep(1);
+
     len = sizeof(recvbuff);
     if (cli.recv((void *)recvbuff, len, sizeof(MsgHeader)) < 0) {
         cout << cli.get_err_msg() << endl;
@@ -101,6 +105,32 @@ int main(int argc, char *argv[]) {
     std::string syndata(recvbuff, exp_len);
     syn_rsp.ParseFromString(syndata);
     cout << syn_rsp.DebugString() << endl;
+
+    //ChatReq
+    ChatReq chat_req;
+    ChatRsp chat_rsp;
+    chat_req.set_name("czlvvv");
+    chat_req.set_content("say hello.");
+
+    SendMsgToSvr(cli, chat_req, MsgCmd::CHAT_REQ);
+
+    sleep(1);
+
+    len = sizeof(recvbuff);
+    if (cli.recv((void *)recvbuff, len, sizeof(MsgHeader)) < 0) {
+        cout << cli.get_err_msg() << endl;
+        return 0;
+    }
+    head = (MsgHeader *)recvbuff;
+    exp_len = ntohl(head->len);
+    len = sizeof(recvbuff);
+    if (cli.recv((void *)recvbuff, len, exp_len - sizeof(MsgHeader)) < 0) {
+        cout << cli.get_err_msg() << endl;
+        return 0;
+    }
+    std::string chat_data(recvbuff, exp_len);
+    chat_rsp.ParseFromString(chat_data);
+    cout << chat_rsp.DebugString() << endl;
 
     return 0;
 }

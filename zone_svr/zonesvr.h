@@ -23,14 +23,12 @@ protected:
 
     void ProcessChat(const std::string &buff, const unsigned long cid);
 
-    void ScanAndSynPlayerPosition(ZoneStat &stat, Player &player);
-
     void GetOnlinePlayers(std::vector<Player *> &vec_players);
 
     void SynPlayerPos(Player &player, const std::vector<Player *> &vec_players);
 
     void FillZoneStat(ZoneStat &stat, const std::vector<Player *> &vec_players);
-    
+
     //todo AOI
 
     void SendToClient(const ::google::protobuf::Message &msg,
