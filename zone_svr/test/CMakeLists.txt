@@ -4,7 +4,12 @@ project(test)
 include_directories(../)
 include_directories(../../src/)
 
-add_definitions(-DLINUX_EPOLL -W -Wall)
+add_definitions(
+        -W -Wall
+        -DLINUX_EPOLL
+        -DNF_TIMER_WHEEL
+        #        -DMEM_CHECK
+        )
 
 set(CMAKE_CXX_STANDARD 11)
 
