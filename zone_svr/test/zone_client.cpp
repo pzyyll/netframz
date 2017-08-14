@@ -9,8 +9,9 @@
 
 #include "proto.h"
 #include "proto/zonesvr.pb.h"
-
 #include "client_api.h"
+
+using namespace std;
 
 Client cli;
 

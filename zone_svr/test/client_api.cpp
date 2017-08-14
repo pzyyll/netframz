@@ -53,7 +53,7 @@ int Readn(int fd, void *buff, const unsigned int lenth) {
             if (EAGAIN == errno)
                 break;
             return -1;
-        } elsef if (rw == 0) {
+        } else if (rw == 0) {
             break;
         }
 
@@ -102,7 +102,7 @@ int InputOption() {
 
     std::cin >> option;
     if (option.size() != 1) {
-        cout << "Option invalid." << endl;
+        std::cout << "Option invalid." << std::endl;
         return ret;
     }
 
@@ -137,28 +137,7 @@ int InputOption() {
     return ret;
 }
 
-void CliRun(Client *cli) {
-    sock_fd = cli->fd;
-
-    if (Connect(cli) < 0) {
-        std::cout << "Connect fail." << std::endl;
-        return;
-    }
-
-    pthread_t tid;
-    pthread_create(&tid, NULL, RecvHandler, NULL);
-
-    //todo client input
-    Login();
-
-    while (true) {
-        //todo input
-        if (InputOption() < 0)
-            break;
-    }
-}
-
-void *Recvhandler(void *args) {
+void *RecvHandler(void *args) {
     int nr = 0;
     while(true) {
         nr = Readn(sock_fd, rv_buff + rv_len, sizeof(rv_buff) - rv_len);
@@ -171,6 +150,9 @@ void *Recvhandler(void *args) {
         }
 
         rv_len += nr;
+
+        std::cout << "nr: " << nr;
+        std::cout << ", rv_len: " << rv_len;
         //todo process buff
         int np = ProcessBuff(rv_buff, rv_len);
 
@@ -197,12 +179,12 @@ int ProcessBuff(const char *buff, const unsigned int lenth) {
         if (np == 0)
             break;
 
-        ProcessRspCmd(cmd);
+        ProcessCmd(cmd);
 
         upos += np;
     }
 
-    return np;
+    return (int)upos;
 }
 
 int ProcessCmd(proto::Cmd &cmd) {
@@ -221,7 +203,7 @@ int ProcessCmd(proto::Cmd &cmd) {
             ret = ProcessChatRsp(cmd.GetMsgData());
             break;
         case MsgCmd::CHAT_STAT:
-            ret = ProcessChatStat(cmd.GetMsgDatq());
+            ret = ProcessChatStat(cmd.GetMsgData());
             break;
         default:
             ret = -1;
@@ -238,7 +220,7 @@ int ProcessLoginRsp(const std::string &data) {
     }
 
     if (rsp.ret() != MsgRet::SUCCESS) {
-        cout << rsp.err_msg() << endl;
+        std::cout << rsp.err_msg() << std::endl;
         return -1;
     }
 
@@ -282,7 +264,7 @@ int ProcessZoneSyn(const std::string &data) {
     }
 
     for (int i = 0; i < syn.zone_stat().persion_list_size(); ++i) {
-        const Persion &persion = rsp.zone_stat().persion_list(i);
+        const Persion &persion = syn.zone_stat().persion_list(i);
         persions_map[persion.name()] = persion;
     }
 
@@ -315,7 +297,7 @@ int ProcessChatStat(const std::string &data) {
 
     std::string speaker_name = cs.speaker().name();
     time_t speaker_time = cs.time();
-    std::string content = cs.speaker().content();
+    std::string content = cs.content();
 
     std::string time_str(ctime(&speaker_time));
 
@@ -330,8 +312,8 @@ int ProcessChatStat(const std::string &data) {
 void FreshShow() {
     std::cout << "Pos: " << std::endl;
     auto itr = persions_map.begin();
-    for ( ; itr != persion_map.end(); ++itr) {
-        Persion &persion = itr.second;
+    for ( ; itr != persions_map.end(); ++itr) {
+        Persion &persion = itr->second;
         std::cout << persion.name() << "("
                   << persion.point().x() << ","
                   << persion.point().y() << ")"
@@ -371,8 +353,7 @@ int Move(Pos mv_direct) {
     int x = persion.point().x();
     int y = persion.point().y();
 
-    x += mv_direct.x;
-    y += mv_direct.y;
+    x += mv_direct.x; y += mv_direct.y;
 
     if (x < 0) x = 0;
     if (x > MAX_COL) x = MAX_COL;
@@ -418,4 +399,25 @@ int SendMsgToSvr(::google::protobuf::Message &msg, unsigned int type) {
     }
 
     return 0;
+}
+
+void CliRun(Client *cli) {
+    sock_fd = cli->fd;
+
+    if (Connect(cli) < 0) {
+        std::cout << "Connect fail." << std::endl;
+        return;
+    }
+
+    pthread_t tid;
+    pthread_create(&tid, NULL, RecvHandler, NULL);
+
+    //todo client input
+    Login();
+
+    while (true) {
+        //todo input
+        if (InputOption() < 0)
+            break;
+    }
 }

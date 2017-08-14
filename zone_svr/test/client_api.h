@@ -14,7 +14,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include <pthread>
+#include <pthread.h>
 #include <time.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -33,7 +33,7 @@ struct Client {
 
 struct Pos {
     int x, y;
-}
+};
 
 int Connect(Client *cli);
 int Writen(int fd, const void *buff, const unsigned int lenth);

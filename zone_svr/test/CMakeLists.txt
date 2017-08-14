@@ -12,7 +12,7 @@ set(SOURCE_FILES tcp_client.cpp)
 add_executable(robot_client robot_client.cpp ${SOURCE_FILES})
 add_executable(send_client send_client.cpp ${SOURCE_FILES})
 add_executable(send_patch_client send_patch_client.cpp ${SOURCE_FILES})
-add_executable(zone_client zone_client.cpp ../proto/zonesvr.pb.cc ${SOURCE_FILES})
+add_executable(zone_client zone_client.cpp client_api.cpp ../proto/zonesvr.pb.cc ${SOURCE_FILES})
 add_executable(zone_clientv2 zone_client_v2.cpp ../proto/zonesvr.pb.cc ${SOURCE_FILES})
 
 target_link_libraries(robot_client -lpthread)

@@ -5,6 +5,9 @@
 #include <vector>
 #include <cstddef>
 
+#include <arpa/inet.h>
+
+
 namespace proto {
 #pragma pack(1)
 struct MsgHeader {
