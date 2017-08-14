@@ -158,7 +158,7 @@ void ZoneSvr::ProcessChat(const std::string &buff, const unsigned long cid) {
         GetOnlinePlayers(vec_players);
 
         for (unsigned int i = 0; i < vec_players.size(); ++i) {
-            SendToClient(cs, MsgCmd::CHAT_STAT, player->conn_id());
+            SendToClient(cs, MsgCmd::CHAT_STAT, vec_players[i]->conn_id());
         }
     } while (false);
 

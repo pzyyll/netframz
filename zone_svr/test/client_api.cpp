@@ -348,6 +348,7 @@ int ProcessChatStat(const std::string &data) {
 }
 
 void FreshShow() {
+    std::cout << "=======" << std::endl;
     std::cout << "Pos: " << std::endl;
     auto itr = persions_map.begin();
     for ( ; itr != persions_map.end(); ++itr) {
