@@ -3,6 +3,8 @@
 // @Brief
 //
 #include "client_api.h"
+#include "nf_event.h"
+#include "nf_event_iotask.h"
 
 int Connect(Client *cli) {
     struct sockaddr_in addr;
@@ -95,6 +97,9 @@ Persion persion;
 std::map<std::string, Persion> persions_map;
 std::deque<std::string> chat_msgs;
 
+EventLoop loop;
+IOTask *recv_task;
+
 int InputOption() {
     //todo
     int ret = 0;
@@ -137,33 +142,66 @@ int InputOption() {
     return ret;
 }
 
-void *RecvHandler(void *args) {
-    int nr = 0;
-    while(true) {
-        nr = Readn(sock_fd, rv_buff + rv_len, sizeof(rv_buff) - rv_len);
-        if (nr < 0) {
-            std::cout << "read err" << std::endl;
-            break;
-        } else if (nr == 0) {
-            std::cout << "close by peer." << std::endl;
-            break;
-        }
-
-        rv_len += nr;
-
-        std::cout << "nr: " << nr;
-        std::cout << ", rv_len: " << rv_len;
-        //todo process buff
-        int np = ProcessBuff(rv_buff, rv_len);
-
-        if (np < 0) {
-            std::cout << "parse err" << std::endl;
-            break;
-        }
-
-        rv_len -= np;
-        memmove(rv_buff, rv_buff + np, rv_len);
+int CheckMask(int mask) {
+    if (mask & EV_RDHUP) {
+        return -1;
     }
+
+    if (mask & EV_HUP) {
+        return -1;
+    }
+
+    if (mask & EV_ERR) {
+        return -1;
+    }
+
+    return 0;
+}
+
+
+void recv_cb(EventLoop *loop, task_data_t data, int mask) {
+    if (CheckMask(mask) < 0) {
+        std::cout << "close" << std::endl;
+        recv_task->Stop();
+        return;
+    }
+
+    int nr = 0;
+    nr = Readn(sock_fd, rv_buff + rv_len, sizeof(rv_buff) - rv_len);
+    if (nr < 0) {
+        std::cout << "read err" << std::endl;
+        recv_task->Stop();
+        return;
+    } else if (nr == 0) {
+        std::cout << "close by peer." << std::endl;
+        recv_task->Stop();
+        return;
+    }
+
+    rv_len += nr;
+
+    std::cout << "nr: " << nr;
+    std::cout << ", rv_len: " << rv_len;
+    //todo process buff
+    int np = ProcessBuff(rv_buff, rv_len);
+
+    if (np < 0) {
+        std::cout << "parse err" << std::endl;
+        recv_task->Stop();
+        return;
+    }
+
+    rv_len -= np;
+    memmove(rv_buff, rv_buff + np, rv_len); 
+}
+
+void *RecvHandler(void *args) {
+    MakeBlockStatus(sock_fd, false);
+    loop.Init();
+    recv_task = new IOTask(loop, sock_fd, EVSTAT::EV_READABLE, recv_cb);
+    recv_task->Start();
+
+    loop.Run();
 
     pthread_exit(NULL);
 }
