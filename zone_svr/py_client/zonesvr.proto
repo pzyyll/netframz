@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+message MsgRet {
+    enum ErrCode {
+        SUCCESS = 0;
+        FAIL    = -1;
+    }
+}
+
+message MsgCmd {
+    enum MsgId {
+        MSGINIT       = 0X0;
+        LOGIN_REQ     = 0X1001;
+        LOGIN_RSP     = 0X1002;
+        ZONE_SYN_REQ  = 0X2001;
+        ZONE_SYN_RSP  = 0X2002;
+        ZONE_SYN      = 0X2003;
+        CHAT_REQ      = 0X3001;
+        CHAT_RSP      = 0X3002;
+        CHAT_STAT     = 0X3003;
+    }
+}
+
+message Persion {
+    message Point {
+        int32 x = 1;
+        int32 y = 2;
+    }
+    bytes name  = 1;
+    Point point = 2;
+    uint32 id   = 3;
+}
+
+message ZoneStat {
+    repeated Persion persion_list = 1;
+}
+
+// LOGIN_REQ = 0X1001;
+message LoginReq {
+    bytes name = 1;
+}
+
+// LOGIN_RSP = 0X1002;
+message LoginRsp {
+    int32 ret = 1;
+    bytes err_msg = 2;
+    ZoneStat zone_stat = 3;
+}
+
+// ZONE_SYN_REQ = 0X2001;
+message ZoneSynReq {
+    Persion persion = 1;
+}
+
+// ZONE_SYN_RSP = 0X2002;
+message ZoneSynRsp {
+    int32 ret = 1;
+    bytes err_msg = 2;
+    ZoneStat zone_stat = 3;
+}
+
+// ZONE_SYN = 0X2003
+message ZoneSyn {
+    ZoneStat zone_stat = 1;
+}
+
+// CHAT_REQ = 0X3001;
+message ChatReq {
+    bytes name    = 1;
+    bytes content = 2;
+}
+
+// CHAT_RSP = 0X3002;
+message ChatRsp {
+    int32 ret = 1;
+    bytes err_msg = 2;
+}
+
+// CHAT_STAT = 0X3003;
+message ChatStat {
+    Persion speaker = 1;
+    bytes content   = 2;
+    uint32 time     = 3;
+}
