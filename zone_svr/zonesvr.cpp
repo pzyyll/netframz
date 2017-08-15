@@ -35,6 +35,11 @@ void ZoneSvr::ProcessCmd(proto::Cmd &cmd, const unsigned long cid) {
     }
 }
 
+void ZoneSvr::CloseConn(unsigned long cid) {
+    BaseServer::CloseConn(cid);
+    player_mng_.DelPlayerByCid(cid);
+}
+
 void ZoneSvr::ProcessLogin(const std::string &buff, const unsigned long cid) {
     log_debug("ProcessLogin. cid|%lu", cid);
 
@@ -181,7 +186,6 @@ void ZoneSvr::GetOnlinePlayers(std::vector<Player *> &vec_players) {
 }
 
 void ZoneSvr::SynPlayerPos(Player &player, const std::vector<Player *> &vec_players) {
-    //Prepare the ZoneSyn of login player send to every online player
     ZoneSyn syn;
     Persion *syn_persion = syn.mutable_zone_stat()->add_persion_list();
 
@@ -191,7 +195,6 @@ void ZoneSvr::SynPlayerPos(Player &player, const std::vector<Player *> &vec_play
     syn_persion->mutable_point()->set_x(player.point().x);
     syn_persion->mutable_point()->set_y(player.point().y);
 
-    //Scan all online player and add position info of these player to player rsp
     for (unsigned int i = 0; i < vec_players.size(); ++i) {
         assert(vec_players[i]);
         SendToClient(syn, MsgCmd::ZONE_SYN, vec_players[i]->conn_id());

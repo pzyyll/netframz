@@ -15,6 +15,9 @@ public:
     typedef std::map<std::string, Player*> PlayerMap;
     typedef PlayerMap::iterator            PlayerMapItr;
     typedef PlayerMap::const_iterator      PlayerMapConstItr;
+    typedef std::map<unsigned long, std::string> IdMap;
+    typedef IdMap::iterator                      IdMapItr;
+
 public:
     PlayerManage();
 
@@ -26,12 +29,17 @@ public:
 
     void DelPlayer(const std::string &name);
 
+    Player *GetPlayerByCid(const unsigned long cid);
+
+    void DelPlayerByCid(const unsigned long cid);
+
     PlayerMapConstItr begin() { return player_map_.begin(); }
 
     PlayerMapConstItr end() { return player_map_.end(); }
 
 private:
     PlayerMap player_map_;
+    IdMap cid_map_;
 };
 
 #endif //NF_ZONESVR_PLAYERMANAGE_H

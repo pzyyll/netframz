@@ -52,11 +52,6 @@ public:
 
     void Stop();
 
-    void Parse(Connector &conn);
-
-    virtual void ProcessCmd(proto::Cmd &cmd, const unsigned long cid);
-
-    virtual void Tick(unsigned long now);
 
     //void OnIdle();
 
@@ -101,13 +96,19 @@ protected:
 
     bool CheckConnect(unsigned long cid);
 
-    void CloseConn(unsigned long cid);
-
     int Daemon();
 
     int Response(proto::Cmd &cmd, unsigned long cid);
 
     int Response(const char *buff, unsigned long size, unsigned long cid);
+
+    void Parse(Connector &conn);
+
+    virtual void ProcessCmd(proto::Cmd &cmd, const unsigned long cid);
+
+    virtual void Tick(unsigned long now);
+
+    virtual void CloseConn(unsigned long cid);
 
 private:
     char         *conf_file_;

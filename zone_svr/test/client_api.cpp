@@ -192,7 +192,7 @@ void recv_cb(EventLoop *loop, task_data_t data, int mask) {
     }
 
     rv_len -= np;
-    memmove(rv_buff, rv_buff + np, rv_len); 
+    memmove(rv_buff, rv_buff + np, rv_len);
 }
 
 void *RecvHandler(void *args) {
@@ -284,6 +284,7 @@ int ProcessZoneSynRsp(const std::string &data) {
         return -1;
     }
 
+    persions_map.clear();
     for (int i = 0; i < rsp.zone_stat().persion_list_size(); ++i) {
         const Persion &persion = rsp.zone_stat().persion_list(i);
         persions_map[persion.name()] = persion;
@@ -349,14 +350,16 @@ int ProcessChatStat(const std::string &data) {
 
 void FreshShow() {
     std::cout << "=======" << std::endl;
-    std::cout << "Pos: " << std::endl;
+    std::cout << "Onlien Players: " << std::endl;
     auto itr = persions_map.begin();
     for ( ; itr != persions_map.end(); ++itr) {
         Persion &persion = itr->second;
         std::cout << persion.name() << "("
                   << persion.point().x() << ","
-                  << persion.point().y() << ")"
-                  << std::endl;
+                  << persion.point().y() << ")";
+        if (persion.name() == ::persion.name())
+            std::cout << "*";
+        std::cout << std::endl;
     }
 
     std::cout << "Chat:" << std::endl;
@@ -371,6 +374,10 @@ int Login() {
     std::string name;
     std::cin >> name;
 
+    persion.set_name(name);
+    persion.mutable_point()->set_x(0);
+    persion.mutable_point()->set_y(0);
+
     LoginReq req;
     req.set_name(name);
 
@@ -380,10 +387,6 @@ int Login() {
 
     std::cout << "loging..." << std::endl;
     while (!login_wait) usleep(100);
-
-    persion.set_name(name);
-    persion.mutable_point()->set_x(0);
-    persion.mutable_point()->set_y(0);
 
     return 0;
 }
