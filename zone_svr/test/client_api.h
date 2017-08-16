@@ -46,6 +46,7 @@ int ProcessCmd(proto::Cmd &cmd);
 int ProcessLoginRsp(const std::string &data);
 int ProcessZoneSynRsp(const std::string &data);
 int ProcessZoneSyn(const std::string &data);
+int ProcessZoneUserLogout(const std::string &data);
 int ProcessChatRsp(const std::string &data);
 int ProcessChatStat(const std::string &data);
 void FreshShow();

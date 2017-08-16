@@ -36,6 +36,8 @@ class ZoneSynRspDefaultTypeInternal : public ::google::protobuf::internal::Expli
 } _ZoneSynRsp_default_instance_;
 class ZoneSynDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ZoneSyn> {
 } _ZoneSyn_default_instance_;
+class ZoneUserLogoutDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ZoneUserLogout> {
+} _ZoneUserLogout_default_instance_;
 class ChatReqDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ChatReq> {
 } _ChatReq_default_instance_;
 class ChatRspDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ChatRsp> {
@@ -48,7 +50,7 @@ namespace protobuf_zonesvr_2eproto {
 
 namespace {
 
-::google::protobuf::Metadata file_level_metadata[13];
+::google::protobuf::Metadata file_level_metadata[14];
 const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors[2];
 
 }  // namespace
@@ -64,6 +66,7 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::AuxillaryParseTableField
 };
 PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
     TableStruct::schema[] = {
+  { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
@@ -146,6 +149,12 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSyn, zone_stat_),
   ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneUserLogout, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneUserLogout, name_),
+  ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChatReq, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -180,9 +189,10 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] = {
   { 45, -1, sizeof(ZoneSynReq)},
   { 51, -1, sizeof(ZoneSynRsp)},
   { 59, -1, sizeof(ZoneSyn)},
-  { 65, -1, sizeof(ChatReq)},
-  { 72, -1, sizeof(ChatRsp)},
-  { 79, -1, sizeof(ChatStat)},
+  { 65, -1, sizeof(ZoneUserLogout)},
+  { 71, -1, sizeof(ChatReq)},
+  { 78, -1, sizeof(ChatRsp)},
+  { 85, -1, sizeof(ChatStat)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -196,6 +206,7 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneSynReq_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneSynRsp_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneSyn_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneUserLogout_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ChatReq_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ChatRsp_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ChatStat_default_instance_),
@@ -219,7 +230,7 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 13);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 14);
 }
 
 }  // namespace
@@ -245,12 +256,14 @@ void TableStruct::Shutdown() {
   delete file_level_metadata[8].reflection;
   _ZoneSyn_default_instance_.Shutdown();
   delete file_level_metadata[9].reflection;
-  _ChatReq_default_instance_.Shutdown();
+  _ZoneUserLogout_default_instance_.Shutdown();
   delete file_level_metadata[10].reflection;
-  _ChatRsp_default_instance_.Shutdown();
+  _ChatReq_default_instance_.Shutdown();
   delete file_level_metadata[11].reflection;
-  _ChatStat_default_instance_.Shutdown();
+  _ChatRsp_default_instance_.Shutdown();
   delete file_level_metadata[12].reflection;
+  _ChatStat_default_instance_.Shutdown();
+  delete file_level_metadata[13].reflection;
 }
 
 void TableStruct::InitDefaultsImpl() {
@@ -267,6 +280,7 @@ void TableStruct::InitDefaultsImpl() {
   _ZoneSynReq_default_instance_.DefaultConstruct();
   _ZoneSynRsp_default_instance_.DefaultConstruct();
   _ZoneSyn_default_instance_.DefaultConstruct();
+  _ZoneUserLogout_default_instance_.DefaultConstruct();
   _ChatReq_default_instance_.DefaultConstruct();
   _ChatRsp_default_instance_.DefaultConstruct();
   _ChatStat_default_instance_.DefaultConstruct();
@@ -293,28 +307,30 @@ void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] = {
       "\n\rzonesvr.proto\"3\n\006MsgRet\")\n\007ErrCode\022\013\n\007"
-      "SUCCESS\020\000\022\021\n\004FAIL\020\377\377\377\377\377\377\377\377\377\001\"\242\001\n\006MsgCmd\""
-      "\227\001\n\005MsgId\022\013\n\007MSGINIT\020\000\022\016\n\tLOGIN_REQ\020\201 \022\016"
+      "SUCCESS\020\000\022\021\n\004FAIL\020\377\377\377\377\377\377\377\377\377\001\"\271\001\n\006MsgCmd\""
+      "\256\001\n\005MsgId\022\013\n\007MSGINIT\020\000\022\016\n\tLOGIN_REQ\020\201 \022\016"
       "\n\tLOGIN_RSP\020\202 \022\021\n\014ZONE_SYN_REQ\020\201@\022\021\n\014ZON"
-      "E_SYN_RSP\020\202@\022\r\n\010ZONE_SYN\020\203@\022\r\n\010CHAT_REQ\020"
-      "\201`\022\r\n\010CHAT_RSP\020\202`\022\016\n\tCHAT_STAT\020\203`\"a\n\007Per"
-      "sion\022\014\n\004name\030\001 \001(\014\022\035\n\005point\030\002 \001(\0132\016.Pers"
-      "ion.Point\022\n\n\002id\030\003 \001(\r\032\035\n\005Point\022\t\n\001x\030\001 \001("
-      "\005\022\t\n\001y\030\002 \001(\005\"*\n\010ZoneStat\022\036\n\014persion_list"
-      "\030\001 \003(\0132\010.Persion\"\030\n\010LoginReq\022\014\n\004name\030\001 \001"
-      "(\014\"F\n\010LoginRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002"
-      " \001(\014\022\034\n\tzone_stat\030\003 \001(\0132\t.ZoneStat\"\'\n\nZo"
-      "neSynReq\022\031\n\007persion\030\001 \001(\0132\010.Persion\"H\n\nZ"
-      "oneSynRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022"
-      "\034\n\tzone_stat\030\003 \001(\0132\t.ZoneStat\"\'\n\007ZoneSyn"
-      "\022\034\n\tzone_stat\030\001 \001(\0132\t.ZoneStat\"(\n\007ChatRe"
-      "q\022\014\n\004name\030\001 \001(\014\022\017\n\007content\030\002 \001(\014\"\'\n\007Chat"
-      "Rsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\"D\n\010Cha"
-      "tStat\022\031\n\007speaker\030\001 \001(\0132\010.Persion\022\017\n\007cont"
-      "ent\030\002 \001(\014\022\014\n\004time\030\003 \001(\rb\006proto3"
+      "E_SYN_RSP\020\202@\022\r\n\010ZONE_SYN\020\203@\022\025\n\020ZONE_USER"
+      "_LOGOUT\020\204@\022\r\n\010CHAT_REQ\020\201`\022\r\n\010CHAT_RSP\020\202`"
+      "\022\016\n\tCHAT_STAT\020\203`\"a\n\007Persion\022\014\n\004name\030\001 \001("
+      "\014\022\035\n\005point\030\002 \001(\0132\016.Persion.Point\022\n\n\002id\030\003"
+      " \001(\r\032\035\n\005Point\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\"*\n\010Z"
+      "oneStat\022\036\n\014persion_list\030\001 \003(\0132\010.Persion\""
+      "\030\n\010LoginReq\022\014\n\004name\030\001 \001(\014\"F\n\010LoginRsp\022\013\n"
+      "\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\034\n\tzone_stat"
+      "\030\003 \001(\0132\t.ZoneStat\"\'\n\nZoneSynReq\022\031\n\007persi"
+      "on\030\001 \001(\0132\010.Persion\"H\n\nZoneSynRsp\022\013\n\003ret\030"
+      "\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\034\n\tzone_stat\030\003 \001("
+      "\0132\t.ZoneStat\"\'\n\007ZoneSyn\022\034\n\tzone_stat\030\001 \001"
+      "(\0132\t.ZoneStat\"\036\n\016ZoneUserLogout\022\014\n\004name\030"
+      "\001 \001(\014\"(\n\007ChatReq\022\014\n\004name\030\001 \001(\014\022\017\n\007conten"
+      "t\030\002 \001(\014\"\'\n\007ChatRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_m"
+      "sg\030\002 \001(\014\"D\n\010ChatStat\022\031\n\007speaker\030\001 \001(\0132\010."
+      "Persion\022\017\n\007content\030\002 \001(\014\022\014\n\004time\030\003 \001(\rb\006"
+      "proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 791);
+      descriptor, 846);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "zonesvr.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -367,6 +383,7 @@ bool MsgCmd_MsgId_IsValid(int value) {
     case 8193:
     case 8194:
     case 8195:
+    case 8196:
     case 12289:
     case 12290:
     case 12291:
@@ -383,6 +400,7 @@ const MsgCmd_MsgId MsgCmd::LOGIN_RSP;
 const MsgCmd_MsgId MsgCmd::ZONE_SYN_REQ;
 const MsgCmd_MsgId MsgCmd::ZONE_SYN_RSP;
 const MsgCmd_MsgId MsgCmd::ZONE_SYN;
+const MsgCmd_MsgId MsgCmd::ZONE_USER_LOGOUT;
 const MsgCmd_MsgId MsgCmd::CHAT_REQ;
 const MsgCmd_MsgId MsgCmd::CHAT_RSP;
 const MsgCmd_MsgId MsgCmd::CHAT_STAT;
@@ -3378,6 +3396,286 @@ void ZoneSyn::set_allocated_zone_stat(::ZoneStat* zone_stat) {
     
   }
   // @@protoc_insertion_point(field_set_allocated:ZoneSyn.zone_stat)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ZoneUserLogout::kNameFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ZoneUserLogout::ZoneUserLogout()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_zonesvr_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ZoneUserLogout)
+}
+ZoneUserLogout::ZoneUserLogout(const ZoneUserLogout& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.name().size() > 0) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  // @@protoc_insertion_point(copy_constructor:ZoneUserLogout)
+}
+
+void ZoneUserLogout::SharedCtor() {
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+ZoneUserLogout::~ZoneUserLogout() {
+  // @@protoc_insertion_point(destructor:ZoneUserLogout)
+  SharedDtor();
+}
+
+void ZoneUserLogout::SharedDtor() {
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void ZoneUserLogout::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ZoneUserLogout::descriptor() {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const ZoneUserLogout& ZoneUserLogout::default_instance() {
+  protobuf_zonesvr_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+ZoneUserLogout* ZoneUserLogout::New(::google::protobuf::Arena* arena) const {
+  ZoneUserLogout* n = new ZoneUserLogout;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void ZoneUserLogout::Clear() {
+// @@protoc_insertion_point(message_clear_start:ZoneUserLogout)
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+bool ZoneUserLogout::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ZoneUserLogout)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // bytes name = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_name()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ZoneUserLogout)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ZoneUserLogout)
+  return false;
+#undef DO_
+}
+
+void ZoneUserLogout::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ZoneUserLogout)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bytes name = 1;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      1, this->name(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:ZoneUserLogout)
+}
+
+::google::protobuf::uint8* ZoneUserLogout::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:ZoneUserLogout)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bytes name = 1;
+  if (this->name().size() > 0) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        1, this->name(), target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:ZoneUserLogout)
+  return target;
+}
+
+size_t ZoneUserLogout::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ZoneUserLogout)
+  size_t total_size = 0;
+
+  // bytes name = 1;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->name());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ZoneUserLogout::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ZoneUserLogout)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ZoneUserLogout* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const ZoneUserLogout>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ZoneUserLogout)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ZoneUserLogout)
+    MergeFrom(*source);
+  }
+}
+
+void ZoneUserLogout::MergeFrom(const ZoneUserLogout& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ZoneUserLogout)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.name().size() > 0) {
+
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+}
+
+void ZoneUserLogout::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ZoneUserLogout)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ZoneUserLogout::CopyFrom(const ZoneUserLogout& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ZoneUserLogout)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ZoneUserLogout::IsInitialized() const {
+  return true;
+}
+
+void ZoneUserLogout::Swap(ZoneUserLogout* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ZoneUserLogout::InternalSwap(ZoneUserLogout* other) {
+  name_.Swap(&other->name_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata ZoneUserLogout::GetMetadata() const {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// ZoneUserLogout
+
+// bytes name = 1;
+void ZoneUserLogout::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& ZoneUserLogout::name() const {
+  // @@protoc_insertion_point(field_get:ZoneUserLogout.name)
+  return name_.GetNoArena();
+}
+void ZoneUserLogout::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:ZoneUserLogout.name)
+}
+#if LANG_CXX11
+void ZoneUserLogout::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:ZoneUserLogout.name)
+}
+#endif
+void ZoneUserLogout::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:ZoneUserLogout.name)
+}
+void ZoneUserLogout::set_name(const void* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:ZoneUserLogout.name)
+}
+::std::string* ZoneUserLogout::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:ZoneUserLogout.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* ZoneUserLogout::release_name() {
+  // @@protoc_insertion_point(field_release:ZoneUserLogout.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void ZoneUserLogout::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:ZoneUserLogout.name)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

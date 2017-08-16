@@ -85,8 +85,8 @@ int MakeBlockStatus(int fd, bool block) {
 
 /////////////////////////////////////////////////////////
 #define MAX_SHOW_MSGS 10
-#define MAX_COL 100
-#define MAX_ROW 100
+#define MAX_COL 20
+#define MAX_ROW 20
 
 static int sock_fd;
 static char rv_buff[1024 * 1024];
@@ -237,6 +237,9 @@ int ProcessCmd(proto::Cmd &cmd) {
         case MsgCmd::ZONE_SYN:
             ret = ProcessZoneSyn(cmd.GetMsgData());
             break;
+        case MsgCmd::ZONE_USER_LOGOUT:
+            ret = ProcessZoneUserLogout(cmd.GetMsgData());
+            break;
         case MsgCmd::CHAT_RSP:
             ret = ProcessChatRsp(cmd.GetMsgData());
             break;
@@ -284,7 +287,7 @@ int ProcessZoneSynRsp(const std::string &data) {
         return -1;
     }
 
-    persions_map.clear();
+    //persions_map.clear();
     for (int i = 0; i < rsp.zone_stat().persion_list_size(); ++i) {
         const Persion &persion = rsp.zone_stat().persion_list(i);
         persions_map[persion.name()] = persion;
@@ -306,6 +309,20 @@ int ProcessZoneSyn(const std::string &data) {
         const Persion &persion = syn.zone_stat().persion_list(i);
         persions_map[persion.name()] = persion;
     }
+
+    FreshShow();
+
+    return 0;
+}
+
+int ProcessZoneUserLogout(const std::string &data) {
+    ZoneUserLogout logout_info;
+
+    if (!logout_info.ParseFromString(data)) {
+        return -1;
+    }
+
+    persions_map.erase(logout_info.name());
 
     FreshShow();
 
@@ -349,17 +366,38 @@ int ProcessChatStat(const std::string &data) {
 }
 
 void FreshShow() {
-    std::cout << "=======" << std::endl;
+    int matrix[MAX_ROW][MAX_COL] = {0};
+
+    std::cout << "============================================================" << std::endl;
     std::cout << "Onlien Players: " << std::endl;
     auto itr = persions_map.begin();
     for ( ; itr != persions_map.end(); ++itr) {
+        int flag = 2;
         Persion &persion = itr->second;
         std::cout << persion.name() << "("
                   << persion.point().x() << ","
                   << persion.point().y() << ")";
-        if (persion.name() == ::persion.name())
+        if (persion.name() == ::persion.name()) {
             std::cout << "*";
+            flag = 1;
+        }
+        matrix[persion.point().x()][persion.point().y()] = flag;
         std::cout << std::endl;
+    }
+
+    for (int y = 0; y < MAX_COL; ++y) {
+        for (int x = 0; x < MAX_ROW; ++x) {
+            if (matrix[x][y] == 1) {
+                printf("\033[31mo\033[0m ");
+                continue;
+            }
+            if (matrix[x][y] == 2) {
+                printf("\033[32mx\033[0m ");
+                continue;
+            }
+            printf(". ");
+        }
+        printf("\n");
     }
 
     std::cout << "Chat:" << std::endl;
@@ -367,6 +405,9 @@ void FreshShow() {
     for ( ; citr != chat_msgs.end(); ++citr) {
         std::cout << *citr << std::endl;
     }
+
+    std::cout << std::endl;
+    std::cout << "You Can Input (h:Move Left, j:Move Donw, k:Move Up l:Move Right, c: Chat, q: quit) " << std::endl;
 }
 
 int Login() {
@@ -398,12 +439,14 @@ int Move(Pos mv_direct) {
     x += mv_direct.x; y += mv_direct.y;
 
     if (x < 0) x = 0;
-    if (x > MAX_COL) x = MAX_COL;
+    if (x >= MAX_COL) x = MAX_COL - 1;
     if (y < 0) y = 0;
-    if (y > MAX_ROW) y = MAX_ROW;
+    if (y >= MAX_ROW) y = MAX_ROW - 1;
 
     persion.mutable_point()->set_x(x);
     persion.mutable_point()->set_y(y);
+
+    persions_map[persion.name()] = persion;
 
     ZoneSynReq req;
     req.mutable_persion()->CopyFrom(persion);
@@ -454,11 +497,9 @@ void CliRun(Client *cli) {
     pthread_t tid;
     pthread_create(&tid, NULL, RecvHandler, NULL);
 
-    //todo client input
     Login();
 
     while (true) {
-        //todo input
         if (InputOption() < 0)
             break;
     }

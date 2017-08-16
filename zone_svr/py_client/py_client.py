@@ -1,3 +1,4 @@
+import sys
 import socket
 import struct
 import ctypes
@@ -22,7 +23,6 @@ class MsgHead :
     type = 0
 
 class Cmd:
-
     def ParseFromString(self, data):
         head = MsgHead()
 
@@ -42,11 +42,14 @@ class Cmd:
     type = 0
     data = ''
 
+if len(sys.argv) < 3:
+    print('exe ip port')
+    sys.exit(0)
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-HOST = '192.168.244.145'
-PORT = 13399
+HOST = sys.argv[1]
+PORT = int(sys.argv[2])
 client.connect((HOST, PORT))
 
 login_req = zonesvr_pb2.LoginReq()
