@@ -15,7 +15,7 @@ message MsgCmd {
         ZONE_SYN_REQ      = 0X2001;
         ZONE_SYN_RSP      = 0X2002;
         ZONE_SYN          = 0X2003;
-        ZONE_USER_LOGOUT  = 0X2004;
+        ZONE_USER_REMOVE  = 0X2004;
         CHAT_REQ          = 0X3001;
         CHAT_RSP          = 0X3002;
         CHAT_STAT         = 0X3003;
@@ -65,8 +65,8 @@ message ZoneSyn {
     ZoneStat zone_stat = 1;
 }
 
-// ZONE_USER_LOGOUT = 0X2004
-message ZoneUserLogout {
+// ZONE_USER_REMOVE = 0X2004
+message ZoneUserRemove {
     bytes name = 1;
 }
 

@@ -237,8 +237,8 @@ int ProcessCmd(proto::Cmd &cmd) {
         case MsgCmd::ZONE_SYN:
             ret = ProcessZoneSyn(cmd.GetMsgData());
             break;
-        case MsgCmd::ZONE_USER_LOGOUT:
-            ret = ProcessZoneUserLogout(cmd.GetMsgData());
+        case MsgCmd::ZONE_USER_REMOVE:
+            ret = ProcessZoneUserRemove(cmd.GetMsgData());
             break;
         case MsgCmd::CHAT_RSP:
             ret = ProcessChatRsp(cmd.GetMsgData());
@@ -315,8 +315,8 @@ int ProcessZoneSyn(const std::string &data) {
     return 0;
 }
 
-int ProcessZoneUserLogout(const std::string &data) {
-    ZoneUserLogout logout_info;
+int ProcessZoneUserRemove(const std::string &data) {
+    ZoneUserRemove logout_info;
 
     if (!logout_info.ParseFromString(data)) {
         return -1;

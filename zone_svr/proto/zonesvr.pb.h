@@ -70,9 +70,9 @@ extern ZoneSynReqDefaultTypeInternal _ZoneSynReq_default_instance_;
 class ZoneSynRsp;
 class ZoneSynRspDefaultTypeInternal;
 extern ZoneSynRspDefaultTypeInternal _ZoneSynRsp_default_instance_;
-class ZoneUserLogout;
-class ZoneUserLogoutDefaultTypeInternal;
-extern ZoneUserLogoutDefaultTypeInternal _ZoneUserLogout_default_instance_;
+class ZoneUserRemove;
+class ZoneUserRemoveDefaultTypeInternal;
+extern ZoneUserRemoveDefaultTypeInternal _ZoneUserRemove_default_instance_;
 
 namespace protobuf_zonesvr_2eproto {
 // Internal implementation detail -- do not call these.
@@ -116,7 +116,7 @@ enum MsgCmd_MsgId {
   MsgCmd_MsgId_ZONE_SYN_REQ = 8193,
   MsgCmd_MsgId_ZONE_SYN_RSP = 8194,
   MsgCmd_MsgId_ZONE_SYN = 8195,
-  MsgCmd_MsgId_ZONE_USER_LOGOUT = 8196,
+  MsgCmd_MsgId_ZONE_USER_REMOVE = 8196,
   MsgCmd_MsgId_CHAT_REQ = 12289,
   MsgCmd_MsgId_CHAT_RSP = 12290,
   MsgCmd_MsgId_CHAT_STAT = 12291,
@@ -314,8 +314,8 @@ class MsgCmd : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
     MsgCmd_MsgId_ZONE_SYN_RSP;
   static const MsgId ZONE_SYN =
     MsgCmd_MsgId_ZONE_SYN;
-  static const MsgId ZONE_USER_LOGOUT =
-    MsgCmd_MsgId_ZONE_USER_LOGOUT;
+  static const MsgId ZONE_USER_REMOVE =
+    MsgCmd_MsgId_ZONE_USER_REMOVE;
   static const MsgId CHAT_REQ =
     MsgCmd_MsgId_CHAT_REQ;
   static const MsgId CHAT_RSP =
@@ -1098,39 +1098,39 @@ class ZoneSyn : public ::google::protobuf::Message /* @@protoc_insertion_point(c
 };
 // -------------------------------------------------------------------
 
-class ZoneUserLogout : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ZoneUserLogout) */ {
+class ZoneUserRemove : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ZoneUserRemove) */ {
  public:
-  ZoneUserLogout();
-  virtual ~ZoneUserLogout();
+  ZoneUserRemove();
+  virtual ~ZoneUserRemove();
 
-  ZoneUserLogout(const ZoneUserLogout& from);
+  ZoneUserRemove(const ZoneUserRemove& from);
 
-  inline ZoneUserLogout& operator=(const ZoneUserLogout& from) {
+  inline ZoneUserRemove& operator=(const ZoneUserRemove& from) {
     CopyFrom(from);
     return *this;
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const ZoneUserLogout& default_instance();
+  static const ZoneUserRemove& default_instance();
 
-  static inline const ZoneUserLogout* internal_default_instance() {
-    return reinterpret_cast<const ZoneUserLogout*>(
-               &_ZoneUserLogout_default_instance_);
+  static inline const ZoneUserRemove* internal_default_instance() {
+    return reinterpret_cast<const ZoneUserRemove*>(
+               &_ZoneUserRemove_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     10;
 
-  void Swap(ZoneUserLogout* other);
+  void Swap(ZoneUserRemove* other);
 
   // implements Message ----------------------------------------------
 
-  inline ZoneUserLogout* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline ZoneUserRemove* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  ZoneUserLogout* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  ZoneUserRemove* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
   void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void CopyFrom(const ZoneUserLogout& from);
-  void MergeFrom(const ZoneUserLogout& from);
+  void CopyFrom(const ZoneUserRemove& from);
+  void MergeFrom(const ZoneUserRemove& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -1146,7 +1146,7 @@ class ZoneUserLogout : public ::google::protobuf::Message /* @@protoc_insertion_
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const PROTOBUF_FINAL;
-  void InternalSwap(ZoneUserLogout* other);
+  void InternalSwap(ZoneUserRemove* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -1176,7 +1176,7 @@ class ZoneUserLogout : public ::google::protobuf::Message /* @@protoc_insertion_
   ::std::string* release_name();
   void set_allocated_name(::std::string* name);
 
-  // @@protoc_insertion_point(class_scope:ZoneUserLogout)
+  // @@protoc_insertion_point(class_scope:ZoneUserRemove)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -2040,59 +2040,59 @@ inline void ZoneSyn::set_allocated_zone_stat(::ZoneStat* zone_stat) {
 
 // -------------------------------------------------------------------
 
-// ZoneUserLogout
+// ZoneUserRemove
 
 // bytes name = 1;
-inline void ZoneUserLogout::clear_name() {
+inline void ZoneUserRemove::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& ZoneUserLogout::name() const {
-  // @@protoc_insertion_point(field_get:ZoneUserLogout.name)
+inline const ::std::string& ZoneUserRemove::name() const {
+  // @@protoc_insertion_point(field_get:ZoneUserRemove.name)
   return name_.GetNoArena();
 }
-inline void ZoneUserLogout::set_name(const ::std::string& value) {
+inline void ZoneUserRemove::set_name(const ::std::string& value) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:ZoneUserLogout.name)
+  // @@protoc_insertion_point(field_set:ZoneUserRemove.name)
 }
 #if LANG_CXX11
-inline void ZoneUserLogout::set_name(::std::string&& value) {
+inline void ZoneUserRemove::set_name(::std::string&& value) {
   
   name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:ZoneUserLogout.name)
+  // @@protoc_insertion_point(field_set_rvalue:ZoneUserRemove.name)
 }
 #endif
-inline void ZoneUserLogout::set_name(const char* value) {
+inline void ZoneUserRemove::set_name(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:ZoneUserLogout.name)
+  // @@protoc_insertion_point(field_set_char:ZoneUserRemove.name)
 }
-inline void ZoneUserLogout::set_name(const void* value, size_t size) {
+inline void ZoneUserRemove::set_name(const void* value, size_t size) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:ZoneUserLogout.name)
+  // @@protoc_insertion_point(field_set_pointer:ZoneUserRemove.name)
 }
-inline ::std::string* ZoneUserLogout::mutable_name() {
+inline ::std::string* ZoneUserRemove::mutable_name() {
   
-  // @@protoc_insertion_point(field_mutable:ZoneUserLogout.name)
+  // @@protoc_insertion_point(field_mutable:ZoneUserRemove.name)
   return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* ZoneUserLogout::release_name() {
-  // @@protoc_insertion_point(field_release:ZoneUserLogout.name)
+inline ::std::string* ZoneUserRemove::release_name() {
+  // @@protoc_insertion_point(field_release:ZoneUserRemove.name)
   
   return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void ZoneUserLogout::set_allocated_name(::std::string* name) {
+inline void ZoneUserRemove::set_allocated_name(::std::string* name) {
   if (name != NULL) {
     
   } else {
     
   }
   name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:ZoneUserLogout.name)
+  // @@protoc_insertion_point(field_set_allocated:ZoneUserRemove.name)
 }
 
 // -------------------------------------------------------------------

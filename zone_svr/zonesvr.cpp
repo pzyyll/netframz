@@ -38,18 +38,18 @@ void ZoneSvr::ProcessCmd(proto::Cmd &cmd, const unsigned long cid) {
 void ZoneSvr::CloseConn(unsigned long cid) {
     BaseServer::CloseConn(cid);
 
-    //Send Logout info to other online users
-    ZoneUserLogout logout_info;
+    //Send Leave info to other online users
+    ZoneUserRemove leave_info;
     Player *player = player_mng_.GetPlayerByCid(cid);
     if (player) {
-        logout_info.set_name(player->name());
+        leave_info.set_name(player->name());
 
         std::vector<Player *> vec_players;
         GetOnlinePlayers(vec_players);
 
         for (unsigned int i = 0; i < vec_players.size(); ++i) {
-            SendToClient(logout_info,
-                         MsgCmd::ZONE_USER_LOGOUT,
+            SendToClient(leave_info,
+                         MsgCmd::ZONE_USER_REMOVE,
                          vec_players[i]->conn_id());
         }
 
@@ -137,9 +137,6 @@ void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long ci
         GetOnlinePlayers(vec_players);
 
         SynPlayerPos(*player, vec_players);
-
-        //FillZoneStat(*rsp.mutable_zone_stat(), vec_players);
-
     } while (false);
 
     rsp.set_ret(ret);
@@ -248,6 +245,7 @@ void ZoneSvr::SendToClient(const ::google::protobuf::Message &msg,
 
 int ZoneSvr::Parse(::google::protobuf::Message &msg, const std::string &buff) {
     log_debug("Buff|%u", (unsigned)buff.size());
+
     if (!msg.ParseFromString(buff)) {
         log_warn("Decode msg fail|%s", msg.GetTypeName().c_str());
         return MsgRet::FAIL;
