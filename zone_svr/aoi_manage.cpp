@@ -119,7 +119,7 @@ void AOIManage::UpdatePos(const unsigned long id,
     CalcGridSet(ovec2, oset);
     CalcGridSet(nvec2, nset);
 
-    set_difference(oset, nset, diff_set);
+    set_diff(oset, nset, diff_set);
 
     GetUserIdsFromGrid(diff_set, remove_ids);
     GetUserIdsFromGrid(nset, interest_ids);
