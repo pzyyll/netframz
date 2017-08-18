@@ -9,6 +9,9 @@
 #include <algorithm>
 #include <list>
 #include <vector>
+#include <set>
+#include <map>
+#include <cmath>
 
 struct Vec2 {
     Vec2(int xt = 0, int yt = 0) : x(xt), y(yt) { }
@@ -37,20 +40,20 @@ struct Pos {
     int y;
 };
 
-class Object {
+struct Object {
     unsigned long id;
-    Pos last_pos;
     Pos pos;
 };
 
-class AOIEntry {
+struct AOIEntry {
     std::list<Object *> obj_list;
 };
 
 class AOIManage {
 public:
-    const static unsigned int kMaxX = 10;
-    const static unsigned int kMaxY = 10;
+    const static unsigned int kMax = 10;
+    const static unsigned int kMaxWidth = 20;
+    const static unsigned int kMaxHeight = 20;
 
     typedef std::map<unsigned long, Object *> Id2ObjMap;
 public:
@@ -58,17 +61,32 @@ public:
 
     ~AOIManage();
 
-    void AddPos(unsigned long id, const Pos &pos);
+    int AddPos(const unsigned long id,
+               const Pos &pos,
+               std::vector<unsigned long> &interest_ids);
 
     void DelPos(unsigned long id, std::vector<unsigned long> &remove_ids);
 
-    void UpdataPos(unsigned long id, const Pos &pos, std::vector<unsigned long> &remove_ids, std::vector<unsigned long> &interest_ids);
-
-    //todo
+    void UpdatePos(const unsigned long id,
+                   const Pos &pos,
+                   std::vector<unsigned long> &remove_ids,
+                   std::vector<unsigned long> &interest_ids);
 
 private:
-    AOIEntry vec2map[kMaxX][kMaxY];
-    Id2ObjMap id2obj_map;
+    void CalcGridSet(const Vec2 &vec2, std::set<Vec2> &vec2_set);
+
+    bool CheckVec2(const Vec2 &vec2);
+
+    Object *FindObj(const unsigned long id);
+
+    void GetUserIdsFromGrid(const std::set<Vec2> &vec2_set,
+                            std::vector<unsigned long> &ids);
+
+    void GetInterestUserIds(const Vec2 &vec2, std::vector<unsigned long> &ids);
+
+private:
+    AOIEntry vec2map_[kMax][kMax];
+    Id2ObjMap id2obj_map_;
 };
 
 #endif //NF_ZONESVR_AOI_H

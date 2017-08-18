@@ -36,6 +36,7 @@ set(SOURCE_FILES
         zonesvr.cpp
         player.cpp
         player_manage.cpp
+        aoi_manage.cpp
         )
 
 set(PROTO_FILES proto/zonesvr.pb.cc)
