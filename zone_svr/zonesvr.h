@@ -8,6 +8,7 @@
 #include "server.h"
 #include "player_manage.h"
 #include "proto/zonesvr.pb.h"
+#include "aoi_manage.h"
 
 class ZoneSvr : public BaseServer {
 public:
@@ -29,6 +30,8 @@ protected:
 
     void SynPlayerPos(Player &player, const std::vector<Player *> &vec_players);
 
+    void SynPlayerLeave(Player &player, const std::vector<Player *> &players);
+
     void FillZoneStat(ZoneStat &stat, const std::vector<Player *> &vec_players);
 
     //todo AOI
@@ -41,6 +44,7 @@ protected:
 
 private:
     PlayerManage player_mng_;
+    AOIManage aoi_manage_;
 };
 
 #endif //NF_ZONESVR_H

@@ -57,6 +57,15 @@ Player *PlayerManage::GetPlayerByCid(const unsigned long cid) {
     return NULL;
 }
 
+void PlayerManage::GetPlayersByCid(std::vector<Player *> &players,
+                                   const std::vector<unsigned long> &cids) {
+    for (unsigned int i = 0; i < cids.size(); ++i) {
+        Player *player = GetPlayerByCid(cids[i]);
+        if (player)
+            players.push_back(player);
+    }
+}
+
 void PlayerManage::DelPlayerByCid(const unsigned long cid) {
     IdMapItr finditr = cid_map_.find(cid);
     if (finditr != cid_map_.end())

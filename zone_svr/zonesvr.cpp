@@ -39,19 +39,15 @@ void ZoneSvr::CloseConn(unsigned long cid) {
     BaseServer::CloseConn(cid);
 
     //Send Leave info to other online users
-    ZoneUserRemove leave_info;
     Player *player = player_mng_.GetPlayerByCid(cid);
     if (player) {
-        leave_info.set_name(player->name());
+        std::vector<unsigned long> noti_ids;
+        aoi_manage_.DelPos(cid, noti_ids);
 
-        std::vector<Player *> vec_players;
-        GetOnlinePlayers(vec_players);
+        std::vector<Player *> noti_players;
+        player_mng_.GetPlayersByCid(noti_players, noti_ids);
 
-        for (unsigned int i = 0; i < vec_players.size(); ++i) {
-            SendToClient(leave_info,
-                         MsgCmd::ZONE_USER_REMOVE,
-                         vec_players[i]->conn_id());
-        }
+        SynPlayerLeave(*player, noti_players);
 
         player_mng_.DelPlayerByCid(cid);
     }
@@ -79,13 +75,17 @@ void ZoneSvr::ProcessLogin(const std::string &buff, const unsigned long cid) {
             break;
         }
 
-        std::vector<Player *> vec_players;
+        std::vector<unsigned long> interest_ids;
+        aoi_manage_.AddPos(cid,
+                           Pos(player->point().x, player->point().y),
+                           interest_ids);
 
-        GetOnlinePlayers(vec_players);
+        std::vector<Player *> inter_players;
+        player_mng_.GetPlayersByCid(inter_players, interest_ids);
 
-        SynPlayerPos(*player, vec_players);
+        SynPlayerPos(*player, inter_players);
 
-        FillZoneStat(*rsp.mutable_zone_stat(), vec_players);
+        FillZoneStat(*rsp.mutable_zone_stat(), inter_players);
 
     } while (false);
 
@@ -132,11 +132,19 @@ void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long ci
         player->set_last_point(player->point());
         player->set_point(Point(nx, ny));
 
-        std::vector<Player *> vec_players;
+        std::vector<unsigned long> rm_ids, inter_ids;
+        aoi_manage_.UpdatePos(cid, Pos(nx, ny), rm_ids, inter_ids);
 
-        GetOnlinePlayers(vec_players);
+        std::vector<Player *> notify_rms, notify_inters;
 
-        SynPlayerPos(*player, vec_players);
+        player_mng_.GetPlayersByCid(notify_rms, rm_ids);
+        player_mng_.GetPlayersByCid(notify_inters, inter_ids);
+
+        SynPlayerLeave(*player, notify_rms);
+        SynPlayerPos(*player, notify_inters);
+
+        FillZoneStat(*rsp.mutable_unshow_stat(), notify_rms);
+        FillZoneStat(*rsp.mutable_show_stat(), notify_inters);
     } while (false);
 
     rsp.set_ret(ret);
@@ -213,6 +221,18 @@ void ZoneSvr::SynPlayerPos(Player &player, const std::vector<Player *> &vec_play
         assert(vec_players[i]);
         if (vec_players[i]->name() != player.name())
             SendToClient(syn, MsgCmd::ZONE_SYN, vec_players[i]->conn_id());
+    }
+}
+
+void ZoneSvr::SynPlayerLeave(Player &player,
+                             const std::vector<Player *> &players) {
+    ZoneUserRemove leave_info;
+    leave_info.set_name(player.name());
+
+    for (unsigned int i = 0; i < players.size(); ++i) {
+        SendToClient(leave_info,
+                     MsgCmd::ZONE_USER_REMOVE,
+                     players[i]->conn_id());
     }
 }
 

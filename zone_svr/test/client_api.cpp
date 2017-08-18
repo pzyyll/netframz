@@ -288,9 +288,14 @@ int ProcessZoneSynRsp(const std::string &data) {
     }
 
     //persions_map.clear();
-    for (int i = 0; i < rsp.zone_stat().persion_list_size(); ++i) {
-        const Persion &persion = rsp.zone_stat().persion_list(i);
+    for (int i = 0; i < rsp.show_stat().persion_list_size(); ++i) {
+        const Persion &persion = rsp.show_stat().persion_list(i);
         persions_map[persion.name()] = persion;
+    }
+
+    for (int i = 0; i < rsp.unshow_stat().persion_list_size(); ++i) {
+        const Persion &persion = rsp.unshow_stat().persion_list(i);
+        persions_map.erase(persion.name());
     }
 
     FreshShow();
@@ -418,6 +423,8 @@ int Login() {
     persion.set_name(name);
     persion.mutable_point()->set_x(0);
     persion.mutable_point()->set_y(0);
+
+    persions_map[persion.name()] = persion;
 
     LoginReq req;
     req.set_name(name);

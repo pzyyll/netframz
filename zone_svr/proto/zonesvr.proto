@@ -57,7 +57,8 @@ message ZoneSynReq {
 message ZoneSynRsp {
     int32 ret = 1;
     bytes err_msg = 2;
-    ZoneStat zone_stat = 3;
+    ZoneStat show_stat = 3;
+    ZoneStat unshow_stat = 4;
 }
 
 // ZONE_SYN = 0X2003

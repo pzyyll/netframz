@@ -988,14 +988,23 @@ class ZoneSynRsp : public ::google::protobuf::Message /* @@protoc_insertion_poin
   ::std::string* release_err_msg();
   void set_allocated_err_msg(::std::string* err_msg);
 
-  // .ZoneStat zone_stat = 3;
-  bool has_zone_stat() const;
-  void clear_zone_stat();
-  static const int kZoneStatFieldNumber = 3;
-  const ::ZoneStat& zone_stat() const;
-  ::ZoneStat* mutable_zone_stat();
-  ::ZoneStat* release_zone_stat();
-  void set_allocated_zone_stat(::ZoneStat* zone_stat);
+  // .ZoneStat show_stat = 3;
+  bool has_show_stat() const;
+  void clear_show_stat();
+  static const int kShowStatFieldNumber = 3;
+  const ::ZoneStat& show_stat() const;
+  ::ZoneStat* mutable_show_stat();
+  ::ZoneStat* release_show_stat();
+  void set_allocated_show_stat(::ZoneStat* show_stat);
+
+  // .ZoneStat unshow_stat = 4;
+  bool has_unshow_stat() const;
+  void clear_unshow_stat();
+  static const int kUnshowStatFieldNumber = 4;
+  const ::ZoneStat& unshow_stat() const;
+  ::ZoneStat* mutable_unshow_stat();
+  ::ZoneStat* release_unshow_stat();
+  void set_allocated_unshow_stat(::ZoneStat* unshow_stat);
 
   // int32 ret = 1;
   void clear_ret();
@@ -1008,7 +1017,8 @@ class ZoneSynRsp : public ::google::protobuf::Message /* @@protoc_insertion_poin
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr err_msg_;
-  ::ZoneStat* zone_stat_;
+  ::ZoneStat* show_stat_;
+  ::ZoneStat* unshow_stat_;
   ::google::protobuf::int32 ret_;
   mutable int _cached_size_;
   friend struct protobuf_zonesvr_2eproto::TableStruct;
@@ -1956,43 +1966,82 @@ inline void ZoneSynRsp::set_allocated_err_msg(::std::string* err_msg) {
   // @@protoc_insertion_point(field_set_allocated:ZoneSynRsp.err_msg)
 }
 
-// .ZoneStat zone_stat = 3;
-inline bool ZoneSynRsp::has_zone_stat() const {
-  return this != internal_default_instance() && zone_stat_ != NULL;
+// .ZoneStat show_stat = 3;
+inline bool ZoneSynRsp::has_show_stat() const {
+  return this != internal_default_instance() && show_stat_ != NULL;
 }
-inline void ZoneSynRsp::clear_zone_stat() {
-  if (GetArenaNoVirtual() == NULL && zone_stat_ != NULL) delete zone_stat_;
-  zone_stat_ = NULL;
+inline void ZoneSynRsp::clear_show_stat() {
+  if (GetArenaNoVirtual() == NULL && show_stat_ != NULL) delete show_stat_;
+  show_stat_ = NULL;
 }
-inline const ::ZoneStat& ZoneSynRsp::zone_stat() const {
-  // @@protoc_insertion_point(field_get:ZoneSynRsp.zone_stat)
-  return zone_stat_ != NULL ? *zone_stat_
+inline const ::ZoneStat& ZoneSynRsp::show_stat() const {
+  // @@protoc_insertion_point(field_get:ZoneSynRsp.show_stat)
+  return show_stat_ != NULL ? *show_stat_
                          : *::ZoneStat::internal_default_instance();
 }
-inline ::ZoneStat* ZoneSynRsp::mutable_zone_stat() {
+inline ::ZoneStat* ZoneSynRsp::mutable_show_stat() {
   
-  if (zone_stat_ == NULL) {
-    zone_stat_ = new ::ZoneStat;
+  if (show_stat_ == NULL) {
+    show_stat_ = new ::ZoneStat;
   }
-  // @@protoc_insertion_point(field_mutable:ZoneSynRsp.zone_stat)
-  return zone_stat_;
+  // @@protoc_insertion_point(field_mutable:ZoneSynRsp.show_stat)
+  return show_stat_;
 }
-inline ::ZoneStat* ZoneSynRsp::release_zone_stat() {
-  // @@protoc_insertion_point(field_release:ZoneSynRsp.zone_stat)
+inline ::ZoneStat* ZoneSynRsp::release_show_stat() {
+  // @@protoc_insertion_point(field_release:ZoneSynRsp.show_stat)
   
-  ::ZoneStat* temp = zone_stat_;
-  zone_stat_ = NULL;
+  ::ZoneStat* temp = show_stat_;
+  show_stat_ = NULL;
   return temp;
 }
-inline void ZoneSynRsp::set_allocated_zone_stat(::ZoneStat* zone_stat) {
-  delete zone_stat_;
-  zone_stat_ = zone_stat;
-  if (zone_stat) {
+inline void ZoneSynRsp::set_allocated_show_stat(::ZoneStat* show_stat) {
+  delete show_stat_;
+  show_stat_ = show_stat;
+  if (show_stat) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:ZoneSynRsp.zone_stat)
+  // @@protoc_insertion_point(field_set_allocated:ZoneSynRsp.show_stat)
+}
+
+// .ZoneStat unshow_stat = 4;
+inline bool ZoneSynRsp::has_unshow_stat() const {
+  return this != internal_default_instance() && unshow_stat_ != NULL;
+}
+inline void ZoneSynRsp::clear_unshow_stat() {
+  if (GetArenaNoVirtual() == NULL && unshow_stat_ != NULL) delete unshow_stat_;
+  unshow_stat_ = NULL;
+}
+inline const ::ZoneStat& ZoneSynRsp::unshow_stat() const {
+  // @@protoc_insertion_point(field_get:ZoneSynRsp.unshow_stat)
+  return unshow_stat_ != NULL ? *unshow_stat_
+                         : *::ZoneStat::internal_default_instance();
+}
+inline ::ZoneStat* ZoneSynRsp::mutable_unshow_stat() {
+  
+  if (unshow_stat_ == NULL) {
+    unshow_stat_ = new ::ZoneStat;
+  }
+  // @@protoc_insertion_point(field_mutable:ZoneSynRsp.unshow_stat)
+  return unshow_stat_;
+}
+inline ::ZoneStat* ZoneSynRsp::release_unshow_stat() {
+  // @@protoc_insertion_point(field_release:ZoneSynRsp.unshow_stat)
+  
+  ::ZoneStat* temp = unshow_stat_;
+  unshow_stat_ = NULL;
+  return temp;
+}
+inline void ZoneSynRsp::set_allocated_unshow_stat(::ZoneStat* unshow_stat) {
+  delete unshow_stat_;
+  unshow_stat_ = unshow_stat;
+  if (unshow_stat) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:ZoneSynRsp.unshow_stat)
 }
 
 // -------------------------------------------------------------------

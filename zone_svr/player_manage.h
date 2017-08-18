@@ -7,6 +7,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 #include "player.h"
 
@@ -30,6 +31,9 @@ public:
     void DelPlayer(const std::string &name);
 
     Player *GetPlayerByCid(const unsigned long cid);
+
+    void GetPlayersByCid(std::vector<Player *> &players,
+                         const std::vector<unsigned long> &cids);
 
     void DelPlayerByCid(const unsigned long cid);
 

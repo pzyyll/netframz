@@ -141,7 +141,8 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSynRsp, ret_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSynRsp, err_msg_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSynRsp, zone_stat_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSynRsp, show_stat_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSynRsp, unshow_stat_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSyn, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -188,11 +189,11 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] = {
   { 37, -1, sizeof(LoginRsp)},
   { 45, -1, sizeof(ZoneSynReq)},
   { 51, -1, sizeof(ZoneSynRsp)},
-  { 59, -1, sizeof(ZoneSyn)},
-  { 65, -1, sizeof(ZoneUserRemove)},
-  { 71, -1, sizeof(ChatReq)},
-  { 78, -1, sizeof(ChatRsp)},
-  { 85, -1, sizeof(ChatStat)},
+  { 60, -1, sizeof(ZoneSyn)},
+  { 66, -1, sizeof(ZoneUserRemove)},
+  { 72, -1, sizeof(ChatReq)},
+  { 79, -1, sizeof(ChatRsp)},
+  { 86, -1, sizeof(ChatStat)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -290,7 +291,9 @@ void TableStruct::InitDefaultsImpl() {
       ::ZoneStat::internal_default_instance());
   _ZoneSynReq_default_instance_.get_mutable()->persion_ = const_cast< ::Persion*>(
       ::Persion::internal_default_instance());
-  _ZoneSynRsp_default_instance_.get_mutable()->zone_stat_ = const_cast< ::ZoneStat*>(
+  _ZoneSynRsp_default_instance_.get_mutable()->show_stat_ = const_cast< ::ZoneStat*>(
+      ::ZoneStat::internal_default_instance());
+  _ZoneSynRsp_default_instance_.get_mutable()->unshow_stat_ = const_cast< ::ZoneStat*>(
       ::ZoneStat::internal_default_instance());
   _ZoneSyn_default_instance_.get_mutable()->zone_stat_ = const_cast< ::ZoneStat*>(
       ::ZoneStat::internal_default_instance());
@@ -319,18 +322,18 @@ void AddDescriptorsImpl() {
       "\030\n\010LoginReq\022\014\n\004name\030\001 \001(\014\"F\n\010LoginRsp\022\013\n"
       "\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\034\n\tzone_stat"
       "\030\003 \001(\0132\t.ZoneStat\"\'\n\nZoneSynReq\022\031\n\007persi"
-      "on\030\001 \001(\0132\010.Persion\"H\n\nZoneSynRsp\022\013\n\003ret\030"
-      "\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\034\n\tzone_stat\030\003 \001("
-      "\0132\t.ZoneStat\"\'\n\007ZoneSyn\022\034\n\tzone_stat\030\001 \001"
-      "(\0132\t.ZoneStat\"\036\n\016ZoneUserRemove\022\014\n\004name\030"
-      "\001 \001(\014\"(\n\007ChatReq\022\014\n\004name\030\001 \001(\014\022\017\n\007conten"
-      "t\030\002 \001(\014\"\'\n\007ChatRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_m"
-      "sg\030\002 \001(\014\"D\n\010ChatStat\022\031\n\007speaker\030\001 \001(\0132\010."
-      "Persion\022\017\n\007content\030\002 \001(\014\022\014\n\004time\030\003 \001(\rb\006"
-      "proto3"
+      "on\030\001 \001(\0132\010.Persion\"h\n\nZoneSynRsp\022\013\n\003ret\030"
+      "\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\034\n\tshow_stat\030\003 \001("
+      "\0132\t.ZoneStat\022\036\n\013unshow_stat\030\004 \001(\0132\t.Zone"
+      "Stat\"\'\n\007ZoneSyn\022\034\n\tzone_stat\030\001 \001(\0132\t.Zon"
+      "eStat\"\036\n\016ZoneUserRemove\022\014\n\004name\030\001 \001(\014\"(\n"
+      "\007ChatReq\022\014\n\004name\030\001 \001(\014\022\017\n\007content\030\002 \001(\014\""
+      "\'\n\007ChatRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014"
+      "\"D\n\010ChatStat\022\031\n\007speaker\030\001 \001(\0132\010.Persion\022"
+      "\017\n\007content\030\002 \001(\014\022\014\n\004time\030\003 \001(\rb\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 846);
+      descriptor, 878);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "zonesvr.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -2711,7 +2714,8 @@ void ZoneSynReq::set_allocated_persion(::Persion* persion) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ZoneSynRsp::kRetFieldNumber;
 const int ZoneSynRsp::kErrMsgFieldNumber;
-const int ZoneSynRsp::kZoneStatFieldNumber;
+const int ZoneSynRsp::kShowStatFieldNumber;
+const int ZoneSynRsp::kUnshowStatFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ZoneSynRsp::ZoneSynRsp()
@@ -2731,10 +2735,15 @@ ZoneSynRsp::ZoneSynRsp(const ZoneSynRsp& from)
   if (from.err_msg().size() > 0) {
     err_msg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.err_msg_);
   }
-  if (from.has_zone_stat()) {
-    zone_stat_ = new ::ZoneStat(*from.zone_stat_);
+  if (from.has_show_stat()) {
+    show_stat_ = new ::ZoneStat(*from.show_stat_);
   } else {
-    zone_stat_ = NULL;
+    show_stat_ = NULL;
+  }
+  if (from.has_unshow_stat()) {
+    unshow_stat_ = new ::ZoneStat(*from.unshow_stat_);
+  } else {
+    unshow_stat_ = NULL;
   }
   ret_ = from.ret_;
   // @@protoc_insertion_point(copy_constructor:ZoneSynRsp)
@@ -2742,9 +2751,9 @@ ZoneSynRsp::ZoneSynRsp(const ZoneSynRsp& from)
 
 void ZoneSynRsp::SharedCtor() {
   err_msg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&zone_stat_, 0, static_cast<size_t>(
+  ::memset(&show_stat_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&ret_) -
-      reinterpret_cast<char*>(&zone_stat_)) + sizeof(ret_));
+      reinterpret_cast<char*>(&show_stat_)) + sizeof(ret_));
   _cached_size_ = 0;
 }
 
@@ -2756,7 +2765,10 @@ ZoneSynRsp::~ZoneSynRsp() {
 void ZoneSynRsp::SharedDtor() {
   err_msg_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != internal_default_instance()) {
-    delete zone_stat_;
+    delete show_stat_;
+  }
+  if (this != internal_default_instance()) {
+    delete unshow_stat_;
   }
 }
 
@@ -2786,10 +2798,14 @@ ZoneSynRsp* ZoneSynRsp::New(::google::protobuf::Arena* arena) const {
 void ZoneSynRsp::Clear() {
 // @@protoc_insertion_point(message_clear_start:ZoneSynRsp)
   err_msg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (GetArenaNoVirtual() == NULL && zone_stat_ != NULL) {
-    delete zone_stat_;
+  if (GetArenaNoVirtual() == NULL && show_stat_ != NULL) {
+    delete show_stat_;
   }
-  zone_stat_ = NULL;
+  show_stat_ = NULL;
+  if (GetArenaNoVirtual() == NULL && unshow_stat_ != NULL) {
+    delete unshow_stat_;
+  }
+  unshow_stat_ = NULL;
   ret_ = 0;
 }
 
@@ -2829,12 +2845,24 @@ bool ZoneSynRsp::MergePartialFromCodedStream(
         break;
       }
 
-      // .ZoneStat zone_stat = 3;
+      // .ZoneStat show_stat = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(26u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_zone_stat()));
+               input, mutable_show_stat()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .ZoneStat unshow_stat = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_unshow_stat()));
         } else {
           goto handle_unusual;
         }
@@ -2879,10 +2907,16 @@ void ZoneSynRsp::SerializeWithCachedSizes(
       2, this->err_msg(), output);
   }
 
-  // .ZoneStat zone_stat = 3;
-  if (this->has_zone_stat()) {
+  // .ZoneStat show_stat = 3;
+  if (this->has_show_stat()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      3, *this->zone_stat_, output);
+      3, *this->show_stat_, output);
+  }
+
+  // .ZoneStat unshow_stat = 4;
+  if (this->has_unshow_stat()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      4, *this->unshow_stat_, output);
   }
 
   // @@protoc_insertion_point(serialize_end:ZoneSynRsp)
@@ -2907,11 +2941,18 @@ void ZoneSynRsp::SerializeWithCachedSizes(
         2, this->err_msg(), target);
   }
 
-  // .ZoneStat zone_stat = 3;
-  if (this->has_zone_stat()) {
+  // .ZoneStat show_stat = 3;
+  if (this->has_show_stat()) {
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageNoVirtualToArray(
-        3, *this->zone_stat_, deterministic, target);
+        3, *this->show_stat_, deterministic, target);
+  }
+
+  // .ZoneStat unshow_stat = 4;
+  if (this->has_unshow_stat()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageNoVirtualToArray(
+        4, *this->unshow_stat_, deterministic, target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:ZoneSynRsp)
@@ -2929,11 +2970,18 @@ size_t ZoneSynRsp::ByteSizeLong() const {
         this->err_msg());
   }
 
-  // .ZoneStat zone_stat = 3;
-  if (this->has_zone_stat()) {
+  // .ZoneStat show_stat = 3;
+  if (this->has_show_stat()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->zone_stat_);
+        *this->show_stat_);
+  }
+
+  // .ZoneStat unshow_stat = 4;
+  if (this->has_unshow_stat()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->unshow_stat_);
   }
 
   // int32 ret = 1;
@@ -2976,8 +3024,11 @@ void ZoneSynRsp::MergeFrom(const ZoneSynRsp& from) {
 
     err_msg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.err_msg_);
   }
-  if (from.has_zone_stat()) {
-    mutable_zone_stat()->::ZoneStat::MergeFrom(from.zone_stat());
+  if (from.has_show_stat()) {
+    mutable_show_stat()->::ZoneStat::MergeFrom(from.show_stat());
+  }
+  if (from.has_unshow_stat()) {
+    mutable_unshow_stat()->::ZoneStat::MergeFrom(from.unshow_stat());
   }
   if (from.ret() != 0) {
     set_ret(from.ret());
@@ -3008,7 +3059,8 @@ void ZoneSynRsp::Swap(ZoneSynRsp* other) {
 }
 void ZoneSynRsp::InternalSwap(ZoneSynRsp* other) {
   err_msg_.Swap(&other->err_msg_);
-  std::swap(zone_stat_, other->zone_stat_);
+  std::swap(show_stat_, other->show_stat_);
+  std::swap(unshow_stat_, other->unshow_stat_);
   std::swap(ret_, other->ret_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -3088,43 +3140,82 @@ void ZoneSynRsp::set_allocated_err_msg(::std::string* err_msg) {
   // @@protoc_insertion_point(field_set_allocated:ZoneSynRsp.err_msg)
 }
 
-// .ZoneStat zone_stat = 3;
-bool ZoneSynRsp::has_zone_stat() const {
-  return this != internal_default_instance() && zone_stat_ != NULL;
+// .ZoneStat show_stat = 3;
+bool ZoneSynRsp::has_show_stat() const {
+  return this != internal_default_instance() && show_stat_ != NULL;
 }
-void ZoneSynRsp::clear_zone_stat() {
-  if (GetArenaNoVirtual() == NULL && zone_stat_ != NULL) delete zone_stat_;
-  zone_stat_ = NULL;
+void ZoneSynRsp::clear_show_stat() {
+  if (GetArenaNoVirtual() == NULL && show_stat_ != NULL) delete show_stat_;
+  show_stat_ = NULL;
 }
-const ::ZoneStat& ZoneSynRsp::zone_stat() const {
-  // @@protoc_insertion_point(field_get:ZoneSynRsp.zone_stat)
-  return zone_stat_ != NULL ? *zone_stat_
+const ::ZoneStat& ZoneSynRsp::show_stat() const {
+  // @@protoc_insertion_point(field_get:ZoneSynRsp.show_stat)
+  return show_stat_ != NULL ? *show_stat_
                          : *::ZoneStat::internal_default_instance();
 }
-::ZoneStat* ZoneSynRsp::mutable_zone_stat() {
+::ZoneStat* ZoneSynRsp::mutable_show_stat() {
   
-  if (zone_stat_ == NULL) {
-    zone_stat_ = new ::ZoneStat;
+  if (show_stat_ == NULL) {
+    show_stat_ = new ::ZoneStat;
   }
-  // @@protoc_insertion_point(field_mutable:ZoneSynRsp.zone_stat)
-  return zone_stat_;
+  // @@protoc_insertion_point(field_mutable:ZoneSynRsp.show_stat)
+  return show_stat_;
 }
-::ZoneStat* ZoneSynRsp::release_zone_stat() {
-  // @@protoc_insertion_point(field_release:ZoneSynRsp.zone_stat)
+::ZoneStat* ZoneSynRsp::release_show_stat() {
+  // @@protoc_insertion_point(field_release:ZoneSynRsp.show_stat)
   
-  ::ZoneStat* temp = zone_stat_;
-  zone_stat_ = NULL;
+  ::ZoneStat* temp = show_stat_;
+  show_stat_ = NULL;
   return temp;
 }
-void ZoneSynRsp::set_allocated_zone_stat(::ZoneStat* zone_stat) {
-  delete zone_stat_;
-  zone_stat_ = zone_stat;
-  if (zone_stat) {
+void ZoneSynRsp::set_allocated_show_stat(::ZoneStat* show_stat) {
+  delete show_stat_;
+  show_stat_ = show_stat;
+  if (show_stat) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:ZoneSynRsp.zone_stat)
+  // @@protoc_insertion_point(field_set_allocated:ZoneSynRsp.show_stat)
+}
+
+// .ZoneStat unshow_stat = 4;
+bool ZoneSynRsp::has_unshow_stat() const {
+  return this != internal_default_instance() && unshow_stat_ != NULL;
+}
+void ZoneSynRsp::clear_unshow_stat() {
+  if (GetArenaNoVirtual() == NULL && unshow_stat_ != NULL) delete unshow_stat_;
+  unshow_stat_ = NULL;
+}
+const ::ZoneStat& ZoneSynRsp::unshow_stat() const {
+  // @@protoc_insertion_point(field_get:ZoneSynRsp.unshow_stat)
+  return unshow_stat_ != NULL ? *unshow_stat_
+                         : *::ZoneStat::internal_default_instance();
+}
+::ZoneStat* ZoneSynRsp::mutable_unshow_stat() {
+  
+  if (unshow_stat_ == NULL) {
+    unshow_stat_ = new ::ZoneStat;
+  }
+  // @@protoc_insertion_point(field_mutable:ZoneSynRsp.unshow_stat)
+  return unshow_stat_;
+}
+::ZoneStat* ZoneSynRsp::release_unshow_stat() {
+  // @@protoc_insertion_point(field_release:ZoneSynRsp.unshow_stat)
+  
+  ::ZoneStat* temp = unshow_stat_;
+  unshow_stat_ = NULL;
+  return temp;
+}
+void ZoneSynRsp::set_allocated_unshow_stat(::ZoneStat* unshow_stat) {
+  delete unshow_stat_;
+  unshow_stat_ = unshow_stat;
+  if (unshow_stat) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:ZoneSynRsp.unshow_stat)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
