@@ -14,6 +14,14 @@ inline Vec2 CalcVec2(const Pos &pos) {
     return vec2;
 }
 
+inline void set_diff(const std::set<Vec2> &set1, const std::set<Vec2> &set2, std::set<Vec2> &res) {
+    for (std::set<Vec2>::iterator itr = set1.begin(); itr != set1.end(); ++itr) {
+        std::set<Vec2>::iterator find_itr = set2.find(*itr);
+        if (find_itr == set2.end())
+            res.insert(*itr);
+    }
+}
+
 inline bool EqualVec2(const Vec2 &a, const Vec2 &b) {
     return (a.x == b.x && a.y == b.y);
 }
@@ -111,9 +119,7 @@ void AOIManage::UpdatePos(const unsigned long id,
     CalcGridSet(ovec2, oset);
     CalcGridSet(nvec2, nset);
 
-    std::set_difference(oset.begin(), oset.end(),
-                        nset.begin(), nset.begin(),
-                        std::inserter(diff_set, diff_set.begin()));
+    set_difference(oset, nset, diff_set);
 
     GetUserIdsFromGrid(diff_set, remove_ids);
     GetUserIdsFromGrid(nset, interest_ids);
