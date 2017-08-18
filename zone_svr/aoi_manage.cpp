@@ -152,7 +152,7 @@ void AOIManage::CalcGridSet(const Vec2 &vec2, std::set<Vec2> &vec2_set) {
 bool AOIManage::CheckVec2(const Vec2 &vec2) {
     if (vec2.x < 0 || vec2.y < 0)
         return false;
-    if ((unsigned)vec2.x > kMax || (unsigned)vec2.y > kMax)
+    if ((unsigned)vec2.x >= kMax || (unsigned)vec2.y >= kMax)
         return false;
 
     return true;
