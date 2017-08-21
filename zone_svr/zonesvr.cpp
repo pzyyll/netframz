@@ -17,6 +17,15 @@ ZoneSvr::~ZoneSvr() {
 
 }
 
+int ZoneSvr::Init(int argc, char **argv) {
+    if (BaseServer::Init(argc, argv) < 0)
+        return -1;
+
+    aoi_manage_.Init();
+
+    return 0;
+}
+
 void ZoneSvr::ProcessCmd(proto::Cmd &cmd, const unsigned long cid) {
     log_debug("ProcessCmd");
     switch (cmd.GetType()) {

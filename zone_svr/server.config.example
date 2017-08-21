@@ -10,10 +10,10 @@ port 23399
 # tick 100
 
 # client time out (ms)
-timeout 60000
+timeout 600000
 
 # daemon default 0
 # daemon 0
 
 # log_level default 2
-# log_level 4
+log_level 4

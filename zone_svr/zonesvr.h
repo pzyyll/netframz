@@ -15,6 +15,8 @@ public:
     ZoneSvr();
     ~ZoneSvr();
 
+    virtual int Init(int argc, char **argv);
+
 protected:
     virtual void ProcessCmd(proto::Cmd &cmd, const unsigned long cid) /*override*/;
 

@@ -46,7 +46,7 @@ public:
 
     virtual ~BaseServer();
 
-    int Init(int argc, char **argv);
+    virtual int Init(int argc, char **argv);
 
     void Run();
 
