@@ -2,8 +2,6 @@
 // @Created by CaiZhili on 2017/7/6.
 // @bref Timer implement by min-heap
 //       这个定时器只提供添加和获取
-//       定时器精度定为 100 ms 吧，虽然可以精确到 1 us,
-//       但是实际情况根据内核精度确定，100 ms 的话基本都可以确定
 //
 
 #ifndef NETFRAMZ_NF_EVENT_TIMER_HEAP_H

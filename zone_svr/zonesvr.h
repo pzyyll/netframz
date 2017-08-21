@@ -34,8 +34,6 @@ protected:
 
     void FillZoneStat(ZoneStat &stat, const std::vector<Player *> &vec_players);
 
-    //todo AOI
-
     void SendToClient(const ::google::protobuf::Message &msg,
                       const unsigned int type,
                       const unsigned long cid);

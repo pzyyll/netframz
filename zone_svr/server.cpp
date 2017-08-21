@@ -204,8 +204,6 @@ void BaseServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
         return;
     }
 
-    log_debug("rv buff size %lu", lenth);
-
     //Parse recv buf
     Parse(*conn);
 }

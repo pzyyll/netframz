@@ -1,8 +1,6 @@
 //
 // @Created by CaiZhili on 2017/7/6.
 // @bref Timer implement by timing wheel linux kernel 2.6 last
-//       定时器精度定为 100 ms
-//       但是实际情况根据内核精度确定，100 ms 的话基本都可以确定
 //
 
 #ifndef NETFRAMZ_NF_EVENT_TIMER_WHEEL_H
