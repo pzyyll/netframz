@@ -79,17 +79,14 @@ int AOIManage::AddPos(const unsigned long id,
     if (FindObj(id))
         return -1;
 
-   //获取网格vec2周围的网格集合;
-    std::set<Vec2> vec2_set;
-    CalcGridSet(vec2, vec2_set);
-    GetUserIdsFromGrid(vec2_set, interest_ids);
+    GetInterestUserIds(vec2, interest_ids);
 
     Object *obj = MakeObject(id, pos);
     id2obj_map_[id] = obj;
     AOIEntry &entry = grids_[IndexOf(vec2)];
     entry.obj_list.push_back(obj);
 
-     return 0;
+    return 0;
 }
 
 void AOIManage::DelPos(unsigned long id,
@@ -104,7 +101,7 @@ void AOIManage::DelPos(unsigned long id,
     Vec2 v = CalcVec2(obj->pos);
     AOIEntry &entry = grids_[IndexOf(v)];
 
-    auto itr = find(entry.obj_list.begin(), entry.obj_list.end(), obj); //entry.obj_list.find(obj);
+    auto itr = find(entry.obj_list.begin(), entry.obj_list.end(), obj);
     if (itr != entry.obj_list.end())
         entry.obj_list.erase(itr);
     id2obj_map_.erase(id);
@@ -149,6 +146,7 @@ void AOIManage::UpdatePos(const unsigned long id,
     CalcGridSet(ovec2, oset);
     CalcGridSet(nvec2, nset);
 
+    //diff_set = oset - nset;
     set_diff(oset, nset, diff_set);
 
     GetUserIdsFromGrid(diff_set, remove_ids);
