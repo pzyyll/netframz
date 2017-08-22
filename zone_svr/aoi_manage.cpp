@@ -3,6 +3,7 @@
 // @Brief
 //
 #include <cassert>
+#include <cstdio>
 
 #include "aoi_manage.h"
 
@@ -35,23 +36,23 @@ AOIManage::AOIManage() :
     map_width_(0), map_height_(0),
     grid_width_(0), grid_height_(0),
     is_init_(0) {
-
+    err_msg_[0] = '\0';
 }
 
 AOIManage::~AOIManage() {
-    //todo release
     if (grids_) {
         delete [] grids_;
         for (auto itr: id2obj_map_)
             delete (itr.second);
         is_init_ = 0;
+        grids_ = NULL;
     }
 }
 
 int AOIManage::Init(unsigned int map_width, unsigned int map_height,
                     unsigned int grid_width, unsigned int grid_height) {
     map_width_ = map_width;
-    map_height_ = map_width;
+    map_height_ = map_height;
     grid_width_ = grid_width;
     grid_height_ = grid_height;
 
@@ -68,16 +69,22 @@ int AOIManage::Init(unsigned int map_width, unsigned int map_height,
 int AOIManage::AddPos(const unsigned long id,
                       const Pos &pos,
                       std::vector<unsigned long> &interest_ids) {
-    if (!is_init_)
-        return -1;
+    if (!is_init_) {
+        snprintf(err_msg_, sizeof(err_msg_), "Not init.");
+        return FAIL;
+    }
 
     Vec2 vec2 = CalcVec2(pos);
 
-    if (!CheckVec2(vec2))
-        return -1;
+    if (!CheckVec2(vec2)) {
+        snprintf(err_msg_, sizeof(err_msg_), "Pos overstep.");
+        return FAIL;
+    }
 
-    if (FindObj(id))
-        return -1;
+    if (FindObj(id)) {
+        snprintf(err_msg_, sizeof(err_msg_), "Id already exist.");
+        return FAIL;
+    }
 
     GetInterestUserIds(vec2, interest_ids);
 
@@ -86,7 +93,7 @@ int AOIManage::AddPos(const unsigned long id,
     AOIEntry &entry = grids_[IndexOf(vec2)];
     entry.obj_list.push_back(obj);
 
-    return 0;
+    return SUCCESS;
 }
 
 void AOIManage::DelPos(unsigned long id,
@@ -155,6 +162,10 @@ void AOIManage::UpdatePos(const unsigned long id,
     obj->pos = pos;
     AOIEntry &nentry = grids_[IndexOf(nvec2)];
     nentry.obj_list.push_back(obj);
+}
+
+std::string AOIManage::GetErrMsg() {
+    return std::string(err_msg_);
 }
 
 Vec2 AOIManage::CalcVec2(const Pos &pos) {

@@ -11,6 +11,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <string>
 #include <cmath>
 
 struct Vec2 {
@@ -55,8 +56,14 @@ public:
     const static int kDeafultMapHeight = 20;
     const static int kDeafultGridWidth = 8;
     const static int kDeafultGridHeight = 8;
+    const static unsigned int kErrMsgMaxLen = 256;
 
     typedef std::map<unsigned long, Object *> Id2ObjMap;
+
+    enum Ret {
+        FAIL = -1,
+        SUCCESS = 0,
+    };
 
 public:
     AOIManage();
@@ -78,6 +85,8 @@ public:
                    const Pos &pos,
                    std::vector<unsigned long> &remove_ids,
                    std::vector<unsigned long> &interest_ids);
+
+    std::string GetErrMsg();
 
 private:
     Vec2 CalcVec2(const Pos &pos);
@@ -107,6 +116,8 @@ private:
     unsigned int grid_height_;
 
     int is_init_;
+
+    char err_msg_[kErrMsgMaxLen];
 };
 
 #endif //NF_ZONESVR_AOI_H

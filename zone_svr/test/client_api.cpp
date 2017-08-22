@@ -362,7 +362,7 @@ int ProcessChatStat(const std::string &data) {
 
     std::string time_str(ctime(&speaker_time));
 
-    std::string show_str = time_str + " " + speaker_name + " " + content;
+    std::string show_str = time_str + speaker_name + ":  " + content;
     chat_msgs.push_back(show_str);
 
     FreshShow();
@@ -374,7 +374,7 @@ void FreshShow() {
     int matrix[MAX_ROW][MAX_COL] = {0};
 
     std::cout << "============================================================" << std::endl;
-    std::cout << "Onlien Players: " << std::endl;
+    std::cout << "Visible Players: " << std::endl;
     auto itr = persions_map.begin();
     for ( ; itr != persions_map.end(); ++itr) {
         int flag = 2;
