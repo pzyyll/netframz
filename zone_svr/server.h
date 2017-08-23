@@ -22,6 +22,7 @@
 #include <netinet/tcp.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <sys/resource.h>
 
 #include "nf_event.h"
 #include "nf_event_iotask.h"
@@ -77,6 +78,8 @@ protected:
     int MakeNonblock(int fd);
 
     int SetCliOpt(int fd);
+
+    int SetMaxFds(int max_fds);
 
     ConnectorPtr CreateConn(int fd);
 

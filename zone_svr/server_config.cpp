@@ -12,6 +12,7 @@ int ServerConfig::Init(const char *cfg_file) {
     cfg.GetInt(tick, "tick", 100);
     cfg.GetInt(timeout, "timeout", 30000);
     cfg.GetInt(daemon, "daemon", 0);
+    cfg.GetInt(max_fds, "max_fds", 65536);
     cfg.GetInt(log_level, "log_level", 2);
 
     return 0;

@@ -15,5 +15,8 @@ timeout 600000
 # daemon default 0
 # daemon 0
 
+# the maximum fds
+max_fds 65536
+
 # log_level default 2
 log_level 4

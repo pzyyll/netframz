@@ -29,7 +29,8 @@ static void TermSigHandler(int sig) {
              << endl;
     }
 #endif //MEM_CHECK
-
+    cout << endl;
+    cout << "bye" << endl;
 }
 
 int main(int argc, char *argv[]) {

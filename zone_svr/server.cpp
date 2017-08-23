@@ -45,6 +45,10 @@ int BaseServer::Init(int argc, char **argv) {
         return FAIL;
     }
 
+    if (SetMaxFds(svr_cfg::get_const_instance().max_fds) < 0) {
+        return FAIL;
+    }
+
     if (StartListen() < 0) {
         return FAIL;
     }
@@ -241,6 +245,7 @@ void BaseServer::ProcessCmd(Cmd &cmd, const unsigned long cid) {
 }
 
 void BaseServer::Tick(unsigned long now) {
+    UNUSE(now);
     //log_debug("Tick: %lu", now);
     //Do tick task;
 }
@@ -403,6 +408,32 @@ int BaseServer::SetCliOpt(int fd) {
         log_warn("setsockopt to forbid Nagle's algorithm. %s", strerror(errno));
         return FAIL;
     }
+
+    return SUCCESS;
+}
+
+int BaseServer::SetMaxFds(int max_fds) {
+    log_debug("SetMaxFds max_fds|%d", max_fds);
+
+    if (max_fds < 0) {
+        log_err("SetMaxFds num invaild|%d", max_fds);
+        return FAIL;
+    }
+
+    struct rlimit maxfdrl;
+    maxfdrl.rlim_cur = max_fds;
+    maxfdrl.rlim_max = max_fds;
+
+    if (setrlimit(RLIMIT_NOFILE, &maxfdrl) < 0) {
+        log_err("set rlimit err|%s", strerror(errno));
+        return FAIL;
+    }
+
+    if (getrlimit(RLIMIT_NOFILE, &maxfdrl) < 0) {
+        log_err("get rlimit err|%s", strerror(errno));
+        return FAIL;
+    }
+    log_info("The maximum fds|%d", (int)maxfdrl.rlim_cur);
 
     return SUCCESS;
 }
