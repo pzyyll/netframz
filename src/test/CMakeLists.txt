@@ -22,6 +22,7 @@ set(SOURCE_FILES
         ../nf_event_idle_task.cpp
         ../nf_thread.cpp
         ../nf_mutex.cpp
+        ../nf_condition.cpp
         )
 
 add_executable(iotask iotask.cpp ${SOURCE_FILES})
@@ -35,9 +36,11 @@ add_executable(pthread pthread.cpp)
 add_executable(tmem_check tmem_check.cpp ${SOURCE_FILES})
 add_executable(idle idle.cpp ${SOURCE_FILES})
 add_executable(thread thread.cpp ${SOURCE_FILES})
+add_executable(thread_cond thread_cond.cpp ${SOURCE_FILES})
 
 #target_link_libraries(netframz -lboostsystem)
 #target_link_libraries(iotask -lglog)
 target_link_libraries(robot_client -lpthread)
 target_link_libraries(pthread -lpthread)
 target_link_libraries(thread -lpthread)
+target_link_libraries(thread_cond -lpthread)

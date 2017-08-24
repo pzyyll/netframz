@@ -14,7 +14,7 @@
 
 namespace nf {
 
-typedef std::function<void()> ThreadHandle;
+typedef std::function<void(void *)> ThreadHandle;
 
 class Thread {
     const static unsigned int kMaxErrMsgLen = 256;
@@ -25,9 +25,13 @@ public:
 
     ~Thread();
 
-    int Run();
+    int Run(void *args);
 
     int Join();
+
+    void SetHandle(const ThreadHandle &handle);
+
+    pthread_t *GetTid();
 
     const char *GetErrMsg();
 
@@ -38,6 +42,8 @@ private:
     ThreadHandle handle_;
 
     pthread_t tid_;
+
+    void *args_;
 
     char err_msg_[kMaxErrMsgLen];
 };

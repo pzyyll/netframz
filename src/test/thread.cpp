@@ -6,12 +6,17 @@
 #include "nf_mutex.h"
 
 using namespace std;
+using namespace std::placeholders;
+
 using namespace nf;
+int d = 2;
 
 class Run{
 public:
-    void run() {
+    void run(void *data) {
+        cout << *((int *)data) << endl;
         int n = 2000000;
+        cout << (void *)&n << endl;
         while (n-- > 0) {
             MutexGuard lock(mutex_);
  //           cout << "run " << i_++ << endl;
@@ -26,15 +31,15 @@ public:
 
 int main() {
     Run run;
-    Thread thread(std::bind(&Run::run, &run));
-    Thread thread2(std::bind(&Run::run, &run));
-    Thread thread3(std::bind(&Run::run, &run));
+    Thread thread(std::bind(&Run::run, &run, _1));
+    Thread thread2(std::bind(&Run::run, &run, _1));
+    Thread thread3(std::bind(&Run::run, &run, _1));
 
-    thread.Run();
+    thread.Run(&d);
 
-    thread2.Run();
+    thread2.Run(&d);
 
-    thread3.Run();
+    thread3.Run(&d);
 
 
     thread.Join();

@@ -7,24 +7,28 @@
 
 using namespace nf;
 
-Mutex::Mutex() {
-    pthread_mutex_init(&mutex_, NULL);
+Mutex::Mutex(): mutex_(PTHREAD_MUTEX_INITIALIZER) {
+
 }
 
 Mutex::~Mutex() {
-    pthread_mutex_destroy(&mutex_);
+
 }
 
-void Mutex::Lock() {
-    pthread_mutex_lock(&mutex_);
+int Mutex::Lock() {
+    return pthread_mutex_lock(&mutex_);
 }
 
 int Mutex::TryLock() {
     return pthread_mutex_trylock(&mutex_);
 }
 
-void Mutex::Unlock() {
-    pthread_mutex_unlock(&mutex_);
+int Mutex::Unlock() {
+    return pthread_mutex_unlock(&mutex_);
+}
+
+pthread_mutex_t &Mutex::GetMutex() {
+    return mutex_;
 }
 
 MutexGuard::MutexGuard(Mutex &mutex) : mutex_(mutex) {

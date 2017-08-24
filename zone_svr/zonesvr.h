@@ -44,6 +44,7 @@ protected:
 
 private:
     PlayerManage player_mng_;
+
     AOIManage aoi_manage_;
 };
 

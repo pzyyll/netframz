@@ -17,11 +17,13 @@ public:
 
     ~Mutex();
 
-    void Lock();
+    int Lock();
 
     int TryLock();
 
-    void Unlock();
+    int Unlock();
+
+    pthread_mutex_t &GetMutex();
 
 private:
     pthread_mutex_t mutex_;

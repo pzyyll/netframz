@@ -21,7 +21,8 @@ Thread::~Thread() {
 
 }
 
-int Thread::Run() {
+int Thread::Run(void *args) {
+    args_ = args;
     int err = pthread_create(&tid_, NULL, Thread::ThreadRun, (void *)this);
     if (err != 0) {
         snprintf(err_msg_, sizeof(err_msg_), "Create thread fail. %s", strerror(err));
@@ -41,6 +42,14 @@ int Thread::Join() {
     return 0;
 }
 
+void Thread::SetHandle(const ThreadHandle &handle) {
+    handle_ = handle;
+}
+
+pthread_t *Thread::GetTid() {
+    return &tid_;
+}
+
 const char *Thread::GetErrMsg() {
     return err_msg_;
 }
@@ -49,7 +58,7 @@ void *Thread::ThreadRun(void *args) {
     assert(args != NULL);
     Thread *threadp = (Thread *)args;
 
-    threadp->handle_();
+    threadp->handle_(threadp->args_);
 
-    pthread_exit(NULL);
+    return NULL;
 }
