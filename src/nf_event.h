@@ -11,13 +11,11 @@
 #include <queue>
 #include <string>
 
-#ifdef LINUX_EPOLL
-
-#include "nf_epoll.h"
-
-#endif
-
 #include "nf_event_timer_mng.h"
+
+#ifdef LINUX_EPOLL
+#include "nf_epoll.h"
+#endif
 
 class IOTaskImpl;
 

@@ -405,7 +405,7 @@ int BaseServer::SetCliOpt(int fd) {
     int nodelay = 1;
     if (::setsockopt(fd, IPPROTO_TCP, TCP_NODELAY,
                      (void *) &nodelay, sizeof(nodelay))) {
-        log_warn("setsockopt to forbid Nagle's algorithm. %s", strerror(errno));
+        log_warn("setsockopt to disabling Nagle's algorithm. %s", strerror(errno));
         return FAIL;
     }
 

@@ -29,11 +29,17 @@ private:
     pthread_mutex_t mutex_;
 };
 
-class MutexGuard {
+class LockGuard {
 public:
-    explicit MutexGuard(Mutex &mutex);
+    explicit LockGuard(Mutex &mutex);
 
-    ~MutexGuard();
+    ~LockGuard();
+
+    int Lock();
+
+    int TryLock();
+
+    int Unlock();
 
 private:
     Mutex &mutex_;

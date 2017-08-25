@@ -38,7 +38,9 @@ void Connector::BeginRecv(const ConnCbData &cb_data) {
     task_->Start();
 }
 
-void Connector::Send(const char *buff, const size_t lenth, const ConnCbData &cb_data) {
+void Connector::Send(const char *buff,
+                     const size_t lenth,
+                     const ConnCbData &cb_data) {
     ErrCode err_code(ErrCode::SUCCESS);
 
     ssize_t ns = Send((void *)buff, lenth);

@@ -4,15 +4,15 @@
 #include <string>
 #include <vector>
 #include <cstddef>
+#include <cstdint>
 
 #include <arpa/inet.h>
-
 
 namespace proto {
 #pragma pack(1)
 struct MsgHeader {
-    unsigned int len;
-    unsigned int type;
+    uint32_t len;
+    uint32_t type;
 };
 #pragma pack()
 

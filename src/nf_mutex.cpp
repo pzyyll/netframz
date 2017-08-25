@@ -31,10 +31,22 @@ pthread_mutex_t &Mutex::GetMutex() {
     return mutex_;
 }
 
-MutexGuard::MutexGuard(Mutex &mutex) : mutex_(mutex) {
+LockGuard::LockGuard(Mutex &mutex) : mutex_(mutex) {
     mutex_.Lock();
 }
 
-MutexGuard::~MutexGuard() {
+LockGuard::~LockGuard() {
     mutex_.Unlock();
+}
+
+int LockGuard::Lock() {
+    return mutex_.Lock();
+}
+
+int LockGuard::TryLock() {
+    return mutex_.TryLock();
+}
+
+int LockGuard::Unlock() {
+    return mutex_.Unlock();
 }

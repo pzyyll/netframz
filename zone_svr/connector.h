@@ -99,7 +99,9 @@ public:
 
     size_t Recv(void *buff, const size_t size);
 
-    void Send(const char *buff, const size_t lenth, const ConnCbData &cb_data = ConnCbData());
+    void Send(const char *buff,
+              const size_t lenth,
+              const ConnCbData &cb_data = ConnCbData());
 
     void Close();
 

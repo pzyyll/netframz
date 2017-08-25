@@ -4,11 +4,12 @@ project(zonesvr)
 include_directories(E:\\linux_inc\\include)
 include_directories(../src/)
 
+option(MEM_CHECK "Enable memory check." OFF)
+
 add_definitions(
         -W -Wall
         -DLINUX_EPOLL
         -DNF_TIMER_WHEEL
-        #        -DMEM_CHECK
         )
 
 set(CMAKE_CXX_STANDARD 11)
@@ -17,13 +18,16 @@ set(CMAKE_BUILD_TYPE debug CACHE STRING "set build type debug")
 set(NFSOURCE_FILES
         ../src/nf_event.cpp
         ../src/nf_epoll.cpp
-        #../src/nf_mem_check.cpp
         ../src/nf_event_iotask.cpp
         ../src/nf_event_iotask_impl.cpp
         ../src/nf_event_timer_task.cpp
         ../src/nf_event_timer_impl.cpp
         ../src/nf_event_timer_mng.cpp
         ../src/nf_event_idle_impl.cpp
+        ../src/nf_condition.cpp
+        ../src/nf_thread.cpp
+        ../src/nf_mutex.cpp
+        ../src/nf_socket_api.cpp
         )
 
 set(SOURCE_FILES
@@ -40,6 +44,11 @@ set(SOURCE_FILES
         )
 
 set(PROTO_FILES proto/zonesvr.pb.cc)
+
+if (MEM_CHECK)
+    add_definitions(-DMEM_CHECK)
+    list(APPEND NFSOURCE_FILES ../src/nf_mem_check.cpp)
+endif()
 
 add_executable(zonesvr ${SOURCE_FILES} ${NFSOURCE_FILES} ${PROTO_FILES})
 

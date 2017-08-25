@@ -18,7 +18,7 @@ int sum = 0;
 Mutex mutex;
 Condition cond(mutex);
 
-#define THREAD_NUM 4
+#define THREAD_NUM 10
 
 struct Arg {
     char name[256];
@@ -34,7 +34,7 @@ void run(void *data) {
     prctl(PR_SET_NAME, arg->name);
 
     while (true) {
-        mutex.Lock();
+        LockGuard lock(mutex);
         while (int_que.size() == 0)
             cond.Wait();
         if (int_que.size() != 0) {
@@ -45,8 +45,8 @@ void run(void *data) {
             cout << "i:" << i << endl;
             sum += 1;
         }
-        mutex.Unlock();
-        usleep(100);
+        lock.Unlock();
+        sleep(1);
     }
 }
 
@@ -60,11 +60,9 @@ int main() {
 
     int n = 0;
     while (cin >> n) {
-        mutex.Lock();
         for (int i = 0; i < n; ++i) {
             int_que.push_front(i);
         }
-        mutex.Unlock();
         //cond.Signal();
         cond.Broadcast();
     }
