@@ -27,6 +27,8 @@
 #include "nf_event.h"
 #include "nf_event_iotask.h"
 #include "nf_event_timer_task.h"
+#include "nf_thread.h"
+#include "nf_mutex.h"
 #include "connector.h"
 #include "proto.h"
 
@@ -53,7 +55,6 @@ public:
 
     void Stop();
 
-
     //void OnIdle();
 
     //void OnExit();
@@ -64,6 +65,8 @@ protected:
     int StartTick();
 
     void OnAccept(EventLoop *loopsv, task_data_t data, int mask);
+
+    void Do(int fd);
 
     void OnRead(unsigned long lenth, task_data_t data, ErrCode err);
 

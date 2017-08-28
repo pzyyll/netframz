@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 HOST=127.0.0.1
-PORT=13399
+PORT=23399
 
 function connect {
     echo "connect $1:$2"

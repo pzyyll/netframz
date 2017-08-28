@@ -13,6 +13,7 @@
 using namespace std::placeholders;
 using namespace std;
 using namespace proto;
+using namespace nf;
 
 BaseServer::BaseServer() : conf_file_(NULL), accept_task_(NULL), tick_(NULL) {
 
@@ -161,36 +162,42 @@ void BaseServer::OnAccept(EventLoop *loopsv, task_data_t data, int mask) {
             break;
         }
 
-        if (MakeNonblock(fd) < 0) {
-            return;
-        }
-
-        if (SetCliOpt(fd) < 0) {
-            return;
-        }
-
-        ConnectorPtr conn = CreateConn(fd);
-        if (!conn) {
-            ::close(fd);
-            return;
-        }
-
-        TimerTaskPtr timer = CreateTimerTask(conn->GetCID());
-        if (!timer) {
-            DelConn(conn);
-            return;
-        }
-
-        struct ConnCbData cb_data;
-        cb_data.pri_data.data.id = conn->GetCID();
-        cb_data.handler = std::bind(&BaseServer::OnRead, this, _1, _2, _3);
-        conn->BeginRecv(cb_data);
-
-        task_data_t data = {.data = {.id = conn->GetCID()}};
-        timer->SetPrivateData(data);
-        timer->Bind(std::bind(&BaseServer::OnTimerOut, this, _1, _2, _3));
-        timer->Start();
+        Do(fd);
     }
+}
+
+void BaseServer::Do(int fd) {
+    log_debug("Do fd|%d", fd);
+
+    if (MakeNonblock(fd) < 0) {
+        return;
+    }
+
+    if (SetCliOpt(fd) < 0) {
+        return;
+    }
+
+    ConnectorPtr conn = CreateConn(fd);
+    if (!conn) {
+        ::close(fd);
+        return;
+    }
+
+    TimerTaskPtr timer = CreateTimerTask(conn->GetCID());
+    if (!timer) {
+        DelConn(conn);
+        return;
+    }
+
+    struct ConnCbData cb_data;
+    cb_data.pri_data.data.id = conn->GetCID();
+    cb_data.handler = std::bind(&BaseServer::OnRead, this, _1, _2, _3);
+    conn->BeginRecv(cb_data);
+
+    task_data_t data = {.data = {.id = conn->GetCID()}};
+    timer->SetPrivateData(data);
+    timer->Bind(std::bind(&BaseServer::OnTimerOut, this, _1, _2, _3));
+    timer->Start();
 }
 
 void BaseServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {

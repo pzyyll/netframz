@@ -14,6 +14,7 @@
 #include <sys/time.h>
 
 #include "nf_event_iotask.h"
+#include "nf_mutex.h"
 #include "err_code.h"
 
 static const unsigned long DEFAULT_BUFF_SIZE = 1024 * 1024;
@@ -147,8 +148,9 @@ protected:
     IOTask         *task_;
     ConnCbData     rdata_, wdata_;
     char           err_msg_[256];
+    nf::Mutex      mutex_;
 
-    static unsigned long id_cnt;
+    static unsigned long id_cnt_;
 };
 
 #endif //NF_TEST_CONNETOR_H

@@ -10,11 +10,12 @@
 #define UNUSE(x) (void)(x);
 
 using namespace std::placeholders;
+using namespace nf;
 
-unsigned long Connector::id_cnt = 1;
+unsigned long Connector::id_cnt_ = 1;
 
 Connector::Connector(EventLoop &loop, int fd)
-        : cid_(id_cnt++),
+        : cid_(id_cnt_++),
           is_close_(0),
           last_act_time_(0),
           recv_buf_(DEFAULT_BUFF_SIZE),
@@ -41,6 +42,7 @@ void Connector::BeginRecv(const ConnCbData &cb_data) {
 void Connector::Send(const char *buff,
                      const size_t lenth,
                      const ConnCbData &cb_data) {
+    LockGuard lock(mutex_);
     ErrCode err_code(ErrCode::SUCCESS);
 
     ssize_t ns = Send((void *)buff, lenth);
