@@ -40,7 +40,6 @@ int Writen(int fd, const void *buff, const unsigned int lenth);
 int Readn(int fd, void *buff, const unsigned int lenth);
 int MakeBlockStatus(int fd, bool block);
 
-void *RecvHandler(void *args);
 int ProcessBuff(const char *buff, const unsigned int lenth);
 int ProcessCmd(proto::Cmd &cmd);
 int ProcessLoginRsp(const std::string &data);

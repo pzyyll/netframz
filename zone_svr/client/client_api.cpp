@@ -5,6 +5,10 @@
 #include "client_api.h"
 #include "nf_event.h"
 #include "nf_event_iotask.h"
+#include "nf_thread.h"
+
+using namespace std;
+using namespace nf;
 
 int Connect(Client *cli) {
     struct sockaddr_in addr;
@@ -195,7 +199,9 @@ void recv_cb(EventLoop *loop, task_data_t data, int mask) {
     memmove(rv_buff, rv_buff + np, rv_len);
 }
 
-void *RecvHandler(void *args) {
+void RecvHandler(void *args) {
+    (void)(args);
+
     MakeBlockStatus(sock_fd, false);
     loop.Init();
     recv_task = new IOTask(loop, sock_fd, EVSTAT::EV_READABLE, recv_cb);
@@ -501,8 +507,10 @@ void CliRun(Client *cli) {
         return;
     }
 
-    pthread_t tid;
-    pthread_create(&tid, NULL, RecvHandler, NULL);
+    Thread recv_thread(RecvHandler);
+    recv_thread.Run(NULL);
+    //pthread_t tid;
+    //pthread_create(&tid, NULL, RecvHandler, NULL);
 
     Login();
 

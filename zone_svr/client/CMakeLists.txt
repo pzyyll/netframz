@@ -26,6 +26,9 @@ set(NFSOURCE_FILES
         ../../src/nf_event_timer_impl.cpp
         ../../src/nf_event_timer_mng.cpp
         ../../src/nf_event_idle_impl.cpp
+        ../../src/nf_condition.cpp
+        ../../src/nf_thread.cpp
+        ../../src/nf_mutex.cpp
         )
 
 add_executable(robot_client robot_client.cpp ${SOURCE_FILES})
