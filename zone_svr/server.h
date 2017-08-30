@@ -30,6 +30,7 @@
 #include "nf_thread.h"
 #include "nf_mutex.h"
 #include "connector.h"
+#include "acceptor.h"
 #include "proto.h"
 
 class BaseServer {
@@ -64,7 +65,7 @@ protected:
 
     int StartTick();
 
-    void OnAccept(EventLoop *loopsv, task_data_t data, int mask);
+    void OnAccept(int fd, ErrCode &err);
 
     void Do(int fd);
 
@@ -118,11 +119,12 @@ protected:
 
 private:
     char         *conf_file_;
-    IOTaskPtr    accept_task_;
     TimerTaskPtr tick_;
     EventLoop    loop_;
     conn_map_t   conn_map_;
     timer_map_t  timer_map_;
+
+    Acceptor     acceptor_;
 };
 
 #endif //NF_TEST_SERVER_SERVER_H

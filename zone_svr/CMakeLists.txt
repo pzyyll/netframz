@@ -41,6 +41,7 @@ set(SOURCE_FILES
         player.cpp
         player_manage.cpp
         aoi_manage.cpp
+        acceptor.cpp
         )
 
 set(PROTO_FILES proto/zonesvr.pb.cc)
