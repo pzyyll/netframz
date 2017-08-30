@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+find -name '*.cpp' -o -name '*.h' | grep -v 'build-debug' | grep -v 'pb.h' | xargs gawk '{ if (NF > 0) cnt++ } END { print cnt }'
+
