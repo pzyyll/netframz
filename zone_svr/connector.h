@@ -121,7 +121,7 @@ protected:
 
     Connector &operator=(const Connector &);
 
-    int MakeFdBlockIs(bool is_block, int fd);
+    int MakeNonBlock(int fd);
 
     ssize_t InnerRead(void *buff, size_t size);
 

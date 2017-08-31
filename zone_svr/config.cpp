@@ -72,6 +72,9 @@ int CConfig::Init(const char *path) {
             continue;
         dict_.insert(std::make_pair(vecs[0], std::string(line)));
     }
+
+    fclose(fp);
+
     return SUCCESS;
 }
 

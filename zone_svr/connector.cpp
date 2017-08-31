@@ -264,7 +264,7 @@ std::string Connector::GetErrMsg() {
     return std::string(err_msg_);
 }
 
-int Connector::MakeFdBlockIs(bool is_block, int fd) {
+int Connector::MakeNonBlock(int fd) {
     int val = ::fcntl(fd, F_GETFL, 0);
     if (val < 0) {
         snprintf(err_msg_, sizeof(err_msg_),
@@ -272,12 +272,7 @@ int Connector::MakeFdBlockIs(bool is_block, int fd) {
         return FAIL;
     }
 
-    if (is_block) {
-        val &= ~O_NONBLOCK;
-    } else {
-        val |= O_NONBLOCK;
-    }
-
+    val |= O_NONBLOCK;
     if (::fcntl(fd, F_SETFL, val) < 0) {
         snprintf(err_msg_, sizeof(err_msg_),
                  "set fd(%d) status fail. %s", fd, strerror(errno));
