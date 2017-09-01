@@ -60,3 +60,11 @@ void Player::set_point(Point point) {
 Point &Player::point() {
     return point_;
 }
+
+void Player::set_scene_id(int scene_id) {
+    scene_id_ = scene_id;
+}
+
+int Player::scene_id() {
+    return scene_id_;
+}

@@ -86,6 +86,8 @@ public:
                    std::vector<unsigned long> &remove_ids,
                    std::vector<unsigned long> &interest_ids);
 
+    void GetAllUserId(std::vector<unsigned long> &users_id);
+
     std::string GetErrMsg();
 
 private:

@@ -19,6 +19,7 @@ public:
     int         daemon;
     int         max_fds;
     int         log_level;
+    int         zone_num;
 };
 
 typedef nf::singleton <ServerConfig> svr_cfg;

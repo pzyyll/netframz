@@ -14,6 +14,7 @@ int ServerConfig::Init(const char *cfg_file) {
     cfg.GetInt(daemon, "daemon", 0);
     cfg.GetInt(max_fds, "max_fds", 65536);
     cfg.GetInt(log_level, "log_level", 2);
+    cfg.GetInt(zone_num, "zone_num", 10);
 
     return 0;
 }

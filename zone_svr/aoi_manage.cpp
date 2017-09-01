@@ -164,6 +164,13 @@ void AOIManage::UpdatePos(const unsigned long id,
     nentry.obj_list.push_back(obj);
 }
 
+void AOIManage::GetAllUserId(std::vector<unsigned long> &users_id) {
+    Id2ObjMap::iterator itr = id2obj_map_.begin();
+    for ( ; itr != id2obj_map_.end(); ++itr) {
+        users_id.push_back(itr->first);
+    }
+}
+
 std::string AOIManage::GetErrMsg() {
     return std::string(err_msg_);
 }

@@ -34,10 +34,14 @@ public:
     void set_point(Point point);
     Point &point();
 
+    void set_scene_id(int scene_id);
+    int scene_id();
+
 private:
     char name_[kNameMaxLen];
     unsigned long conn_id_;
     unsigned long last_act_time_;
     Point last_point_;
     Point point_;
+    int scene_id_;
 };
