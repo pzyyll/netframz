@@ -42,6 +42,7 @@ set(SOURCE_FILES
         player_manage.cpp
         aoi_manage.cpp
         acceptor.cpp
+        xml/tinyxml2.cpp
         )
 
 set(PROTO_FILES proto/zonesvr.pb.cc)
