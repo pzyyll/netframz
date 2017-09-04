@@ -33,7 +33,7 @@
 #include "acceptor.h"
 #include "proto.h"
 
-class BaseServer {
+class Server {
 public:
     enum Ret {
         FAIL    = -1,
@@ -46,9 +46,9 @@ public:
     typedef std::unordered_map<unsigned long, TimerTaskPtr> timer_map_t;
 
 public:
-    BaseServer();
+    Server();
 
-    virtual ~BaseServer();
+    virtual ~Server();
 
     virtual int Init(int argc, char **argv);
 

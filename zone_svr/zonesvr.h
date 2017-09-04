@@ -10,7 +10,7 @@
 #include "proto/zonesvr.pb.h"
 #include "aoi_manage.h"
 
-class ZoneSvr : public BaseServer {
+class ZoneSvr : public Server {
 public:
     ZoneSvr();
     ~ZoneSvr();

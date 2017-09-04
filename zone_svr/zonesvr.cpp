@@ -18,7 +18,7 @@ ZoneSvr::~ZoneSvr() {
 }
 
 int ZoneSvr::Init(int argc, char **argv) {
-    if (BaseServer::Init(argc, argv) < 0)
+    if (Server::Init(argc, argv) < 0)
         return -1;
 
     aoi_manage_.Init();
@@ -45,7 +45,7 @@ void ZoneSvr::ProcessCmd(proto::Cmd &cmd, const unsigned long cid) {
 }
 
 void ZoneSvr::CloseConn(unsigned long cid) {
-    BaseServer::CloseConn(cid);
+    Server::CloseConn(cid);
 
     //Send Leave info to other online users
     Player *player = player_mng_.GetPlayerByCid(cid);

@@ -33,6 +33,15 @@ struct Vec2 {
     int y;
 };
 
+struct Rect {
+    Rect(unsigned int width = 0, unsigned int height = 0)
+        : w(width), h(height) {  }
+    ~Rect() {  }
+
+    unsigned int w;
+    unsigned int h;
+};
+
 struct Pos {
     Pos(int xt = 0, int yt = 0) : x(xt), y(yt) { }
     ~Pos() { }
@@ -70,10 +79,8 @@ public:
 
     ~AOIManage();
 
-    int Init(unsigned int map_width = kDeafultMapWidth,
-             unsigned int map_height = kDeafultMapHeight,
-             unsigned int grid_width = kDeafultGridWidth,
-             unsigned int grid_height = kDeafultGridHeight);
+    int Init(Rect map_size = Rect(kDeafultMapWidth, kDeafultMapHeight),
+             Rect grid_size = Rect(kDeafultGridWidth, kDeafultGridHeight));
 
     int AddPos(const unsigned long id,
                const Pos &pos,
@@ -111,11 +118,9 @@ private:
 
     Id2ObjMap id2obj_map_;
 
-    unsigned int map_width_;
-    unsigned int map_height_;
+    Rect map_size_;
 
-    unsigned int grid_width_;
-    unsigned int grid_height_;
+    Rect grid_size_;
 
     int is_init_;
 

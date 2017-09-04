@@ -15,16 +15,16 @@ using namespace std;
 using namespace proto;
 using namespace nf;
 
-BaseServer::BaseServer() : conf_file_(NULL), tick_(NULL) {
+Server::Server() : conf_file_(NULL), tick_(NULL) {
 
 }
 
-BaseServer::~BaseServer() {
+Server::~Server() {
     if (tick_)
         delete tick_;
 }
 
-int BaseServer::Init(int argc, char **argv) {
+int Server::Init(int argc, char **argv) {
     if (GetOption(argc, argv) < 0) {
         return FAIL;
     }
@@ -59,7 +59,7 @@ int BaseServer::Init(int argc, char **argv) {
     return SUCCESS;
 }
 
-int BaseServer::StartListen() {
+int Server::StartListen() {
     acceptor_.SetEventLoop(&loop_);
 
     std::string ipv4 = svr_cfg::get_const_instance().ipv4;
@@ -73,7 +73,7 @@ int BaseServer::StartListen() {
         return FAIL;
     }
 
-    if (acceptor_.Listen(std::bind(&BaseServer::OnAccept, this, _1, _2)) < 0) {
+    if (acceptor_.Listen(std::bind(&Server::OnAccept, this, _1, _2)) < 0) {
         log_err("Acceptor Listen fail. %s", acceptor_.GetErrMsg());
         return FAIL;
     }
@@ -82,14 +82,14 @@ int BaseServer::StartListen() {
     return listen_fd;
 }
 
-int BaseServer::StartTick() {
+int Server::StartTick() {
     int tick_interval =  svr_cfg::get_const_instance().tick;
     tick_ = new TimerTask(loop_, tick_interval, 1);
     if (NULL == tick_) {
         log_err("New fail.");
         return FAIL;
     }
-    tick_->Bind(std::bind(&BaseServer::OnTick, this, _1, _2, _3));
+    tick_->Bind(std::bind(&Server::OnTick, this, _1, _2, _3));
     task_data_t pridata = {.data = {.ptr = tick_}};
     tick_->SetPrivateData(pridata);
 
@@ -99,7 +99,7 @@ int BaseServer::StartTick() {
     return SUCCESS;
 }
 
-void BaseServer::OnAccept(int fd, ErrCode &err) {
+void Server::OnAccept(int fd, ErrCode &err) {
     if (err.get_ret() != ErrCode::SUCCESS) {
         log_info("%s", err.get_err_msg().c_str());
         return;
@@ -108,7 +108,7 @@ void BaseServer::OnAccept(int fd, ErrCode &err) {
     Do(fd);
 }
 
-void BaseServer::Do(int fd) {
+void Server::Do(int fd) {
     log_debug("Do fd|%d", fd);
 
     if (MakeNonblock(fd) < 0) {
@@ -133,16 +133,16 @@ void BaseServer::Do(int fd) {
 
     struct ConnCbData cb_data;
     cb_data.pri_data.data.id = conn->GetCID();
-    cb_data.handler = std::bind(&BaseServer::OnRead, this, _1, _2, _3);
+    cb_data.handler = std::bind(&Server::OnRead, this, _1, _2, _3);
     conn->BeginRecv(cb_data);
 
     task_data_t data = {.data = {.id = conn->GetCID()}};
     timer->SetPrivateData(data);
-    timer->Bind(std::bind(&BaseServer::OnTimerOut, this, _1, _2, _3));
+    timer->Bind(std::bind(&Server::OnTimerOut, this, _1, _2, _3));
     timer->Start();
 }
 
-void BaseServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
+void Server::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
     UNUSE(lenth);
     unsigned long cid = data.data.id;
     if (err.get_ret() != ErrCode::SUCCESS) {
@@ -161,7 +161,7 @@ void BaseServer::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
     Parse(*conn);
 }
 
-void BaseServer::Parse(Connector &conn) {
+void Server::Parse(Connector &conn) {
     log_debug("Do");
     conn.SetLastActTimeToNow();
     while (conn.GetRecvBuff().UsedSize() > 0) {
@@ -186,20 +186,20 @@ void BaseServer::Parse(Connector &conn) {
     }
 }
 
-void BaseServer::ProcessCmd(Cmd &cmd, const unsigned long cid) {
+void Server::ProcessCmd(Cmd &cmd, const unsigned long cid) {
     log_debug("ProcessCmd");
 
     //Echo Test
     Response(cmd, cid);
 }
 
-void BaseServer::Tick(unsigned long now) {
+void Server::Tick(unsigned long now) {
     UNUSE(now);
     //log_debug("Tick: %lu", now);
     //Do tick task;
 }
 
-int BaseServer::Response(proto::Cmd &cmd, unsigned long cid) {
+int Server::Response(proto::Cmd &cmd, unsigned long cid) {
     std::string sndstr;
     cmd.Serialize(sndstr);
     log_debug("snd: %li", (long int)sndstr.size());
@@ -207,7 +207,7 @@ int BaseServer::Response(proto::Cmd &cmd, unsigned long cid) {
     return Response(sndstr.c_str(), sndstr.size(), cid);
 }
 
-int BaseServer::Response(const char *buff, unsigned long size, unsigned long cid) {
+int Server::Response(const char *buff, unsigned long size, unsigned long cid) {
     log_debug("Response: %lu, size: %lu", cid, size);
 
     ConnectorPtr conn = FindConn(cid);
@@ -218,13 +218,13 @@ int BaseServer::Response(const char *buff, unsigned long size, unsigned long cid
 
     struct ConnCbData cbdata;
     cbdata.pri_data.data.id = cid;
-    cbdata.handler = std::bind(&BaseServer::OnWriteErr, this,_1, _2, _3);
+    cbdata.handler = std::bind(&Server::OnWriteErr, this,_1, _2, _3);
     conn->Send(buff, size, cbdata);
 
     return SUCCESS;
 }
 
-void BaseServer::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
+void Server::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
     UNUSE(lenth);
     unsigned long cid = data.data.id;
     if (err.get_ret() != ErrCode::SUCCESS) {
@@ -234,7 +234,7 @@ void BaseServer::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) 
     }
 }
 
-void BaseServer::OnTick(EventLoop *loopsv, task_data_t data, int mask) {
+void Server::OnTick(EventLoop *loopsv, task_data_t data, int mask) {
     //log_debug("OnTick");
     UNUSE(loopsv);
     UNUSE(data);
@@ -246,7 +246,7 @@ void BaseServer::OnTick(EventLoop *loopsv, task_data_t data, int mask) {
     Tick(now_ms);
 }
 
-void BaseServer::OnTimerOut(EventLoop *loopsv, task_data_t data, int mask) {
+void Server::OnTimerOut(EventLoop *loopsv, task_data_t data, int mask) {
     log_debug("OnTimerOut.");
     UNUSE(loopsv);
     UNUSE(mask);
@@ -271,16 +271,16 @@ void BaseServer::OnTimerOut(EventLoop *loopsv, task_data_t data, int mask) {
     timer->Restart();
 }
 
-void BaseServer::Run() {
+void Server::Run() {
     loop_.Run();
 }
 
-void BaseServer::Stop() {
+void Server::Stop() {
     loop_.Stop();
 }
 
 //=====================private===========================//
-int BaseServer::GetOption(int argc, char **argv) {
+int Server::GetOption(int argc, char **argv) {
     int ret = 0;
     struct option ops[] = {
             {"help",    no_argument,       0, 'h'},
@@ -318,7 +318,7 @@ int BaseServer::GetOption(int argc, char **argv) {
     return ret;
 }
 
-int BaseServer::MakeNonblock(int fd) {
+int Server::MakeNonblock(int fd) {
     int val = 0;
     if ((val = fcntl(fd, F_GETFL, 0)) < 0) {
         log_warn("Get fd(%d) stat fail. %s", fd, strerror(errno));
@@ -333,7 +333,7 @@ int BaseServer::MakeNonblock(int fd) {
     return SUCCESS;
 }
 
-int BaseServer::SetCliOpt(int fd) {
+int Server::SetCliOpt(int fd) {
     //一般实际缓冲区大小是设置的2倍
     //path:/proc/sys/net/core/w(r)mem_max
     int send_buff_size = 2 * 65536;
@@ -361,7 +361,7 @@ int BaseServer::SetCliOpt(int fd) {
     return SUCCESS;
 }
 
-int BaseServer::SetMaxFds(int max_fds) {
+int Server::SetMaxFds(int max_fds) {
     log_debug("SetMaxFds max_fds|%d", max_fds);
 
     if (max_fds < 0) {
@@ -387,7 +387,7 @@ int BaseServer::SetMaxFds(int max_fds) {
     return SUCCESS;
 }
 
-BaseServer::ConnectorPtr BaseServer::FindConn(unsigned long cid) {
+Server::ConnectorPtr Server::FindConn(unsigned long cid) {
     conn_map_t::iterator itr = conn_map_.find(cid);
     if (itr == conn_map_.end()) {
         return NULL;
@@ -396,7 +396,7 @@ BaseServer::ConnectorPtr BaseServer::FindConn(unsigned long cid) {
     return itr->second;
 }
 
-int BaseServer::CheckMask(int mask) {
+int Server::CheckMask(int mask) {
     if (mask & EV_RDHUP) {
         log_debug("Connect already closed by foreign.");
         return FAIL;
@@ -415,7 +415,7 @@ int BaseServer::CheckMask(int mask) {
     return SUCCESS;
 }
 
-BaseServer::ConnectorPtr BaseServer::CreateConn(int fd) {
+Server::ConnectorPtr Server::CreateConn(int fd) {
     log_debug("Create Connector for fd %d.", fd);
 
     ConnectorPtr cli = new Connector(loop_, fd);
@@ -435,7 +435,7 @@ BaseServer::ConnectorPtr BaseServer::CreateConn(int fd) {
     return cli;
 }
 
-void BaseServer::DelConn(unsigned long cid) {
+void Server::DelConn(unsigned long cid) {
     log_debug("Connect cid %lu will be closed and del.", cid);
 
     ConnectorPtr conn = FindConn(cid);
@@ -447,7 +447,7 @@ void BaseServer::DelConn(unsigned long cid) {
     DelConn(conn);
 }
 
-void BaseServer::DelConn(ConnectorPtr conn) {
+void Server::DelConn(ConnectorPtr conn) {
     if (conn) {
         conn->Close();
         conn_map_.erase(conn->GetCID());
@@ -455,7 +455,7 @@ void BaseServer::DelConn(ConnectorPtr conn) {
     }
 }
 
-BaseServer::TimerTaskPtr BaseServer::CreateTimerTask(unsigned long cid) {
+Server::TimerTaskPtr Server::CreateTimerTask(unsigned long cid) {
     log_debug("Create timer task for cid %lu.", cid);
 
     int timeout = svr_cfg::get_const_instance().timeout;
@@ -471,7 +471,7 @@ BaseServer::TimerTaskPtr BaseServer::CreateTimerTask(unsigned long cid) {
     return timer;
 }
 
-void BaseServer::DelTimerTask(unsigned long cid) {
+void Server::DelTimerTask(unsigned long cid) {
     log_debug("DelTimerTask cid %lu", cid);
 
     TimerTaskPtr timer = FindTimer(cid);
@@ -485,7 +485,7 @@ void BaseServer::DelTimerTask(unsigned long cid) {
     delete timer;
 }
 
-BaseServer::TimerTaskPtr BaseServer::FindTimer(unsigned long cid) {
+Server::TimerTaskPtr Server::FindTimer(unsigned long cid) {
     timer_map_t::iterator itr = timer_map_.find(cid);
     if (itr == timer_map_.end()) {
         return NULL;
@@ -494,18 +494,18 @@ BaseServer::TimerTaskPtr BaseServer::FindTimer(unsigned long cid) {
     return itr->second;
 }
 
-bool BaseServer::CheckConnect(unsigned long cid) {
+bool Server::CheckConnect(unsigned long cid) {
     if (FindConn(cid))
         return true;
     return false;
 }
 
-void BaseServer::CloseConn(unsigned long cid) {
+void Server::CloseConn(unsigned long cid) {
     DelConn(cid);
     DelTimerTask(cid);
 }
 
-int BaseServer::Daemon() {
+int Server::Daemon() {
     //Linux 有现成的 daemon() 调用可以将进程转为守护进程
 
     pid_t pid;

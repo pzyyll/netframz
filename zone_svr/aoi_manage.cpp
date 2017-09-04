@@ -33,8 +33,6 @@ inline Object *MakeObject(const unsigned long id, const Pos &pos) {
 
 AOIManage::AOIManage() :
     grids_(NULL),
-    map_width_(0), map_height_(0),
-    grid_width_(0), grid_height_(0),
     is_init_(0) {
     err_msg_[0] = '\0';
 }
@@ -49,14 +47,11 @@ AOIManage::~AOIManage() {
     }
 }
 
-int AOIManage::Init(unsigned int map_width, unsigned int map_height,
-                    unsigned int grid_width, unsigned int grid_height) {
-    map_width_ = map_width;
-    map_height_ = map_height;
-    grid_width_ = grid_width;
-    grid_height_ = grid_height;
+int AOIManage::Init(Rect map_size, Rect grid_size) {
+    map_size_ = map_size;
+    grid_size_ = grid_size;
 
-    grids_ = new AOIEntry[grid_width_ * grid_height_];
+    grids_ = new AOIEntry[grid_size_.w * grid_size_.h];
     assert(grids_ != NULL);
 
     is_init_ = 1;
@@ -177,14 +172,14 @@ std::string AOIManage::GetErrMsg() {
 
 Vec2 AOIManage::CalcVec2(const Pos &pos) {
     Vec2 vec2;
-    vec2.x = pos.x / (int)ceil(map_width_ * 1.0 / grid_width_);
-    vec2.y = pos.y / (int)ceil(map_height_ * 1.0 / grid_height_);
+    vec2.x = pos.x / (int)ceil(map_size_.w * 1.0 / grid_size_.w);
+    vec2.y = pos.y / (int)ceil(map_size_.h * 1.0 / grid_size_.h);
 
     return vec2;
 }
 
 unsigned int AOIManage::IndexOf(const Vec2 &vec2) {
-    return (vec2.x * grid_width_ + vec2.y);
+    return (vec2.x * grid_size_.w + vec2.y);
 }
 
 void AOIManage::CalcGridSet(const Vec2 &vec2, std::set<Vec2> &vec2_set) {
@@ -210,7 +205,7 @@ void AOIManage::CalcGridSet(const Vec2 &vec2, std::set<Vec2> &vec2_set) {
 bool AOIManage::CheckVec2(const Vec2 &vec2) {
     if (vec2.x < 0 || vec2.y < 0)
         return false;
-    if ((unsigned)vec2.x >= grid_width_ || (unsigned)vec2.y >= grid_height_)
+    if ((unsigned)vec2.x >= grid_size_.w || (unsigned)vec2.y >= grid_size_.h)
         return false;
 
     return true;
