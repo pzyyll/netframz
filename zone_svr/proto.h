@@ -54,7 +54,7 @@ public:
         return (int)msg_len;
     }
 
-    void Serialize(std::string &data) {
+    void SerializeTo(std::string &data) {
         data.clear();
         struct MsgHeader head;
         head.len = htonl(sizeof(head) + msg_data_.size());

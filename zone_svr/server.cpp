@@ -201,7 +201,7 @@ void Server::Tick(unsigned long now) {
 
 int Server::Response(proto::Cmd &cmd, unsigned long cid) {
     std::string sndstr;
-    cmd.Serialize(sndstr);
+    cmd.SerializeTo(sndstr);
     log_debug("snd: %li", (long int)sndstr.size());
 
     return Response(sndstr.c_str(), sndstr.size(), cid);

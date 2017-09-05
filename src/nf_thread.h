@@ -21,7 +21,7 @@ class Thread {
 public:
     Thread();
 
-    explicit Thread(const ThreadHandle &handle);
+    Thread(const ThreadHandle &handle);
 
     ~Thread();
 

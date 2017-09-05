@@ -31,6 +31,13 @@ AOIManage *SceneManage::AddAOIManager(Rect &map_size, Rect &grid_size) {
     return aoi_new;
 }
 
+AOIManage *SceneManage::GetAOIAt(unsigned int index) {
+    if (index >= vec_aoi_.size())
+        return NULL;
+
+    return vec_aoi_[index];
+}
+
 unsigned int SceneManage::GetSize() {
     return vec_aoi_.size();
 }

@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "player.h"
+#include "singleton.h"
 
 class PlayerManage {
 public:
@@ -45,5 +46,7 @@ private:
     PlayerMap player_map_;
     IdMap cid_map_;
 };
+
+#define PlayerMngSlg nf::singleton<PlayerManage>::get_mutable_instance
 
 #endif //NF_ZONESVR_PLAYERMANAGE_H

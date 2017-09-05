@@ -30,7 +30,7 @@ int SendMsgToSvr(TcpClient &cli, const ::google::protobuf::Message &msg, const u
     cmd.SetMsgData(str);
 
     str.clear();
-    cmd.Serialize(str);
+    cmd.SerializeTo(str);
     cout << "snd: " << str.size() << endl;
     int ns = cli.send((void *)str.c_str(), str.size());
     if (ns < 0) {

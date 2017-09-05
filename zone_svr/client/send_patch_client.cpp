@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
             Cmd cmd;
             cmd.SetMsgData(string(302400, 'a'));
             string pack;
-            cmd.Serialize(pack);
+            cmd.SerializeTo(pack);
             int ns = cli.send((void *)pack.c_str(), pack.size());
             if (ns < 0) {
                 cout << cli.get_err_msg() << endl;

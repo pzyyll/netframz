@@ -20,7 +20,7 @@ public:
 
     AOIManage *AddAOIManager(Rect &map_size, Rect &grid_size);
 
-    AOIManage *GetAOIAt(unsigned index);
+    AOIManage *GetAOIAt(unsigned int index);
 
     unsigned int GetSize();
 

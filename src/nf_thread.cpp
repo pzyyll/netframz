@@ -35,7 +35,8 @@ int Thread::Run(void *args) {
 int Thread::Join() {
     int err = pthread_join(tid_, NULL);
     if (err != 0) {
-        snprintf(err_msg_, sizeof(err_msg_), "Join thread fail. %s", strerror(err));
+        snprintf(err_msg_, sizeof(err_msg_),
+                 "Join thread fail. %s", strerror(err));
         return -1;
     }
 

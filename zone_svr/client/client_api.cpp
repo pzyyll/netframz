@@ -488,7 +488,7 @@ int SendMsgToSvr(::google::protobuf::Message &msg, unsigned int type) {
     cmd.SetMsgData(str);
 
     str.clear();
-    cmd.Serialize(str);
+    cmd.SerializeTo(str);
     //std::cout << "snd: " << str.size() << endl;
     int ns = Writen(sock_fd, (void *)str.c_str(), str.size());
     if (ns < 0) {

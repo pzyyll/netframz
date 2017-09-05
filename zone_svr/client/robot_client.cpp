@@ -40,7 +40,7 @@ LOOP_N_BEGING(nmsg)
     Cmd cmd;
     cmd.SetMsgData(string(pkg_len, 'a'));
     string pack;
-    cmd.Serialize(pack);
+    cmd.SerializeTo(pack);
 
     int ns = cli.send((void *)pack.c_str(), pack.size());
     if (ns < 0) {

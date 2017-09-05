@@ -6,6 +6,7 @@
 #define NF_TEST_CONNETOR_H
 
 #include <functional>
+#include <vector>
 #include <ctime>
 #include <cstring>
 #include <cstdlib>
@@ -22,30 +23,24 @@ static const unsigned long DEFAULT_BUFF_SIZE = 1024 * 1024;
 typedef std::function<void(unsigned long, task_data_t, ErrCode)> WRHandler;
 
 struct Buffer {
-    explicit Buffer(const unsigned long len)
-            : base(new char[len]), lenth(len), fpos(0), tpos(0) {
+    Buffer() : fpos(0), tpos(0) {
 
+    }
+
+    Buffer(const unsigned long len)
+        : fpos(0), tpos(0) {
+        storage.reserve(len);
     }
 
     ~Buffer() {
-        if (base)
-            delete[] base;
-        base = NULL;
     }
 
-    unsigned long MaxSize() { return lenth; }
+    unsigned long MaxSize() { return storage.capacity(); }
     unsigned long UsedSize() { return (unsigned long)(tpos - fpos); }
-    unsigned long RemainSize() { return (unsigned long)(lenth - tpos); }
+    unsigned long RemainSize() { return (unsigned long)(MaxSize() - tpos); }
     int Resize(unsigned long size) {
-        char *newbuf = new char[size];
-        if (!newbuf)
-            return -1;
-        unsigned long cpsize = size < lenth ? size : lenth;
-        memcpy(newbuf, base, cpsize);
-        delete[] base;
-        base = newbuf;
-        lenth = size;
-        fpos = tpos = 0;
+        if (size > MaxSize())
+            storage.reserve(size);
         return 0;
     }
     void FrontAdvancing(unsigned long step_size) {
@@ -56,23 +51,22 @@ struct Buffer {
             fpos = tpos = 0;
     }
     void TailAdvancing(unsigned long step_size) {
-        if (tpos + step_size > lenth)
+        if (tpos + step_size > MaxSize())
             return;
         tpos += step_size;
     }
-    char *FrontPos() { return (base + fpos); }
-    char *TailPos() { return (base + tpos); }
+    char *FrontPos() { return (&storage[0] + fpos); }
+    char *TailPos() { return (&storage[0] + tpos); }
     void MemoryMove2Left() {
         if (0 == fpos)
             return;
-        memmove(base, base + fpos, tpos - fpos);
+        memmove(&storage[0], &storage[0] + fpos, tpos - fpos);
         tpos -= fpos;
         fpos = 0;
     }
 
-    char          *base;
-    unsigned long lenth;
     unsigned long fpos, tpos;
+    std::vector<char> storage;
 };
 
 struct ConnCbData {

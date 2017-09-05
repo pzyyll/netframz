@@ -43,8 +43,6 @@ protected:
     int Parse(::google::protobuf::Message &msg, const std::string &buff);
 
 private:
-    PlayerManage player_mng_;
-
     AOIManage aoi_manage_;
 };
 

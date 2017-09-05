@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
         cmd.SetType(0);
 
         string snd;
-        cmd.Serialize(snd);
+        cmd.SerializeTo(snd);
         cout << "snd: " << snd.size() << endl;
         int ns = cli.send((void *)snd.c_str(), snd.size());
         if (ns < 0) {
