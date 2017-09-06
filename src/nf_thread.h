@@ -23,9 +23,9 @@ public:
 
     Thread(const ThreadHandle &handle);
 
-    ~Thread();
+    virtual ~Thread();
 
-    int Run(void *args);
+    int Run(void *args = NULL);
 
     int Join();
 
@@ -35,7 +35,9 @@ public:
 
     const char *GetErrMsg();
 
-private:
+protected:
+    virtual void Handle(void *args);
+
     static void *ThreadRun(void *args);
 
 private:

@@ -4,23 +4,26 @@
 
 #include "nf_thread.h"
 #include "nf_mutex.h"
+#include "nf_lock_queue.h"
 
 using namespace std;
 using namespace std::placeholders;
 
 using namespace nf;
+
 int d = 2;
+LockQueue<int> que;
 
 class Run{
 public:
     void run(void *data) {
-        cout << *((int *)data) << endl;
-        int n = 2000000;
-        cout << (void *)&n << endl;
-        while (n-- > 0) {
-            MutexGuard lock(mutex_);
- //           cout << "run " << i_++ << endl;
-            ++i_;
+        while (true) {
+            if (que.Empty())
+                continue;
+            cout << (char *)data << endl;
+            int n;
+            if (que.Next(n))
+                cout << n << endl;
         }
     }
 
@@ -29,18 +32,41 @@ public:
     Mutex mutex_;
 };
 
+class WThread : public Thread {
+public:
+    WThread() : n_(0) {  }
+
+    ~WThread() {  }
+
+    void Handle(void *args) override {
+        while (true) {
+            que.Push(n_);
+            cout << "handle " << n_++ << endl;
+            sleep(1);
+        }
+    }
+
+private:
+    int n_;
+};
+
 int main() {
     Run run;
     Thread thread(std::bind(&Run::run, &run, _1));
     Thread thread2(std::bind(&Run::run, &run, _1));
     Thread thread3(std::bind(&Run::run, &run, _1));
 
-    thread.Run(&d);
+    thread.Run((void *)"thread1");
 
-    thread2.Run(&d);
+    thread2.Run((void *)"thread2");
 
-    thread3.Run(&d);
+    thread3.Run((void *)"thread3");
 
+    WThread wthread;
+
+    wthread.Run();
+
+    wthread.Join();
 
     thread.Join();
     thread2.Join();

@@ -11,8 +11,8 @@
 namespace proto {
 #pragma pack(1)
 struct MsgHeader {
-    uint32_t len;
-    uint32_t type;
+    uint16_t len;
+    uint16_t type;
 };
 #pragma pack()
 
@@ -31,8 +31,8 @@ public:
         }
 
         const struct MsgHeader *head = (const struct MsgHeader *)(data);
-        unsigned int msg_len = ntohl(head->len);
-        unsigned int type = ntohl(head->type);
+        unsigned int msg_len = ntohs(head->len);
+        unsigned int type = ntohs(head->type);
 
         if (msg_len > MAX_CMD_LEN) {
             snprintf(err_, sizeof(err_), "pkg is too long. msg len|%u", msg_len);
@@ -57,8 +57,8 @@ public:
     void SerializeTo(std::string &data) {
         data.clear();
         struct MsgHeader head;
-        head.len = htonl(sizeof(head) + msg_data_.size());
-        head.type = htonl(type_);
+        head.len = htons(sizeof(head) + msg_data_.size());
+        head.type = htons(type_);
         data.append((char *) &head, sizeof(head));
         data.append(msg_data_);
     }

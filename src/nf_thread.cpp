@@ -55,11 +55,16 @@ const char *Thread::GetErrMsg() {
     return err_msg_;
 }
 
+void Thread::Handle(void *args) {
+    if (handle_)
+        handle_(args);
+}
+
 void *Thread::ThreadRun(void *args) {
     assert(args != NULL);
     Thread *threadp = (Thread *)args;
 
-    threadp->handle_(threadp->args_);
+    threadp->Handle(threadp->args_);
 
     return NULL;
 }
