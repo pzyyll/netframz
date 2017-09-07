@@ -28,9 +28,9 @@ void IOTaskImpl::Bind(handle_t handle) {
     op_ = handle;
 }
 
-void IOTaskImpl::Process(EventLoop *loop, int mask) {
+void IOTaskImpl::Process(EventService *es, int mask) {
     if (op_)
-        op_(loop, data_, mask);
+        op_(es, data_, mask);
 }
 
 void IOTaskImpl::set_fd(int fd) {

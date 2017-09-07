@@ -7,8 +7,8 @@
 #include "nf_event.h"
 #include "nf_event_timer_impl.h"
 
-TimerImpl::TimerImpl(const unsigned long interval, bool is_loop)
-        : id_(0), interval_(interval), is_loop_(is_loop) {
+TimerImpl::TimerImpl(const unsigned long interval, bool is_es)
+        : id_(0), interval_(interval), is_es_(is_es) {
 
 }
 
@@ -32,7 +32,7 @@ struct timeval TimerImpl::GetExpireTime() {
     return expire;
 }
 
-void TimerImpl::Process(EventLoop *loop, int mask) {
+void TimerImpl::Process(EventService *es, int mask) {
     if (op_)
-        op_(loop, data_, mask);
+        op_(es, data_, mask);
 }

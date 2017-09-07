@@ -40,7 +40,7 @@ int Server::Init(int argc, char **argv) {
         return FAIL;
     }
 
-    if (loop_.Init() < 0) {
+    if (es_.Init() < 0) {
         return FAIL;
     }
 
@@ -60,7 +60,7 @@ int Server::Init(int argc, char **argv) {
 }
 
 int Server::StartListen() {
-    acceptor_.SetEventLoop(&loop_);
+    acceptor_.SetEventService(&es_);
 
     std::string ipv4 = svr_cfg::get_const_instance().ipv4;
     int port = svr_cfg::get_const_instance().port;
@@ -84,7 +84,7 @@ int Server::StartListen() {
 
 int Server::StartTick() {
     int tick_interval =  svr_cfg::get_const_instance().tick;
-    tick_ = new TimerTask(loop_, tick_interval, 1);
+    tick_ = new TimerTask(es_, tick_interval, 1);
     if (NULL == tick_) {
         log_err("New fail.");
         return FAIL;
@@ -234,9 +234,9 @@ void Server::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
     }
 }
 
-void Server::OnTick(EventLoop *loopsv, task_data_t data, int mask) {
+void Server::OnTick(EventService *es, task_data_t data, int mask) {
     //log_debug("OnTick");
-    UNUSE(loopsv);
+    UNUSE(es);
     UNUSE(data);
     UNUSE(mask);
 
@@ -246,9 +246,9 @@ void Server::OnTick(EventLoop *loopsv, task_data_t data, int mask) {
     Tick(now_ms);
 }
 
-void Server::OnTimerOut(EventLoop *loopsv, task_data_t data, int mask) {
+void Server::OnTimerOut(EventService *es, task_data_t data, int mask) {
     log_debug("OnTimerOut.");
-    UNUSE(loopsv);
+    UNUSE(es);
     UNUSE(mask);
 
     unsigned long cid = data.data.id;
@@ -272,11 +272,11 @@ void Server::OnTimerOut(EventLoop *loopsv, task_data_t data, int mask) {
 }
 
 void Server::Run() {
-    loop_.Run();
+    es_.Run();
 }
 
 void Server::Stop() {
-    loop_.Stop();
+    es_.Stop();
 }
 
 //=====================private===========================//
@@ -418,7 +418,7 @@ int Server::CheckMask(int mask) {
 Server::ConnectorPtr Server::CreateConn(int fd) {
     log_debug("Create Connector for fd %d.", fd);
 
-    ConnectorPtr cli = new Connector(loop_, fd);
+    ConnectorPtr cli = new Connector(es_, fd);
     if (NULL == cli) {
         log_err("New a Connector fail.");
         return NULL;
@@ -459,7 +459,7 @@ Server::TimerTaskPtr Server::CreateTimerTask(unsigned long cid) {
     log_debug("Create timer task for cid %lu.", cid);
 
     int timeout = svr_cfg::get_const_instance().timeout;
-    TimerTaskPtr timer = new TimerTask(loop_, timeout, 0);
+    TimerTaskPtr timer = new TimerTask(es_, timeout, 0);
     if (NULL == timer
         || !timer_map_.insert(make_pair(cid, timer)).second) {
         log_warn("Create timer fail for cid %lu.", cid);

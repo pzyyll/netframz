@@ -13,13 +13,13 @@ struct PriData {
     unsigned long expired;
 } data_test;
 
-void cbfunc(EventLoop *loop, task_data_t data, int mask) {
+void cbfunc(EventService *es, task_data_t data, int mask) {
   std::cout << "Timer no class: " <<  mask << std::endl;
 }
 
 class Cb {
  public:
-  void cbfunc(EventLoop *loop, task_data_t data, int mask) {
+  void cbfunc(EventService *es, task_data_t data, int mask) {
 
     PriData *d = (PriData *)data.data.ptr;
     std::cout << "pri: " << d->fd << std::endl;
@@ -28,7 +28,7 @@ class Cb {
   int i=0;
 };
 
-void idlecb(EventLoop *loop, task_data_t data, int mask) {
+void idlecb(EventService *es, task_data_t data, int mask) {
     IdleTask *task = (IdleTask *)data.data.ptr;
     std::cout << "idle" << endl;
     task->Stop();
@@ -36,25 +36,25 @@ void idlecb(EventLoop *loop, task_data_t data, int mask) {
 
 int main() {
   Cb cb;
-  EventLoop loop;
-  loop.Init();
-  TimerTask timer1(loop, 1000, 1);
+  EventService es;
+  es.Init();
+  TimerTask timer1(es, 1000, 1);
   timer1.Bind(std::bind(&Cb::cbfunc, cb, _1, _2, _3));
   //timer1.Start();
 
-  TimerTask timer2(loop, 100, 1);
+  TimerTask timer2(es, 100, 1);
   timer2.Bind(cbfunc);
   //timer2.Start();
 
   Cb cb3;
   cb3.i = 100;
-  TimerTask timer3(loop, 3000, 1);
+  TimerTask timer3(es, 3000, 1);
   timer3.Bind(std::bind(&Cb::cbfunc, cb3, _1, _2, _3));
   //timer3.Start();
 
   Cb cb4;
   cb4.i = 1000;
-  TimerTask timer4(loop, 4000, 0);
+  TimerTask timer4(es, 4000, 0);
   timer4.Bind(std::bind(&Cb::cbfunc, cb4, _1, _2, _3));
   task_data_t data4;
   data_test.fd = 13;
@@ -62,11 +62,11 @@ int main() {
   timer4.SetPrivateData(data4);
   timer4.Start();
 
-  IdleTask idle(loop, idlecb);
+  IdleTask idle(es, idlecb);
   task_data_t data = { .data = {.ptr = &idle} };
   idle.SetPrivateData(data);
   idle.Start();
 
-  loop.Run();
+  es.Run();
   return 0;
 }

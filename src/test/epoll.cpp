@@ -68,7 +68,7 @@ static int InitServers() {
     return listen_fd;
 }
 
-void read_cb(EventLoop *loop, task_data_t data, int mask) {
+void read_cb(EventService *es, task_data_t data, int mask) {
     int cli_fd = data.data.fd;
     cout <<  "hah" << endl;
 
@@ -97,11 +97,11 @@ void read_cb(EventLoop *loop, task_data_t data, int mask) {
     cout << "end" << endl;
 }
 
-void write_cb(EventLoop *loop, task_data_t *task, int mask) {
+void write_cb(EventService *es, task_data_t *task, int mask) {
 
 }
 
-void accept_cb(EventLoop *loop, task_data_t data, int mask) {
+void accept_cb(EventService *es, task_data_t data, int mask) {
     IOTask &task = *((IOTask *)data.data.ptr);
 
     struct sockaddr_in addr;
@@ -114,7 +114,7 @@ void accept_cb(EventLoop *loop, task_data_t data, int mask) {
     }
 
     printf("cli fd : %d \n", cli_fd);
-    IOTask *cli_task = new IOTask(*loop, cli_fd, EVSTAT::EV_READABLE);
+    IOTask *cli_task = new IOTask(*es, cli_fd, EVSTAT::EV_READABLE);
     task_data_t iodata = { .data = { .fd = cli_fd } };
     cli_task->SetPrivateData(iodata);
     cli_task->Bind(read_cb);
@@ -129,13 +129,13 @@ int main(int argc, char **argv) {
 
     HookSig();
 
-    EventLoop loop;
-    IOTask accept_task(loop, fd, EVSTAT::EV_READABLE);
+    EventService es;
+    IOTask accept_task(es, fd, EVSTAT::EV_READABLE);
     task_data_t data = { .data = { .ptr = &accept_task } };
     accept_task.SetPrivateData(data);
     accept_task.Bind(accept_cb);
     accept_task.Start();
 
-    loop.Run();
+    es.Run();
     return 0;
 }

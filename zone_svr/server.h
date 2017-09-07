@@ -73,9 +73,9 @@ protected:
 
     void OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err);
 
-    void OnTick(EventLoop *loopsv, task_data_t data, int mask);
+    void OnTick(EventService *es, task_data_t data, int mask);
 
-    void OnTimerOut(EventLoop *loopsv, task_data_t data, int mask);
+    void OnTimerOut(EventService *es, task_data_t data, int mask);
 
     int GetOption(int argc, char **argv);
 
@@ -120,7 +120,7 @@ protected:
 private:
     char         *conf_file_;
     TimerTaskPtr tick_;
-    EventLoop    loop_;
+    EventService    es_;
     conn_map_t   conn_map_;
     timer_map_t  timer_map_;
 

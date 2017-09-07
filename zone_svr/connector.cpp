@@ -14,13 +14,13 @@ using namespace nf;
 
 unsigned long Connector::id_cnt_ = 1;
 
-Connector::Connector(EventLoop &loop, int fd)
+Connector::Connector(EventService &es, int fd)
         : cid_(id_cnt_++),
           is_close_(0),
           last_act_time_(0),
           recv_buf_(DEFAULT_BUFF_SIZE),
           send_buf_(DEFAULT_BUFF_SIZE),
-          task_(new IOTask(loop, fd, 0)) {
+          task_(new IOTask(es, fd, 0)) {
     SetLastActTimeToNow();
 }
 
@@ -67,10 +67,10 @@ void Connector::Send(const char *buff,
         cb_data.handler(0, cb_data.pri_data, err_code);
 }
 
-void Connector::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
+void Connector::OnRead(EventService *es, task_data_t data, int mask) {
     ErrCode err_code(ErrCode::SUCCESS);
     ssize_t nr = 0;
-    UNUSE(loopsv);
+    UNUSE(es);
     UNUSE(data);
 
     do {
@@ -105,10 +105,10 @@ void Connector::OnRead(EventLoop *loopsv, task_data_t data, int mask) {
         rdata_.handler(recv_buf_.UsedSize(), rdata_.pri_data, err_code);
 }
 
-void Connector::OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask) {
+void Connector::OnWriteRemain(EventService *es, task_data_t data, int mask) {
     ErrCode err_code(ErrCode::FAIL);
     ssize_t ns = 0;
-    UNUSE(loopsv);
+    UNUSE(es);
     UNUSE(data);
 
     do {

@@ -9,18 +9,18 @@
 
 #include "mem_check.h"
 
-IOTask::IOTask(EventLoop &loop, const int fd)
-        : loop_(loop), pimpl_(new IOTaskImpl(fd, 0)) {
+IOTask::IOTask(EventService &es, const int fd)
+        : es_(es), pimpl_(new IOTaskImpl(fd, 0)) {
 
 }
 
-IOTask::IOTask(EventLoop &loop, const int fd, const int mask)
-        : loop_(loop), pimpl_(new IOTaskImpl(fd, mask)) {
+IOTask::IOTask(EventService &es, const int fd, const int mask)
+        : es_(es), pimpl_(new IOTaskImpl(fd, mask)) {
 
 }
 
-IOTask::IOTask(EventLoop &loop, const int fd, const int mask, handle_t op)
-        : loop_(loop), pimpl_(new IOTaskImpl(fd, mask, op)) {
+IOTask::IOTask(EventService &es, const int fd, const int mask, handle_t op)
+        : es_(es), pimpl_(new IOTaskImpl(fd, mask, op)) {
 
 }
 
@@ -37,15 +37,15 @@ void IOTask::Bind(handle_t handle) {
 }
 
 int IOTask::Start() {
-    return loop_.SetIOTask(pimpl_);
+    return es_.SetIOTask(pimpl_);
 }
 
 int IOTask::Restart() {
-    return loop_.ResetIOTask(pimpl_);
+    return es_.ResetIOTask(pimpl_);
 }
 
 void IOTask::Stop() {
-    loop_.DelIOTask(pimpl_->get_fd());
+    es_.DelIOTask(pimpl_->get_fd());
 }
 
 void IOTask::SetPrivateData(task_data_t data) {
@@ -69,5 +69,5 @@ int IOTask::GetFd() {
 }
 
 std::string IOTask::GetErr() {
-    return loop_.get_err_msg();
+    return es_.get_err_msg();
 }

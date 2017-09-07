@@ -6,16 +6,16 @@
 #include <string>
 #include "nf_event_config.h"
 
-class EventLoop;
+class EventService;
 
 class IdleImpl;
 
 class IdleTask {
 public:
-    typedef std::function<void(EventLoop *, task_data_t, int)> handle_t;
+    typedef std::function<void(EventService *, task_data_t, int)> handle_t;
     typedef IdleImpl impl_type;
 
-    IdleTask(EventLoop &loop, handle_t handle);
+    IdleTask(EventService &es, handle_t handle);
 
     ~IdleTask();
 
@@ -30,6 +30,6 @@ public:
     task_data_t GetPrivateData();
 
 private:
-    EventLoop &loop_;
+    EventService &es_;
     impl_type *pimpl_;
 };

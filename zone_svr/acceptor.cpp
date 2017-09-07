@@ -11,23 +11,23 @@ using namespace std::placeholders;
 using namespace nf;
 
 Acceptor::Acceptor()
-    : loop_(NULL),
+    : es_(NULL),
       accept_task_(NULL),
       listen_fd_(-1),
       cb_() {
     err_msg_[0] = '\0';
 }
 
-Acceptor::Acceptor(EventLoop *loop)
-    : loop_(loop),
+Acceptor::Acceptor(EventService *es)
+    : es_(es),
       accept_task_(NULL),
       listen_fd_(-1),
       cb_() {
     err_msg_[0] = '\0';
 }
 
-Acceptor::Acceptor(EventLoop *loop, int listen_fd)
-    : loop_(loop),
+Acceptor::Acceptor(EventService *es, int listen_fd)
+    : es_(es),
       accept_task_(NULL),
       listen_fd_(listen_fd),
       cb_() {
@@ -91,12 +91,12 @@ int Acceptor::Listen(CallBack cb) {
         return FAIL;
     }
 
-    if (!loop_) {
-        snprintf(err_msg_, sizeof(err_msg_), "EventLoop handler is null.");
+    if (!es_) {
+        snprintf(err_msg_, sizeof(err_msg_), "EventService handler is null.");
         return FAIL;
     }
 
-    accept_task_ = new IOTask(*loop_, listen_fd_, EV_READABLE);
+    accept_task_ = new IOTask(*es_, listen_fd_, EV_READABLE);
     assert(accept_task_ != NULL);
 
     accept_task_->Bind(std::bind(&Acceptor::AcceptCb, this, _1, _2, _3));
@@ -118,20 +118,20 @@ int Acceptor::GetListenFd() {
     return listen_fd_;
 }
 
-void Acceptor::SetEventLoop(EventLoop *loop) {
-    loop_ = loop;
+void Acceptor::SetEventService(EventService *es) {
+    es_ = es;
 }
 
-EventLoop *Acceptor::GetEventLoop() {
-    return loop_;
+EventService *Acceptor::GetEventService() {
+    return es_;
 }
 
 const char *Acceptor::GetErrMsg() {
     return err_msg_;
 }
 
-void Acceptor::AcceptCb(EventLoop *loop, task_data_t data, int mask) {
-    UNUSED(loop);
+void Acceptor::AcceptCb(EventService *es, task_data_t data, int mask) {
+    UNUSED(es);
     UNUSED(data);
 
     ErrCode err(ErrCode::SUCCESS);

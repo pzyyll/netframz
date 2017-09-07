@@ -31,7 +31,7 @@ int TimerMng::AddTimer(timer_type *timer) {
     return_val_fail(timer, FAIL);
 
     if (FindTimer(timer->get_id(), NULL)) {
-        snprintf(err_, sizeof(err_), "Timer already add to timer loop!");
+        snprintf(err_, sizeof(err_), "Timer already add to timer es!");
         return FAIL;
     }
 

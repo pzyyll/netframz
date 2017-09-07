@@ -9,11 +9,11 @@
 #include <functional>
 #include "nf_event_config.h"
 
-class EventLoop;
+class EventService;
 
 class IdleImpl {
 public:
-    typedef std::function<void (EventLoop *, task_data_t, int)> Handler;
+    typedef std::function<void (EventService *, task_data_t, int)> Handler;
 
     IdleImpl(Handler op);
 
@@ -27,7 +27,7 @@ public:
 
     Handler GetOp();
 
-    void Process(EventLoop *loop, int mask);
+    void Process(EventService *es, int mask);
 
 private:
     task_data_t data_;

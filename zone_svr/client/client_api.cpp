@@ -101,7 +101,7 @@ Persion persion;
 std::map<std::string, Persion> persions_map;
 std::deque<std::string> chat_msgs;
 
-EventLoop loop;
+EventService es;
 IOTask *recv_task;
 
 int InputOption() {
@@ -163,7 +163,7 @@ int CheckMask(int mask) {
 }
 
 
-void recv_cb(EventLoop *loop, task_data_t data, int mask) {
+void recv_cb(EventService *es, task_data_t data, int mask) {
     if (CheckMask(mask) < 0) {
         std::cout << "close" << std::endl;
         recv_task->Stop();
@@ -203,11 +203,11 @@ void RecvHandler(void *args) {
     (void)(args);
 
     MakeBlockStatus(sock_fd, false);
-    loop.Init();
-    recv_task = new IOTask(loop, sock_fd, EVSTAT::EV_READABLE, recv_cb);
+    es.Init();
+    recv_task = new IOTask(es, sock_fd, EVSTAT::EV_READABLE, recv_cb);
     recv_task->Start();
 
-    loop.Run();
+    es.Run();
 
     pthread_exit(NULL);
 }

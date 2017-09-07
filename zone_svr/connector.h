@@ -86,7 +86,7 @@ public:
     };
 
 public:
-    Connector(EventLoop &loop, int fd);
+    Connector(EventService &es, int fd);
 
     ~Connector();
 
@@ -121,9 +121,9 @@ protected:
 
     ssize_t InnerWrite(const void *buff, const size_t size);
 
-    void OnRead(EventLoop *loopsv, task_data_t data, int mask);
+    void OnRead(EventService *es, task_data_t data, int mask);
 
-    void OnWriteRemain(EventLoop *loopsv, task_data_t data, int mask);
+    void OnWriteRemain(EventService *es, task_data_t data, int mask);
 
     int CheckMask(int mask);
 

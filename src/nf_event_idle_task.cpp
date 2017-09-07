@@ -6,8 +6,8 @@
 #include "nf_event.h"
 #include "nf_event_idle_impl.h"
 
-IdleTask::IdleTask(EventLoop &loop, handle_t handle)
-    : loop_(loop),
+IdleTask::IdleTask(EventService &es, handle_t handle)
+    : es_(es),
       pimpl_(new impl_type(handle)) {
 
 }
@@ -24,11 +24,11 @@ void IdleTask::Bind(handle_t handle) {
 }
 
 int IdleTask::Start() {
-    return loop_.AddIdleTask(pimpl_);
+    return es_.AddIdleTask(pimpl_);
 }
 
 int IdleTask::Stop() {
-    return loop_.DelIdleTask(pimpl_);
+    return es_.DelIdleTask(pimpl_);
 }
 
 void IdleTask::SetPrivateData(task_data_t data) {

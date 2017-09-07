@@ -11,18 +11,18 @@
 
 #include "nf_event_config.h"
 
-class EventLoop;
+class EventService;
 
 class TimerTask;
 
 class TimerImpl {
 public:
     typedef unsigned long long id_type;
-    typedef std::function<void(EventLoop *, task_data_t, int)> handle_t;
+    typedef std::function<void(EventService *, task_data_t, int)> handle_t;
     typedef TimerTask *timer_task_ptr;
 
 public:
-    TimerImpl(const unsigned long interval, bool is_loop);
+    TimerImpl(const unsigned long interval, bool is_es);
 
     ~TimerImpl();
 
@@ -30,7 +30,7 @@ public:
 
     struct timeval GetExpireTime();
 
-    void Process(EventLoop *loop, int mask);
+    void Process(EventService *es, int mask);
 
     void set_id(id_type id) { id_ = id; }
 
@@ -40,9 +40,9 @@ public:
 
     void set_interval(unsigned long interval) { interval_ = interval; }
 
-    void set_is_loop(bool is_loop) { is_loop_ = is_loop; }
+    void set_is_es(bool is_es) { is_es_ = is_es; }
 
-    bool get_is_loop() { return is_loop_; }
+    bool get_is_es() { return is_es_; }
 
     void set_data(task_data_t data) { data_ = data; }
 
@@ -55,7 +55,7 @@ private:
 
     //ms, expire time = begin_ + interval_;
     unsigned long  interval_;
-    bool           is_loop_;
+    bool           is_es_;
     handle_t       op_;
     task_data_t    data_;
 };

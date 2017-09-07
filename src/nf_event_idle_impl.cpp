@@ -29,7 +29,7 @@ IdleImpl::Handler IdleImpl::GetOp() {
     return op_;
 }
 
-void IdleImpl::Process(EventLoop *loop, int mask) {
+void IdleImpl::Process(EventService *es, int mask) {
     if (op_)
-        op_(loop, data_, mask);
+        op_(es, data_, mask);
 }

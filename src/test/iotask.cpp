@@ -6,7 +6,7 @@
 
 using namespace std::placeholders;
 
-void cbfunc(EventLoop *loop, task_data_t data, int mask) {
+void cbfunc(EventService *es, task_data_t data, int mask) {
   IOTask &task = *((IOTask *)data.data.ptr);
 
   std::cout << task.GetFd() << std::endl;
@@ -16,7 +16,7 @@ void cbfunc(EventLoop *loop, task_data_t data, int mask) {
 
 class Cb {
  public:
-    void CbFunc(EventLoop *loop, task_data_t data, int mask) {
+    void CbFunc(EventService *es, task_data_t data, int mask) {
       IOTask &task = *((IOTask *)data.data.ptr);
       std::cout << task.GetFd() << std::endl;
 
@@ -29,8 +29,8 @@ class Cb {
 };
 
 int main() {
-  EventLoop loop;
-  IOTask task(loop, STDIN_FILENO, EV_POLLIN);
+  EventService es;
+  IOTask task(es, STDIN_FILENO, EV_POLLIN);
   task_data_t data;
   data.data.ptr = &task;
   task.SetPrivateData(data);
@@ -39,11 +39,11 @@ int main() {
 
   Cb cb;
   cb.i = 33;
-  IOTask taskout(loop, STDOUT_FILENO, EV_POLLOUT);
+  IOTask taskout(es, STDOUT_FILENO, EV_POLLOUT);
   data.data.ptr = &taskout;
   taskout.SetPrivateData(data);
   taskout.Bind(std::bind(&Cb::CbFunc, cb, _1, _2, _3));
   taskout.Start();
-  loop.Run();
+  es.Run();
   return 0;
 }

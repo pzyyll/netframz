@@ -21,7 +21,7 @@ class IOTaskImpl;
 
 class IdleImpl;
 
-class EventLoop {
+class EventService {
 public:
     typedef IOTaskImpl *iotask_pointer;
     typedef TimerImpl *timer_pointer;
@@ -31,9 +31,9 @@ public:
     typedef std::list<idle_pointer> IdleList;
 
 public:
-    EventLoop();
+    EventService();
 
-    ~EventLoop();
+    ~EventService();
 
     int Init();
 

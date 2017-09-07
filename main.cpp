@@ -4,13 +4,13 @@
 #include <boost/asio.hpp>
 #include <functional>
 
-void cbfunc(EventLoop &loop, Timer &task, int mask) {
+void cbfunc(EventService &es, Timer &task, int mask) {
     std::cout << "Timer no class: " << mask << std::endl;
 }
 
 class Cb {
 public:
-    void cbfunc(EventLoop &loop, Timer &task, int mask) {
+    void cbfunc(EventService &es, Timer &task, int mask) {
         std::cout << "Timer: " << mask << i++ << std::endl;
     }
 
@@ -19,15 +19,15 @@ public:
 
 int main() {
     Cb cb;
-    EventLoop loop;
+    EventService es;
     Timer timer1(1000, 1);
     timer1.Bind(&Cb::cbfunc, cb);
-    timer1.Start(loop);
+    timer1.Start(es);
 
     Timer timer2(100, 1);
     timer2.Bind(cbfunc);
-    timer2.Start(loop);
+    timer2.Start(es);
 
-    loop.Run();
+    es.Run();
     return 0;
 }

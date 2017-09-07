@@ -11,8 +11,8 @@
 
 #include "mem_check.h"
 
-TimerTask::TimerTask(EventLoop &loop, const unsigned long interval, bool is_loop)
-        : loop_(loop), impl_(new impl_type(interval, is_loop)) {
+TimerTask::TimerTask(EventService &es, const unsigned long interval, bool is_es)
+        : es_(es), impl_(new impl_type(interval, is_es)) {
 
 }
 
@@ -33,7 +33,7 @@ int TimerTask::Start() {
     gettimeofday(&now, NULL);
     impl_->set_begin(now);
 
-    return loop_.AddTimerTask(impl_);
+    return es_.AddTimerTask(impl_);
 }
 
 int TimerTask::Restart() {
@@ -41,11 +41,11 @@ int TimerTask::Restart() {
     gettimeofday(&now, NULL);
     impl_->set_begin(now);
 
-    return loop_.ResetTimerTask(impl_);
+    return es_.ResetTimerTask(impl_);
 }
 
 void TimerTask::Stop() {
-    loop_.DelTimerTask(impl_->get_id());
+    es_.DelTimerTask(impl_->get_id());
 }
 
 void TimerTask::SetPrivateData(task_data_t data) {

@@ -29,5 +29,5 @@ void Socket::set_sa(const struct sockaddr_in *sa) {
     if (!sa)
         return sa;
 
-    memcpy(&sa_, sa, sizeof(sa));
+    sa_ = *sa;
 }

@@ -11,14 +11,14 @@
 
 class TimerImpl;
 
-class EventLoop;
+class EventService;
 
 class TimerTask {
     typedef TimerImpl impl_type;
 public:
-    typedef std::function<void(EventLoop *, task_data_t, int)> handle_t;
+    typedef std::function<void(EventService *, task_data_t, int)> handle_t;
 public:
-    TimerTask(EventLoop &loop, const unsigned long interval, bool is_loop);
+    TimerTask(EventService &es, const unsigned long interval, bool is_es);
 
     ~TimerTask();
 
@@ -39,7 +39,7 @@ public:
     task_data_t GetPrivateData();
 
 private:
-    EventLoop &loop_;
+    EventService &es_;
     impl_type *impl_;
 };
 

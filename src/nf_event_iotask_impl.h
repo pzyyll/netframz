@@ -10,13 +10,13 @@
 #include <functional>
 #include "nf_event_config.h"
 
-class EventLoop;
+class EventService;
 
 class IOTaskImpl;
 
 class IOTaskImpl {
 public:
-    typedef std::function<void(EventLoop *, task_data_t data, int)> handle_t;
+    typedef std::function<void(EventService *, task_data_t data, int)> handle_t;
 
 public:
     IOTaskImpl();
@@ -29,7 +29,7 @@ public:
 
     void Bind(handle_t handle);
 
-    void Process(EventLoop *loop, int mask);
+    void Process(EventService *es, int mask);
 
     void set_fd(int fd);
 

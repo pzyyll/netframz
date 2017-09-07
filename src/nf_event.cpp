@@ -11,15 +11,15 @@
 
 static const int kMaxBlockTime = 10;
 
-EventLoop::EventLoop() : stop_(true), waittime_(0) {
+EventService::EventService() : stop_(true), waittime_(0) {
     poll_.Init();
 }
 
-EventLoop::~EventLoop() {
+EventService::~EventService() {
 
 }
 
-int EventLoop::Init() {
+int EventService::Init() {
     int ret = poll_.Init();
     if (ret < 0) {
         set_err_msg(poll_.get_err());
@@ -29,7 +29,7 @@ int EventLoop::Init() {
     return ret;
 }
 
-void EventLoop::Run() {
+void EventService::Run() {
     bool exist_task = true;
 
     while (!stop_ && exist_task) {
@@ -39,7 +39,7 @@ void EventLoop::Run() {
 
         HandleAllIdleTask();
 
-        //Check if exist task continue loop.
+        //Check if exist task continue es.
         exist_task = false;
         if (idle_tasks_.size() > 0) {
             exist_task = true;
@@ -54,15 +54,15 @@ void EventLoop::Run() {
     }
 }
 
-void EventLoop::Stop() {
+void EventService::Stop() {
     stop_ = true;
 }
 
-void EventLoop::Sleep(int timeout) {
+void EventService::Sleep(int timeout) {
     PollTask(timeout);
 }
 
-int EventLoop::SetIOTask(iotask_pointer task) {
+int EventService::SetIOTask(iotask_pointer task) {
     int ret = RET::RET_SUCCESS;
 
     if (NULL == task) {
@@ -85,7 +85,7 @@ int EventLoop::SetIOTask(iotask_pointer task) {
     return ret;
 }
 
-int EventLoop::ResetIOTask(iotask_pointer task) {
+int EventService::ResetIOTask(iotask_pointer task) {
     int ret = RET_SUCCESS;
 
     if (NULL == task) {
@@ -109,7 +109,7 @@ int EventLoop::ResetIOTask(iotask_pointer task) {
     return ret;
 }
 
-int EventLoop::DelIOTask(int fd) {
+int EventService::DelIOTask(int fd) {
     int ret = RET::RET_FAIL;
 
     if (FindTask(fd, NULL)) {
@@ -126,19 +126,19 @@ int EventLoop::DelIOTask(int fd) {
     return ret;
 }
 
-int EventLoop::AddTimerTask(timer_pointer timer) {
+int EventService::AddTimerTask(timer_pointer timer) {
     return timer_mng_.AddTimer(timer);
 }
 
-int EventLoop::DelTimerTask(const unsigned long id) {
+int EventService::DelTimerTask(const unsigned long id) {
     return timer_mng_.DelTimer(id);
 }
 
-int EventLoop::ResetTimerTask(timer_pointer timer) {
+int EventService::ResetTimerTask(timer_pointer timer) {
     return timer_mng_.ModTimer(timer);
 }
 
-int EventLoop::AddIdleTask(idle_pointer idler) {
+int EventService::AddIdleTask(idle_pointer idler) {
     if (NULL == idler) {
         set_err_msg("idler pointer is null.");
         return RET::RET_FAIL;
@@ -147,7 +147,7 @@ int EventLoop::AddIdleTask(idle_pointer idler) {
     return RET::RET_SUCCESS;
 }
 
-int EventLoop::DelIdleTask(idle_pointer idler) {
+int EventService::DelIdleTask(idle_pointer idler) {
     if (NULL == idler) {
         set_err_msg("idler pointer is null.");
         return RET::RET_FAIL;
@@ -156,11 +156,11 @@ int EventLoop::DelIdleTask(idle_pointer idler) {
     return RET::RET_SUCCESS;
 }
 
-const std::string &EventLoop::get_err_msg() {
+const std::string &EventService::get_err_msg() {
     return err_msg_;
 }
 
-void EventLoop::PollTask(int timeout) {
+void EventService::PollTask(int timeout) {
     int nds = poll_.WaitEvent(fires_, timeout);
 
     while (!fires_.empty() && nds > 0) {
@@ -173,7 +173,7 @@ void EventLoop::PollTask(int timeout) {
     }
 }
 
-bool EventLoop::FindTask(const int fd, iotask_pointer *find) {
+bool EventService::FindTask(const int fd, iotask_pointer *find) {
     TaskMapItr itr = file_tasks_.find(fd);
     if (itr != file_tasks_.end()) {
         if (find)
@@ -183,17 +183,17 @@ bool EventLoop::FindTask(const int fd, iotask_pointer *find) {
     return false;
 }
 
-void EventLoop::set_err_msg(std::string msg) {
+void EventService::set_err_msg(std::string msg) {
     err_msg_ = msg;
 }
 
-void EventLoop::HandleAllTimerTask() {
+void EventService::HandleAllTimerTask() {
     std::vector<TimerImpl *> fire_timers;
     timer_mng_.GetFiredTimers(fire_timers);
 
     for (int i = 0; i < (int) fire_timers.size(); ++i) {
         TimerImpl &timer = *fire_timers[i];
-        if (timer.get_is_loop()) {
+        if (timer.get_is_es()) {
             struct timeval now;
             gettimeofday(&now, NULL);
             timer.set_begin(now);
@@ -203,7 +203,7 @@ void EventLoop::HandleAllTimerTask() {
     }
 }
 
-void EventLoop::HandleAllIdleTask() {
+void EventService::HandleAllIdleTask() {
     std::vector<idle_pointer> vecs;
     for (IdleList::iterator itr = idle_tasks_.begin(); itr != idle_tasks_.end(); ++itr) {
         if (*itr)

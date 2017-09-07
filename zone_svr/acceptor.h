@@ -33,9 +33,9 @@ public:
 public:
     Acceptor();
 
-    Acceptor(EventLoop *loop);
+    Acceptor(EventService *es);
 
-    Acceptor(EventLoop *loop, int listen_fd);
+    Acceptor(EventService *es, int listen_fd);
 
     ~Acceptor();
 
@@ -47,19 +47,19 @@ public:
 
     int GetListenFd();
 
-    void SetEventLoop(EventLoop *loop);
+    void SetEventService(EventService *es);
 
-    EventLoop *GetEventLoop();
+    EventService *GetEventService();
 
     const char *GetErrMsg();
 
 private:
-    void AcceptCb(EventLoop *loop, task_data_t data, int mask);
+    void AcceptCb(EventService *es, task_data_t data, int mask);
 
     int CheckMask(int mask);
 
 private:
-    EventLoop *loop_;
+    EventService *es_;
     IOTask    *accept_task_;
     int       listen_fd_;
     CallBack  cb_;

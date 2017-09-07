@@ -10,21 +10,21 @@
 #include <string>
 #include "nf_event_config.h"
 
-class EventLoop;
+class EventService;
 
 class IOTaskImpl;
 
 class IOTask {
 public:
-    typedef std::function<void(EventLoop *, task_data_t, int)> handle_t;
+    typedef std::function<void(EventService *, task_data_t, int)> handle_t;
     typedef IOTaskImpl impl_type;
 
 public:
-    IOTask(EventLoop &loop, const int fd);
+    IOTask(EventService &es, const int fd);
 
-    IOTask(EventLoop &loop, const int fd, const int mask);
+    IOTask(EventService &es, const int fd, const int mask);
 
-    IOTask(EventLoop &loop, const int fd, const int mask, handle_t op);
+    IOTask(EventService &es, const int fd, const int mask, handle_t op);
 
     ~IOTask();
 
@@ -49,7 +49,7 @@ public:
     std::string GetErr();
 
 private:
-    EventLoop &loop_;
+    EventService &es_;
     impl_type *pimpl_;
 };
 

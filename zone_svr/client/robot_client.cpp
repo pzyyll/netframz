@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
     ip = string(argv[1]);
 
     int n = 0, n2 = 0;
-    cout << "option(0:loop, 1: once) client_nums msg_nums per-msg-len" << endl;
+    cout << "option(0:es, 1: once) client_nums msg_nums per-msg-len" << endl;
     while (cin >> n) {
         cin >> n2 >> nmsg >> pkg_len;
         switch (n) {
@@ -133,7 +133,7 @@ int main(int argc, char *argv[]) {
         default:
             break;
         }
-        cout << "option(0:loop, 1: once) client_nums msg_nums per-msg-len" << endl;
+        cout << "option(0:es, 1: once) client_nums msg_nums per-msg-len" << endl;
     }
 
     return 0;
