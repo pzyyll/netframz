@@ -5,6 +5,8 @@
 
 #include "nf_socket_api.h"
 
+namespace nf {
+
 int SetBlockStat(int fd, bool is_block) {
     int val;
 
@@ -66,3 +68,5 @@ ssize_t Writen(int fd, const void *buff, size_t len) {
 
     return (ssize_t)(len - nleft);
 }
+
+} //nf

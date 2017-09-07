@@ -8,6 +8,7 @@
 #define UNUSED(X) (void)(X)
 
 using namespace std::placeholders;
+using namespace nf;
 
 Acceptor::Acceptor()
     : loop_(NULL),

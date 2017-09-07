@@ -29,6 +29,7 @@ set(NFSOURCE_FILES
         ../../src/nf_condition.cpp
         ../../src/nf_thread.cpp
         ../../src/nf_mutex.cpp
+        ../../src/nf_socket_api.cpp
         )
 
 add_executable(robot_client robot_client.cpp ${SOURCE_FILES})
