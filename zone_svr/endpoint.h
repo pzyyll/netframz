@@ -8,24 +8,33 @@
 
 #include <string>
 #include <cstring>
+#include <cstddef>
 #include <netinet/in.h>
-
+#include <arpa/inet.h>
 
 class Endpoint {
 public:
+    const static size_t kMaxIPStrLen = 128;
     typedef struct sockaddr_storage SAStorage;
-    typedef struct sockaddr_in SAv4;
-    typedef struct sockaddr_in6 SAv6;
-    typedef struct sockaddr SA;
 
-    Endpoint(int port, const std::string addr = "", bool ipv6 = false);
+    Endpoint();
+
+    Endpoint(int port, const std::string &addr = "", bool ipv6 = false);
 
     ~Endpoint();
 
+    void SetSockAddr(const struct sockaddr *sa, socklen_t sa_len);
+
+    void GetIPStr(std::string &str);
+
     //TODO(@Caizhili)
+
+    int GetPort();
+
+    void GetHost(std::string &str);
 
 private:
     SAStorage sa_;
-}
+};
 
 #endif //NF_ZONESVR_ENDPOINT_H
