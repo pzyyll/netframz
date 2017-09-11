@@ -25,7 +25,7 @@ public:
 
     ~Endpoint();
 
-    void SetSockAddr(const struct sockaddr *sa, socklen_t sa_len);
+    void SetSockaddr(const struct sockaddr *sa, socklen_t sa_len);
 
     void GetIPStr(std::string &str);
 

@@ -25,7 +25,7 @@ Endpoint::~Endpoint() {
 
 }
 
-void Endpoint::SetSockAddr(const struct sockaddr *sa, socklen_t sa_len) {
+void Endpoint::SetSockaddr(const struct sockaddr *sa, socklen_t sa_len) {
     if (!sa || sa_len == 0 || sa_len > sizeof(sa_))
         return;
 

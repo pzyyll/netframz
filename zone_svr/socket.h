@@ -7,28 +7,38 @@
 #define NF_ZONESVR_SOCKET_H
 
 #include <netinet/in.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 #include <cstdlib>
 #include <cstring>
 
+#include "endpoint.h"
+
 class Socket {
+    const static unsigned int kMaxErrLen = 256;
 public:
     Socket();
+
+    Socket(int domain, int type, int protocol);
 
     Socket(int sock);
 
     ~Socket();
 
-    void set_sock(int sock);
+    void SetSock(int sock);
 
-    int sock();
+    int GetSock();
 
-    void set_sa(const struct sockaddr_in *sa);
+    void SetSockaddr(const struct sockaddr *sa, socklen_t sa_len);
 
-    struct sockaddr_in *sa();
+    struct sockaddr *GetSockaddr();
+
+    //TODO(@Caizhili)
 
 private:
     int sock_;
-    struct sockaddr_in sa_;
+    Endpoint ep_;
+    char err_msg_;
 };
 
 #endif //NF_ZONESVR_SOCKET_H
