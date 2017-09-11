@@ -9,8 +9,10 @@
 #include <string>
 #include <cstring>
 #include <cstddef>
+#include <cstdio>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 
 class Endpoint {
 public:
@@ -32,6 +34,17 @@ public:
     int GetPort();
 
     void GetHost(std::string &str);
+
+    int GetFamily();
+
+    /*
+     * @Brief
+     * struct sockaddr_storage {
+     *   sa_family_t sa_family;
+     *   char        sa_data[]; //variable-length data;
+     * }
+     */
+    const struct sockaddr_storage *GetSA();
 
 private:
     SAStorage sa_;
