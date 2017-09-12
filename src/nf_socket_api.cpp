@@ -69,4 +69,209 @@ ssize_t Writen(int fd, const void *buff, size_t len) {
     return (ssize_t)(len - nleft);
 }
 
+/*
+ * @Brief struct sockaddr_in detail for IPv4.
+ * struct sockaddr_in {
+ *     sa_family_t    sin_family;
+ *     in_port_t      sin_port;
+ *     struct in_addr sin_addr;
+ * }
+ *
+ * struct in_addr {
+ *     uint32_t s_addr;
+ * }
+ */
+void SAv4From(int port, const char *addr, struct sockaddr_in *sa) {
+    sa->sin_family = AF_INET;
+    sa->sin_port = htons(port);
+
+    if (addr == NULL || strlen(addr) == 0)
+        sa->sin_addr.s_addr = INADDR_ANY;
+    else
+        inet_pton(AF_INET, addr, &sa->sin_addr);
+}
+
+/*
+ * @Brief struct sockaddr_in6 detail for IPv6.
+ * struct sockaddr_in6 {
+ *     sa_family_t     sin6_family;
+ *     in_port_t       sin6_port;
+ *     uint32_t        sin6_flowinfor;  // < TODO understand
+ *     struct in6_addr sin6_addr;
+ *     uint32_t        sin6_scope_id;   // < TODO understand
+ * }
+ *
+ * struct in6_addr {
+ *     unsigned char s6_addr[16];
+ * }
+ */
+void SAv6From(int port, const char *addr, struct sockaddr_in6 *sa6) {
+    sa6->sin6_family = AF_INET6;
+    sa6->sin6_port = htons(port);
+
+    if (addr == NULL || strlen(addr) == 0)
+        sa6->sin6_addr = in6addr_any;
+    else
+        inet_pton(AF_INET6, addr, &sa6->sin6_addr);
+}
+
+/*
+ * @Brief Convert IP presentation from sockaddr_xxx struct;
+ */
+void SAToIPStr(const struct sockaddr *sa, socklen_t sa_len,
+               char *ip_str, size_t len) {
+    char portstr[8];
+    size_t rlen = 0;
+
+    switch (sa->sa_family) {
+    case AF_INET: {
+            if ((size_t)sa_len < sizeof(struct sockaddr_in)
+                    || len < INET_ADDRSTRLEN) {
+                return;
+            }
+            const struct sockaddr_in *sa_in = (const struct sockaddr_in *)sa;
+            if (!inet_ntop(AF_INET, &sa_in->sin_addr, ip_str, (socklen_t)len)) {
+                return;
+            }
+            snprintf(portstr, sizeof(portstr), ":%d", ntohs(sa_in->sin_port));
+            rlen = len - INET_ADDRSTRLEN;
+            break;
+        }
+    case AF_INET6: {
+            if ((size_t)sa_len < sizeof(struct sockaddr_in6)
+                    || len < INET6_ADDRSTRLEN) {
+                return;
+            }
+            const struct sockaddr_in6 *sa_i6 = (const struct sockaddr_in6 *)sa;
+            if (!inet_ntop(AF_INET6, &sa_i6->sin6_addr, ip_str, (socklen_t)len)) {
+                return;
+            }
+            snprintf(portstr, sizeof(portstr), ":%d", ntohs(sa_i6->sin6_port));
+            rlen = len - INET6_ADDRSTRLEN;
+            break;
+        }
+    default:
+        return;
+    }
+
+    strncat(ip_str, portstr, rlen > 0 ? rlen - 1 : 0);
+}
+
+void SAToHost(const struct sockaddr *sa, socklen_t sa_len,
+              char *host, size_t len) {
+    switch (sa->sa_family) {
+    case AF_INET: {
+            if ((size_t)sa_len < sizeof(struct sockaddr_in)
+                    || len < INET_ADDRSTRLEN) {
+                return;
+            }
+            const struct sockaddr_in *sa_in = (const struct sockaddr_in *)sa;
+            inet_ntop(AF_INET, &sa_in->sin_addr, host, (socklen_t)len);
+            break;
+        }
+    case AF_INET6: {
+            if ((size_t)sa_len < sizeof(struct sockaddr_in6)
+                    || len < INET6_ADDRSTRLEN) {
+                return;
+            }
+            const struct sockaddr_in6 *sa_i6 = (const struct sockaddr_in6 *)sa;
+            inet_ntop(AF_INET6, &sa_i6->sin6_addr, host, (socklen_t)len);
+            break;
+        }
+    default:
+        break;
+    }
+}
+
+int SAToPort(const struct sockaddr *sa, socklen_t sa_len) {
+    int port = 0;
+
+    switch (sa->sa_family) {
+    case AF_INET: {
+            if (sizeof(struct sockaddr_in) > (size_t)sa_len)
+                return 0;
+            const struct sockaddr_in *sa_in = (const struct sockaddr_in *)sa;
+            port = ntohs(sa_in->sin_port);
+            break;
+        }
+    case AF_INET6: {
+            if (sizeof(struct sockaddr_in6) > (size_t)sa_len)
+                return 0;
+            const struct sockaddr_in6 *sa_i6 = (const struct sockaddr_in6 *)sa;
+            port = ntohs(sa_i6->sin6_port);
+            break;
+        }
+    default:
+        break;
+    }
+
+    return port;
+}
+
+void GetIPFromHost(const std::string &host, int domain, std::vector<std::string> &v_ip) {
+    /* @Brief
+     * struct addrinfo {
+     *   int             ai_flags;
+     *   int             ai_family;
+     *   int             ai_socktype;
+     *   int             ai_protocol;
+     *   socklen_t       ai_addrlen;
+     *   char            *ai_canonname;
+     *   struct sockaddr *ai_addr;
+     *   struct addrinfo *ai_next;
+     * }
+     */
+    struct addrinfo hints;
+    struct addrinfo *result = NULL, *rp;
+
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = domain;
+
+    /* @Brief
+     * getaddrinfo(const char *node,
+     *             const char *service,
+     *             const struct addrinfo *hints,
+     *             struct addrinfo **res);
+     */
+    int ret = getaddrinfo(host.c_str(), 0, &hints, &result);
+    if (ret != 0) {
+        //cout << gai_strerror(ret) << endl;
+        return;
+    }
+
+    char ipstr[48] = {0};
+    for (rp = result; rp != NULL; rp = rp->ai_next) {
+        switch (rp->ai_family) {
+        case AF_INET: {
+                struct sockaddr_in *sa_in = (struct sockaddr_in *)rp->ai_addr;
+                if (inet_ntop(AF_INET,
+                              &sa_in->sin_addr,
+                              ipstr,
+                              sizeof(ipstr)) == NULL) {
+                    //cout << strerror(ret) << endl;
+                    return ;
+                }
+                if (AF_INET == domain)
+                    v_ip.push_back(ipstr);
+                break;
+            }
+        case AF_INET6: {
+                struct sockaddr_in6 *sa_in6 = (struct sockaddr_in6 *)rp->ai_addr;
+                if (inet_ntop(AF_INET6,
+                              &sa_in6->sin6_addr,
+                              ipstr,
+                              sizeof(ipstr)) == NULL) {
+                    //cout << strerror(ret) << endl;
+                    return;
+                }
+                if (AF_INET6 == domain)
+                    v_ip.push_back(ipstr);
+                break;
+            }
+        default:
+            break;
+        }
+    }
+}
+
 } //nf
