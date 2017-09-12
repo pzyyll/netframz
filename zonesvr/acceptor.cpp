@@ -48,7 +48,7 @@ int Acceptor::Bind(const std::string &addr, const int port, bool reuse) {
         return FAIL;
     }
 
-    if (reuse && listen_.SetReuseAddr(true) < 0) {
+    if (listen_.SetReuseAddr(reuse) < 0) {
         snprintf(err_msg_, sizeof(err_msg_), "Set reuse fail. %s", listen_.GetErrMsg());
         return FAIL;
     }
@@ -87,8 +87,12 @@ int Acceptor::Listen(CallBack cb) {
     return SUCCESS;
 }
 
+/*
+ * @Brief
+ * If had bind and listen, need rebind and restart listen;
+ */
 void Acceptor::SetListenFd(int listen_fd) {
-//    listen_fd_ = listen_fd;
+    listen_.SetSock(listen_fd);
 }
 
 int Acceptor::GetListenFd() {
