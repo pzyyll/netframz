@@ -32,38 +32,38 @@ void Endpoint::SetSockaddr(const struct sockaddr *sa, socklen_t sa_len) {
     memcpy(&sa_, sa, sa_len);
 }
 
-void Endpoint::GetIPStr(std::string &str) {
+std::string Endpoint::GetIP() const {
     char cstr[kMaxIPStrLen] = {0};
     SAToIPStr((struct sockaddr *)&sa_, sizeof(sa_), cstr, sizeof(cstr));
-    str.assign(cstr);
+    return std::string(cstr);
 }
 
-int Endpoint::GetPort() {
+int Endpoint::GetPort() const {
     return SAToPort((struct sockaddr *)&sa_, sizeof(sa_));
 }
 
-void Endpoint::GetHost(std::string &str) {
+std::string Endpoint::GetHost() const {
     char cstr[kMaxIPStrLen] = {0};
     SAToHost((struct sockaddr *)&sa_, sizeof(sa_), cstr, sizeof(cstr));
-    str.assign(cstr);
+    return std::string(cstr);
 }
 
-int Endpoint::GetFamily() {
+int Endpoint::GetFamily() const {
     return sa_.ss_family;
 }
 
-const struct sockaddr_storage *Endpoint::GetSA() {
-    return GetMutableSA();
+const struct sockaddr_storage *Endpoint::GetSA() const {
+    return &sa_;
 }
 
 struct sockaddr_storage *Endpoint::GetMutableSA() {
     return &sa_;
 }
 
-const struct sockaddr_in *Endpoint::GetSAv4() {
+const struct sockaddr_in *Endpoint::GetSAv4() const {
     return (const struct sockaddr_in *)&sa_;
 }
 
-const struct sockaddr_in6 *Endpoint::GetSAv6() {
+const struct sockaddr_in6 *Endpoint::GetSAv6() const {
     return (const struct sockaddr_in6 *)&sa_;
 }

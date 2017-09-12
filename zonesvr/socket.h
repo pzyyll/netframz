@@ -34,7 +34,7 @@ public:
 
     ~Socket();
 
-    void SetNonBlock();
+    void SetNonBlock(bool on);
 
     void SetSock(int sock);
 
@@ -60,20 +60,12 @@ public:
      */
     int GetPeerSockInfo(Endpoint &ep);
 
-    /*
-     * @Brief
-     * Server side
-     */
-    int BindAddr(Endpoint &ep);
+    int BindAddr(const Endpoint &ep);
 
     int Listen(int backlog);
 
     int Accept(Endpoint *peerend = NULL);
 
-    /*
-     * @Brief
-     * IO interface
-     */
     ssize_t Send(const void *buf, size_t len);
 
     ssize_t Recv(void *buf, size_t len);
@@ -97,7 +89,6 @@ public:
     int SetRecvBuff(int size);
 
     int SetSendBuff(int size);
-
 
 private:
     int sock_;

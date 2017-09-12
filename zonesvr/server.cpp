@@ -8,6 +8,8 @@
 #include "log.h"
 #include "mem_check.h"
 
+#include <iostream>
+
 #define UNUSE(x) ((void)(x))
 
 using namespace std::placeholders;

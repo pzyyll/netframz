@@ -27,15 +27,15 @@ public:
 
     void SetSockaddr(const struct sockaddr *sa, socklen_t sa_len);
 
-    void GetIPStr(std::string &str);
+    std::string GetIP() const;
 
     //TODO(@Caizhili)
 
-    int GetPort();
+    int GetPort() const;
 
-    void GetHost(std::string &str);
+    std::string GetHost() const;
 
-    int GetFamily();
+    int GetFamily() const;
 
     /*
      * @Brief
@@ -44,13 +44,13 @@ public:
      *   char        sa_data[]; //variable-length data;
      * }
      */
-    const struct sockaddr_storage *GetSA();
+    const struct sockaddr_storage *GetSA() const;
 
     struct sockaddr_storage *GetMutableSA();
 
-    const struct sockaddr_in *GetSAv4();
+    const struct sockaddr_in *GetSAv4() const;
 
-    const struct sockaddr_in6 *GetSAv6();
+    const struct sockaddr_in6 *GetSAv6() const;
 
 private:
     SAStorage sa_;

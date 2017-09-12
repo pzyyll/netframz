@@ -19,6 +19,8 @@
 #include "nf_event_iotask.h"
 #include "nf_socket_api.h"
 #include "err_code.h"
+#include "socket.h"
+#include "endpoint.h"
 
 class Acceptor {
     static const unsigned int kMaxErrLen = 256;
@@ -61,7 +63,7 @@ private:
 private:
     EventService *es_;
     IOTask    *accept_task_;
-    int       listen_fd_;
+    Socket    listen_;
     CallBack  cb_;
 
     char err_msg_[kMaxErrLen];

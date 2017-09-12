@@ -4,6 +4,7 @@
 //
 
 #include "acceptor.h"
+#include <iostream>
 
 #define UNUSED(X) (void)(X)
 
@@ -13,7 +14,7 @@ using namespace nf;
 Acceptor::Acceptor()
     : es_(NULL),
       accept_task_(NULL),
-      listen_fd_(-1),
+      listen_(AF_INET, SOCK_STREAM, 0),
       cb_() {
     err_msg_[0] = '\0';
 }
@@ -21,7 +22,7 @@ Acceptor::Acceptor()
 Acceptor::Acceptor(EventService *es)
     : es_(es),
       accept_task_(NULL),
-      listen_fd_(-1),
+      listen_(AF_INET, SOCK_STREAM, 0),
       cb_() {
     err_msg_[0] = '\0';
 }
@@ -29,7 +30,7 @@ Acceptor::Acceptor(EventService *es)
 Acceptor::Acceptor(EventService *es, int listen_fd)
     : es_(es),
       accept_task_(NULL),
-      listen_fd_(listen_fd),
+      listen_(listen_fd),
       cb_() {
     err_msg_[0] = '\0';
 }
@@ -42,61 +43,37 @@ Acceptor::~Acceptor() {
 }
 
 int Acceptor::Bind(const std::string &addr, const int port, bool reuse) {
-    if (listen_fd_ < 0) {
-        if ( (listen_fd_ = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-            snprintf(err_msg_, sizeof(err_msg_), "Create socket fd fail|%s",
-                     strerror(errno));
-            return FAIL;
-        }
-    }
-
-    if (reuse) {
-        int ireuse = 1;
-        if (setsockopt(listen_fd_, SOL_SOCKET,
-                       SO_REUSEADDR, &ireuse, sizeof(ireuse)) < 0) {
-            snprintf(err_msg_, sizeof(err_msg_), "Set addr reuse fail|%s",
-                     strerror(errno));
-            return FAIL;
-        }
-    }
-
-    SetBlockStat(listen_fd_, false);
-
-    struct sockaddr_in saddr;
-    memset(&saddr, 0, sizeof(saddr));
-    saddr.sin_family = AF_INET;
-    saddr.sin_port = htons(port);
-
-    if (addr != "") {
-        inet_pton(AF_INET, addr.c_str(), &saddr.sin_addr);
-    } else {
-        saddr.sin_addr.s_addr = INADDR_ANY;
-    }
-
-    if (bind(listen_fd_, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
-        snprintf(err_msg_, sizeof(err_msg_), "Bind fd(%d) fail. %s",
-                 listen_fd_, strerror(errno));
+    if (listen_.BindAddr(Endpoint(port, addr)) < 0) {
+        snprintf(err_msg_, sizeof(err_msg_), "Bind addr err. %s", listen_.GetErrMsg());
         return FAIL;
     }
 
-    return listen_fd_;
+    if (reuse && listen_.SetReuseAddr(true) < 0) {
+        snprintf(err_msg_, sizeof(err_msg_), "Set reuse fail. %s", listen_.GetErrMsg());
+        return FAIL;
+    }
+
+    //TODO (@Caizhili) test
+    listen_.SetNonBlock(true);
+
+     return SUCCESS;
 }
 
 int Acceptor::Listen(CallBack cb) {
     cb_ = cb;
-
-    if (listen(listen_fd_, 4096) < 0) {
-        snprintf(err_msg_, sizeof(err_msg_), "Listen fail. fd=%d, %s",
-                 listen_fd_, strerror(errno));
-        return FAIL;
-    }
 
     if (!es_) {
         snprintf(err_msg_, sizeof(err_msg_), "EventService handler is null.");
         return FAIL;
     }
 
-    accept_task_ = new IOTask(*es_, listen_fd_, EV_READABLE);
+    if (listen_.Listen(4096) < 0) {
+        snprintf(err_msg_, sizeof(err_msg_), "Listen fail. fd=%d, %s",
+                 listen_.GetSock(), listen_.GetErrMsg());
+        return FAIL;
+    }
+
+    accept_task_ = new IOTask(*es_, listen_.GetSock(), EV_READABLE);
     assert(accept_task_ != NULL);
 
     accept_task_->Bind(std::bind(&Acceptor::AcceptCb, this, _1, _2, _3));
@@ -111,11 +88,11 @@ int Acceptor::Listen(CallBack cb) {
 }
 
 void Acceptor::SetListenFd(int listen_fd) {
-    listen_fd_ = listen_fd;
+//    listen_fd_ = listen_fd;
 }
 
 int Acceptor::GetListenFd() {
-    return listen_fd_;
+    return listen_.GetSock();
 }
 
 void Acceptor::SetEventService(EventService *es) {
@@ -145,10 +122,8 @@ void Acceptor::AcceptCb(EventService *es, task_data_t data, int mask) {
     }
 
     while (true) {
-        struct sockaddr_in cli_addr;
-        memset(&cli_addr, 0, sizeof(cli_addr));
-        socklen_t len = sizeof(cli_addr);
-        int fd = accept(listen_fd_, (struct sockaddr *) &cli_addr, &len);
+        Endpoint cli_ep;
+        int fd = listen_.Accept(&cli_ep);
         if (fd < 0) {
             if (EAGAIN == errno)
                 break;

@@ -22,11 +22,11 @@ Socket::Socket(int domain, int type, int protocol) {
 }
 
 Socket::~Socket() {
-    Close();
+    //Close();
 }
 
-void Socket::SetNonBlock() {
-    SetBlockStat(sock_, false);
+void Socket::SetNonBlock(bool on) {
+    SetBlockStat(sock_, !on);
 }
 
 void Socket::SetSock(int sock) {
@@ -72,7 +72,7 @@ int Socket::GetPeerSockInfo(Endpoint &ep) {
     return SUCCESS;
 }
 
-int Socket::BindAddr(Endpoint &ep) {
+int Socket::BindAddr(const Endpoint &ep) {
     int ret = SUCCESS;
     switch (ep.GetFamily()) {
     case AF_INET: {

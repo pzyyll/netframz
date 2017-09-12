@@ -30,14 +30,30 @@ void SAv4From(int port, const char *addr, struct sockaddr_in *sa);
 
 void SAv6From(int port, const char *addr, struct sockaddr_in6 *sa6);
 
+/*
+ * @Brief
+ * Get IP presentation from sockaddr_xxx
+ * Only IPv4 and IPv6.
+ * e.g. xxxx.xxxx.xxxx.xxxx:port
+ *      xxxx:xxxx:xxxx:xxxx:port
+ */
 void SAToIPStr(const struct sockaddr *sa, socklen_t sa_len,
                char *ip_str, size_t len);
 
+/*
+ * @Brief
+ * Get IP presentation not port
+ */
 void SAToHost(const struct sockaddr *sa, socklen_t sa_len,
               char *host, size_t len);
 
 int SAToPort(const struct sockaddr *sa, socklen_t sa_len);
 
+/*
+ * @Brief
+ * Get IP from host name;
+ * e.g. pzyyll.top -> 172.x.x.x
+ */
 void GetIPFromHost(const std::string &host, int domain, std::vector<std::string> &v_ip);
 
 } //nf
