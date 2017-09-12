@@ -53,5 +53,17 @@ int Endpoint::GetFamily() {
 }
 
 const struct sockaddr_storage *Endpoint::GetSA() {
+    return GetMutableSA();
+}
+
+struct sockaddr_storage *Endpoint::GetMutableSA() {
     return &sa_;
+}
+
+const struct sockaddr_in *Endpoint::GetSAv4() {
+    return (const struct sockaddr_in *)&sa_;
+}
+
+const struct sockaddr_in6 *Endpoint::GetSAv6() {
+    return (const struct sockaddr_in6 *)&sa_;
 }

@@ -42,6 +42,8 @@ set(SOURCE_FILES
         player_manage.cpp
         aoi_manage.cpp
         acceptor.cpp
+        socket.cpp
+        endpoint.cpp
         xml/tinyxml2.cpp
         )
 

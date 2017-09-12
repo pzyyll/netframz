@@ -1,44 +1,107 @@
 //
 // @Create by Caizhili on 20170906
-// @Brief
+// @Brief verbose socket api package
 //
 
 #ifndef NF_ZONESVR_SOCKET_H
 #define NF_ZONESVR_SOCKET_H
 
-#include <netinet/in.h>
-#include <sys/types.h>
-#include <sys/socket.h>
 #include <cstdlib>
 #include <cstring>
+#include <cstdio>
+#include <unistd.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <errno.h>
 
 #include "endpoint.h"
 
 class Socket {
     const static unsigned int kMaxErrLen = 256;
 public:
-    Socket();
+    enum Ret {
+        FAIL = -1,
+        SUCCESS = 0,
+    };
 
-    Socket(int domain, int type, int protocol);
+    Socket();
 
     Socket(int sock);
 
+    Socket(int domain, int type, int protocol);
+
     ~Socket();
+
+    void SetNonBlock();
 
     void SetSock(int sock);
 
     int GetSock();
 
-    void SetSockaddr(const struct sockaddr *sa, socklen_t sa_len);
+    bool CheckSock();
 
-    struct sockaddr *GetSockaddr();
+    void Close();
 
-    //TODO(@Caizhili)
+    const char *GetErrMsg();
+
+    //TODO(@Caizhili) test all interface
+
+    /*
+     * @Brief
+     * Get local sockaddr info from socket fd;
+     */
+    int GetLocalSockInfo(Endpoint &ep);
+
+    /*
+     * @Brief
+     * Get peer end sockaddr info from socket fd;
+     */
+    int GetPeerSockInfo(Endpoint &ep);
+
+    /*
+     * @Brief
+     * Server side
+     */
+    int BindAddr(Endpoint &ep);
+
+    int Listen(int backlog);
+
+    int Accept(Endpoint *peerend = NULL);
+
+    /*
+     * @Brief
+     * IO interface
+     */
+    ssize_t Send(const void *buf, size_t len);
+
+    ssize_t Recv(void *buf, size_t len);
+
+    int SetNoDelay(bool on);
+
+    int SetReuseAddr(bool on);
+
+    /*
+     * @Linux 3.9 later
+     * Allow mutil process bind same port.
+     */
+    int SetReusePort(bool on);
+
+    /*
+     * @Brief
+     * Set tcp recv buff
+     * :/proc/sys/net/core/wmem_max
+     * The real val is 2x set size;
+     */
+    int SetRecvBuff(int size);
+
+    int SetSendBuff(int size);
+
 
 private:
     int sock_;
-    Endpoint ep_;
-    char err_msg_;
+    char err_msg_[kMaxErrLen];
 };
 
 #endif //NF_ZONESVR_SOCKET_H

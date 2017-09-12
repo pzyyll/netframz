@@ -46,6 +46,12 @@ public:
      */
     const struct sockaddr_storage *GetSA();
 
+    struct sockaddr_storage *GetMutableSA();
+
+    const struct sockaddr_in *GetSAv4();
+
+    const struct sockaddr_in6 *GetSAv6();
+
 private:
     SAStorage sa_;
 };
