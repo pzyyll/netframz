@@ -56,7 +56,7 @@ int Acceptor::Bind(const std::string &addr, const int port, bool reuse) {
     //TODO (@Caizhili) test
     listen_.SetNonBlock(true);
 
-     return SUCCESS;
+    return SUCCESS;
 }
 
 int Acceptor::Listen(CallBack cb) {
@@ -126,8 +126,8 @@ void Acceptor::AcceptCb(EventService *es, task_data_t data, int mask) {
     }
 
     while (true) {
-        Endpoint cli_ep;
-        int fd = listen_.Accept(&cli_ep);
+        //Endpoint cli_ep;
+        int fd = listen_.Accept();
         if (fd < 0) {
             if (EAGAIN == errno)
                 break;

@@ -9,15 +9,16 @@ message MsgRet {
 
 message MsgCmd {
     enum MsgId {
-        MSGINIT       = 0X0;
-        LOGIN_REQ     = 0X1001;
-        LOGIN_RSP     = 0X1002;
-        ZONE_SYN_REQ  = 0X2001;
-        ZONE_SYN_RSP  = 0X2002;
-        ZONE_SYN      = 0X2003;
-        CHAT_REQ      = 0X3001;
-        CHAT_RSP      = 0X3002;
-        CHAT_STAT     = 0X3003;
+        MSGINIT           = 0X0;
+        LOGIN_REQ         = 0X1001;
+        LOGIN_RSP         = 0X1002;
+        ZONE_SYN_REQ      = 0X2001;
+        ZONE_SYN_RSP      = 0X2002;
+        ZONE_SYN          = 0X2003;
+        ZONE_USER_REMOVE  = 0X2004;
+        CHAT_REQ          = 0X3001;
+        CHAT_RSP          = 0X3002;
+        CHAT_STAT         = 0X3003;
     }
 }
 
@@ -56,12 +57,18 @@ message ZoneSynReq {
 message ZoneSynRsp {
     int32 ret = 1;
     bytes err_msg = 2;
-    ZoneStat zone_stat = 3;
+    ZoneStat show_stat = 3;
+    ZoneStat unshow_stat = 4;
 }
 
 // ZONE_SYN = 0X2003
 message ZoneSyn {
     ZoneStat zone_stat = 1;
+}
+
+// ZONE_USER_REMOVE = 0X2004
+message ZoneUserRemove {
+    bytes name = 1;
 }
 
 // CHAT_REQ = 0X3001;

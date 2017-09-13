@@ -52,19 +52,23 @@ public:
      * @Brief
      * Get local sockaddr info from socket fd;
      */
-    int GetLocalSockInfo(Endpoint &ep);
+    int GetLocalAddr(Endpoint &ep);
 
     /*
      * @Brief
      * Get peer end sockaddr info from socket fd;
      */
-    int GetPeerSockInfo(Endpoint &ep);
+    int GetPeerAddr(Endpoint &ep);
 
     int BindAddr(const Endpoint &ep);
 
     int Listen(int backlog);
 
     int Accept(Endpoint *peerend = NULL);
+
+    int Connect(const Endpoint &ep);
+
+    int Connect(const Endpoint &ep, int timeout);
 
     ssize_t Send(const void *buf, size_t len);
 

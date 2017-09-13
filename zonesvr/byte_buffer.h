@@ -28,7 +28,7 @@ public:
     size_t ReadableSize();
 
     /*
-     * @brief just increase
+     * @Brief just increase
      */
     void Reserve(size_t size);
 

@@ -52,7 +52,7 @@ const char *Socket::GetErrMsg() {
     return err_msg_;
 }
 
-int Socket::GetLocalSockInfo(Endpoint &ep) {
+int Socket::GetLocalAddr(Endpoint &ep) {
     struct sockaddr_storage *ssp = ep.GetMutableSA();
     socklen_t len = sizeof(*ssp);
     if (getsockname(sock_, (struct sockaddr *)ssp, &len) < 0) {
@@ -62,7 +62,7 @@ int Socket::GetLocalSockInfo(Endpoint &ep) {
     return SUCCESS;
 }
 
-int Socket::GetPeerSockInfo(Endpoint &ep) {
+int Socket::GetPeerAddr(Endpoint &ep) {
     struct sockaddr_storage *ssp = ep.GetMutableSA();
     socklen_t len = sizeof(*ssp);
     if (getpeername(sock_, (struct sockaddr *)ssp, &len) < 0) {
@@ -117,6 +117,11 @@ int Socket::Accept(Endpoint *peerend) {
         peer_fd = accept(sock_, (struct sockaddr *)ssp, &ss_len);
     }
     return peer_fd;
+}
+
+int Socket::Connect(const Endpoint &ep) {
+    const struct sockaddr_storage *ssp = ep.GetSA();
+    return connect(sock_, (const struct sockaddr *)ssp, sizeof(*ssp));
 }
 
 ssize_t Socket::Send(const void *buf, size_t len) {

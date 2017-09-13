@@ -22,4 +22,4 @@ max_fds 65536
 log_level 4
 
 # zone num
-zone_num 10
+#zone_num 10

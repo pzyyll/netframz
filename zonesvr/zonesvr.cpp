@@ -123,17 +123,6 @@ void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long ci
             break;
         }
 
-
-//	        int nx, ny, ox, oy;
-//	        ox = player->last_point().x;
-//	        oy = player->last_point().y;
-//	        nx = req.persion().point().x();
-//	        ny = req.persion().point().y();
-//	        if (ox == nx && oy == ny) {
-//	            log_debug("position not change.");
-//	            break;
-//	        }
-
         int nx, ny;
         nx = req.persion().point().x();
         ny = req.persion().point().y();

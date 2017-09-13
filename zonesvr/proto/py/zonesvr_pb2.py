@@ -19,9 +19,8 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='zonesvr.proto',
   package='',
   syntax='proto3',
-  serialized_pb=_b('\n\rzonesvr.proto\"3\n\x06MsgRet\")\n\x07\x45rrCode\x12\x0b\n\x07SUCCESS\x10\x00\x12\x11\n\x04\x46\x41IL\x10\xff\xff\xff\xff\xff\xff\xff\xff\xff\x01\"\xa2\x01\n\x06MsgCmd\"\x97\x01\n\x05MsgId\x12\x0b\n\x07MSGINIT\x10\x00\x12\x0e\n\tLOGIN_REQ\x10\x81 \x12\x0e\n\tLOGIN_RSP\x10\x82 \x12\x11\n\x0cZONE_SYN_REQ\x10\x81@\x12\x11\n\x0cZONE_SYN_RSP\x10\x82@\x12\r\n\x08ZONE_SYN\x10\x83@\x12\r\n\x08\x43HAT_REQ\x10\x81`\x12\r\n\x08\x43HAT_RSP\x10\x82`\x12\x0e\n\tCHAT_STAT\x10\x83`\"a\n\x07Persion\x12\x0c\n\x04name\x18\x01 \x01(\x0c\x12\x1d\n\x05point\x18\x02 \x01(\x0b\x32\x0e.Persion.Point\x12\n\n\x02id\x18\x03 \x01(\r\x1a\x1d\n\x05Point\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\"*\n\x08ZoneStat\x12\x1e\n\x0cpersion_list\x18\x01 \x03(\x0b\x32\x08.Persion\"\x18\n\x08LoginReq\x12\x0c\n\x04name\x18\x01 \x01(\x0c\"F\n\x08LoginRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\x0c\x12\x1c\n\tzone_stat\x18\x03 \x01(\x0b\x32\t.ZoneStat\"\'\n\nZoneSynReq\x12\x19\n\x07persion\x18\x01 \x01(\x0b\x32\x08.Persion\"H\n\nZoneSynRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\x0c\x12\x1c\n\tzone_stat\x18\x03 \x01(\x0b\x32\t.ZoneStat\"\'\n\x07ZoneSyn\x12\x1c\n\tzone_stat\x18\x01 \x01(\x0b\x32\t.ZoneStat\"(\n\x07\x43hatReq\x12\x0c\n\x04name\x18\x01 \x01(\x0c\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\"\'\n\x07\x43hatRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\x0c\"D\n\x08\x43hatStat\x12\x19\n\x07speaker\x18\x01 \x01(\x0b\x32\x08.Persion\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\x12\x0c\n\x04time\x18\x03 \x01(\rb\x06proto3')
+  serialized_pb=_b('\n\rzonesvr.proto\"3\n\x06MsgRet\")\n\x07\x45rrCode\x12\x0b\n\x07SUCCESS\x10\x00\x12\x11\n\x04\x46\x41IL\x10\xff\xff\xff\xff\xff\xff\xff\xff\xff\x01\"\xb9\x01\n\x06MsgCmd\"\xae\x01\n\x05MsgId\x12\x0b\n\x07MSGINIT\x10\x00\x12\x0e\n\tLOGIN_REQ\x10\x81 \x12\x0e\n\tLOGIN_RSP\x10\x82 \x12\x11\n\x0cZONE_SYN_REQ\x10\x81@\x12\x11\n\x0cZONE_SYN_RSP\x10\x82@\x12\r\n\x08ZONE_SYN\x10\x83@\x12\x15\n\x10ZONE_USER_REMOVE\x10\x84@\x12\r\n\x08\x43HAT_REQ\x10\x81`\x12\r\n\x08\x43HAT_RSP\x10\x82`\x12\x0e\n\tCHAT_STAT\x10\x83`\"a\n\x07Persion\x12\x0c\n\x04name\x18\x01 \x01(\x0c\x12\x1d\n\x05point\x18\x02 \x01(\x0b\x32\x0e.Persion.Point\x12\n\n\x02id\x18\x03 \x01(\r\x1a\x1d\n\x05Point\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\"*\n\x08ZoneStat\x12\x1e\n\x0cpersion_list\x18\x01 \x03(\x0b\x32\x08.Persion\"\x18\n\x08LoginReq\x12\x0c\n\x04name\x18\x01 \x01(\x0c\"F\n\x08LoginRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\x0c\x12\x1c\n\tzone_stat\x18\x03 \x01(\x0b\x32\t.ZoneStat\"\'\n\nZoneSynReq\x12\x19\n\x07persion\x18\x01 \x01(\x0b\x32\x08.Persion\"h\n\nZoneSynRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\x0c\x12\x1c\n\tshow_stat\x18\x03 \x01(\x0b\x32\t.ZoneStat\x12\x1e\n\x0bunshow_stat\x18\x04 \x01(\x0b\x32\t.ZoneStat\"\'\n\x07ZoneSyn\x12\x1c\n\tzone_stat\x18\x01 \x01(\x0b\x32\t.ZoneStat\"\x1e\n\x0eZoneUserRemove\x12\x0c\n\x04name\x18\x01 \x01(\x0c\"(\n\x07\x43hatReq\x12\x0c\n\x04name\x18\x01 \x01(\x0c\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\"\'\n\x07\x43hatRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\x0c\"D\n\x08\x43hatStat\x12\x19\n\x07speaker\x18\x01 \x01(\x0b\x32\x08.Persion\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\x12\x0c\n\x04time\x18\x03 \x01(\rb\x06proto3')
 )
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 
 
@@ -78,22 +77,26 @@ _MSGCMD_MSGID = _descriptor.EnumDescriptor(
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='CHAT_REQ', index=6, number=12289,
+      name='ZONE_USER_REMOVE', index=6, number=8196,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='CHAT_RSP', index=7, number=12290,
+      name='CHAT_REQ', index=7, number=12289,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='CHAT_STAT', index=8, number=12291,
+      name='CHAT_RSP', index=8, number=12290,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CHAT_STAT', index=9, number=12291,
       options=None,
       type=None),
   ],
   containing_type=None,
   options=None,
   serialized_start=82,
-  serialized_end=233,
+  serialized_end=256,
 )
 _sym_db.RegisterEnumDescriptor(_MSGCMD_MSGID)
 
@@ -144,7 +147,7 @@ _MSGCMD = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=71,
-  serialized_end=233,
+  serialized_end=256,
 )
 
 
@@ -181,8 +184,8 @@ _PERSION_POINT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=303,
-  serialized_end=332,
+  serialized_start=326,
+  serialized_end=355,
 )
 
 _PERSION = _descriptor.Descriptor(
@@ -225,8 +228,8 @@ _PERSION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=235,
-  serialized_end=332,
+  serialized_start=258,
+  serialized_end=355,
 )
 
 
@@ -256,8 +259,8 @@ _ZONESTAT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=334,
-  serialized_end=376,
+  serialized_start=357,
+  serialized_end=399,
 )
 
 
@@ -287,8 +290,8 @@ _LOGINREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=378,
-  serialized_end=402,
+  serialized_start=401,
+  serialized_end=425,
 )
 
 
@@ -332,8 +335,8 @@ _LOGINRSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=404,
-  serialized_end=474,
+  serialized_start=427,
+  serialized_end=497,
 )
 
 
@@ -363,8 +366,8 @@ _ZONESYNREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=476,
-  serialized_end=515,
+  serialized_start=499,
+  serialized_end=538,
 )
 
 
@@ -390,8 +393,15 @@ _ZONESYNRSP = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='zone_stat', full_name='ZoneSynRsp.zone_stat', index=2,
+      name='show_stat', full_name='ZoneSynRsp.show_stat', index=2,
       number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='unshow_stat', full_name='ZoneSynRsp.unshow_stat', index=3,
+      number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -408,8 +418,8 @@ _ZONESYNRSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=517,
-  serialized_end=589,
+  serialized_start=540,
+  serialized_end=644,
 )
 
 
@@ -439,8 +449,39 @@ _ZONESYN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=591,
-  serialized_end=630,
+  serialized_start=646,
+  serialized_end=685,
+)
+
+
+_ZONEUSERREMOVE = _descriptor.Descriptor(
+  name='ZoneUserRemove',
+  full_name='ZoneUserRemove',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='ZoneUserRemove.name', index=0,
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=687,
+  serialized_end=717,
 )
 
 
@@ -477,8 +518,8 @@ _CHATREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=632,
-  serialized_end=672,
+  serialized_start=719,
+  serialized_end=759,
 )
 
 
@@ -515,8 +556,8 @@ _CHATRSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=674,
-  serialized_end=713,
+  serialized_start=761,
+  serialized_end=800,
 )
 
 
@@ -560,8 +601,8 @@ _CHATSTAT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=715,
-  serialized_end=783,
+  serialized_start=802,
+  serialized_end=870,
 )
 
 _MSGRET_ERRCODE.containing_type = _MSGRET
@@ -571,7 +612,8 @@ _PERSION.fields_by_name['point'].message_type = _PERSION_POINT
 _ZONESTAT.fields_by_name['persion_list'].message_type = _PERSION
 _LOGINRSP.fields_by_name['zone_stat'].message_type = _ZONESTAT
 _ZONESYNREQ.fields_by_name['persion'].message_type = _PERSION
-_ZONESYNRSP.fields_by_name['zone_stat'].message_type = _ZONESTAT
+_ZONESYNRSP.fields_by_name['show_stat'].message_type = _ZONESTAT
+_ZONESYNRSP.fields_by_name['unshow_stat'].message_type = _ZONESTAT
 _ZONESYN.fields_by_name['zone_stat'].message_type = _ZONESTAT
 _CHATSTAT.fields_by_name['speaker'].message_type = _PERSION
 DESCRIPTOR.message_types_by_name['MsgRet'] = _MSGRET
@@ -583,9 +625,11 @@ DESCRIPTOR.message_types_by_name['LoginRsp'] = _LOGINRSP
 DESCRIPTOR.message_types_by_name['ZoneSynReq'] = _ZONESYNREQ
 DESCRIPTOR.message_types_by_name['ZoneSynRsp'] = _ZONESYNRSP
 DESCRIPTOR.message_types_by_name['ZoneSyn'] = _ZONESYN
+DESCRIPTOR.message_types_by_name['ZoneUserRemove'] = _ZONEUSERREMOVE
 DESCRIPTOR.message_types_by_name['ChatReq'] = _CHATREQ
 DESCRIPTOR.message_types_by_name['ChatRsp'] = _CHATRSP
 DESCRIPTOR.message_types_by_name['ChatStat'] = _CHATSTAT
+_sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 MsgRet = _reflection.GeneratedProtocolMessageType('MsgRet', (_message.Message,), dict(
   DESCRIPTOR = _MSGRET,
@@ -657,6 +701,13 @@ ZoneSyn = _reflection.GeneratedProtocolMessageType('ZoneSyn', (_message.Message,
   # @@protoc_insertion_point(class_scope:ZoneSyn)
   ))
 _sym_db.RegisterMessage(ZoneSyn)
+
+ZoneUserRemove = _reflection.GeneratedProtocolMessageType('ZoneUserRemove', (_message.Message,), dict(
+  DESCRIPTOR = _ZONEUSERREMOVE,
+  __module__ = 'zonesvr_pb2'
+  # @@protoc_insertion_point(class_scope:ZoneUserRemove)
+  ))
+_sym_db.RegisterMessage(ZoneUserRemove)
 
 ChatReq = _reflection.GeneratedProtocolMessageType('ChatReq', (_message.Message,), dict(
   DESCRIPTOR = _CHATREQ,

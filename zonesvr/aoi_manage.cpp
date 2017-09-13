@@ -60,7 +60,6 @@ int AOIManage::Init(Rect map_size, Rect grid_size) {
     return 0;
 }
 
-
 int AOIManage::AddPos(const unsigned long id,
                       const Pos &pos,
                       std::vector<unsigned long> &interest_ids) {

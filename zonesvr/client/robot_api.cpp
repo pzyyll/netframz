@@ -2,10 +2,11 @@
 // @Create by CaiZhili on 20170814
 // @Brief
 //
-#include "client_api.h"
+#include "robot_api.h"
 #include "nf_event.h"
 #include "nf_event_iotask.h"
 #include "nf_thread.h"
+#define SHOW
 
 using namespace std;
 using namespace nf;
@@ -104,19 +105,20 @@ std::deque<std::string> chat_msgs;
 EventService es;
 IOTask *recv_task;
 
+void RandOption(char &option) {
+    char opt_v[5] = {'h', 'l', 'j', 'k', 'c'};
+    option = opt_v[rand() % 5];
+}
+
 int InputOption() {
     //todo
     int ret = 0;
-    std::string option;
+    char option;
 
-    std::cin >> option;
-    if (option.size() != 1) {
-        std::cout << "Option invalid." << std::endl;
-        return ret;
-    }
+    RandOption(option);
 
     struct Pos pos = { 0, 0 };
-    switch (option[0]) {
+    switch (option) {
         case 'h':
             pos.x = -1;
             Move(pos);
@@ -371,12 +373,18 @@ int ProcessChatStat(const std::string &data) {
     std::string show_str = time_str + speaker_name + ":  " + content;
     chat_msgs.push_back(show_str);
 
+    //Show last 5msg
+    while (chat_msgs.size() > 5) {
+        chat_msgs.pop_front();
+    }
+
     FreshShow();
 
     return 0;
 }
 
 void FreshShow() {
+#ifdef SHOW
     int matrix[MAX_ROW][MAX_COL] = {0};
 
     std::cout << "============================================================" << std::endl;
@@ -411,11 +419,6 @@ void FreshShow() {
         printf("\n");
     }
 
-
-    while (chat_msgs.size() > 5) {
-        chat_msgs.pop_front();
-    }
-
     std::cout << "Chat:" << std::endl;
     auto citr = chat_msgs.begin();
     for ( ; citr != chat_msgs.end(); ++citr) {
@@ -424,12 +427,13 @@ void FreshShow() {
 
     std::cout << std::endl;
     std::cout << "You Can Input (h:Move Left, j:Move Donw, k:Move Up l:Move Right, c: Chat, q: quit) " << std::endl;
+#endif //SHOW
 }
 
-int Login() {
-    std::cout << "entry name: ";
-    std::string name;
-    std::cin >> name;
+int Login(const std::string &name) {
+    //std::cout << "entry name: ";
+    //std::string name;
+    //std::cin >> name;
 
     persion.set_name(name);
     persion.mutable_point()->set_x(0);
@@ -473,9 +477,9 @@ int Move(Pos mv_direct) {
 }
 
 int Chat() {
-    std::cout << "content : ";
-    std::string content;
-    std::cin >> content;
+    //std::cout << "content : ";
+    std::string content = "robot-test";
+    //std::cin >> content;
 
     ChatReq req;
     req.set_name(persion.name());
@@ -514,13 +518,12 @@ void CliRun(Client *cli) {
 
     Thread recv_thread(RecvHandler);
     recv_thread.Run(NULL);
-    //pthread_t tid;
-    //pthread_create(&tid, NULL, RecvHandler, NULL);
 
-    Login();
+    Login(cli->name);
 
     while (true) {
         if (InputOption() < 0)
             break;
+        sleep(1);
     }
 }
