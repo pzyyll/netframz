@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.7)
 project(zonesvr)
 
 include_directories(E:\\linux_inc\\include)
-include_directories(../src/)
+include_directories(../netfram/net/)
+include_directories(../netfram/utils/)
 
 option(MEM_CHECK "Enable memory check." OFF)
 
@@ -13,26 +14,13 @@ add_definitions(
         )
 
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_BUILD_TYPE debug CACHE STRING "set build type debug")
-
-set(NFSOURCE_FILES
-        ../src/nf_event.cpp
-        ../src/nf_epoll.cpp
-        ../src/nf_event_iotask.cpp
-        ../src/nf_event_iotask_impl.cpp
-        ../src/nf_event_timer_task.cpp
-        ../src/nf_event_timer_impl.cpp
-        ../src/nf_event_timer_mng.cpp
-        ../src/nf_event_idle_impl.cpp
-        ../src/nf_condition.cpp
-        ../src/nf_thread.cpp
-        ../src/nf_mutex.cpp
-        ../src/nf_socket_api.cpp
-        )
+#set(CMAKE_BUILD_TYPE debug CACHE STRING "set build type debug")
+set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
+ 
+find_library(NFLIB libnf.a ../netfram/lib/)
 
 set(SOURCE_FILES
         main.cpp
-        connector.cpp
         server_config.cpp
         server.cpp
         log.cpp
@@ -41,9 +29,6 @@ set(SOURCE_FILES
         player.cpp
         player_manage.cpp
         aoi_manage.cpp
-        acceptor.cpp
-        socket.cpp
-        endpoint.cpp
         xml/tinyxml2.cpp
         )
 
@@ -59,3 +44,4 @@ add_executable(zonesvr ${SOURCE_FILES} ${NFSOURCE_FILES} ${PROTO_FILES})
 #target_link_libraries(netframz -lboostsystem)
 #target_link_libraries(test_svr -lglog)
 target_link_libraries(zonesvr -lprotobuf)
+target_link_libraries(zonesvr ${NFLIB})

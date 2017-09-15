@@ -5,7 +5,6 @@
 
 #include "connector.h"
 #include "mem_check.h"
-#include "log.h"
 
 #define UNUSE(x) (void)(x);
 
@@ -82,7 +81,6 @@ void Connector::OnRead(EventService *es, task_data_t data, int mask) {
 
         //检查用户缓冲区是否满了
         recv_buf_.MemoryMove2Left();
-        log_debug("tpos|%lu, fpos|%lu", recv_buf_.tpos, recv_buf_.fpos);
         ssize_t remain = recv_buf_.RemainSize();
         if (remain == 0) {
             nr = 0;
@@ -131,9 +129,6 @@ void Connector::OnWriteRemain(EventService *es, task_data_t data, int mask) {
             break;
         }
 
-        log_debug("ns|%ld, remain|%d.", ns, (int)send_buf_.UsedSize());
-        log_debug("tpos|%lu, fpos|%lu", send_buf_.tpos, send_buf_.fpos);
-
         return;
     } while (false);
 
@@ -170,7 +165,6 @@ Connector::size_t Connector::Recv(void *buff, const size_t size) {
         take_size = remain;
     }
 
-    log_debug("remain|%lu, take|%lu", remain, take_size);
     memcpy(buff, base, take_size);
     recv_buf_.FrontAdvancing(take_size);
 
@@ -186,7 +180,6 @@ Connector::ssize_t Connector::Send(const void *buff, const size_t size) {
     //nw = 0 或 nw 小于要求写的大小，说明 socket 缓冲区满了。
     //缓存下未发送的数据
     if ((size_t) nw < size) {
-        log_debug("send full.");
         //检查用户缓存是否足够存放现场
         send_buf_.MemoryMove2Left();
         int snd_buf_size = send_buf_.RemainSize();
@@ -217,7 +210,6 @@ Connector::ssize_t Connector::SendRemain() {
         return FAIL;
     }
     send_buf_.FrontAdvancing(nw);
-    log_debug("tpos|%lu, fpos|%lu, nw|%ld", send_buf_.tpos, send_buf_.fpos, nw);
 
     return nw;
 }

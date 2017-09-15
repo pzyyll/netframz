@@ -25,6 +25,54 @@ int SetBlockStat(int fd, bool is_block) {
     return 0;
 }
 
+int ConnectNonb(int sockfd, const struct sockaddr *sa, socklen_t salen, int timeout) {
+    int flags = fcntl(sockfd, F_GETFL, 0);
+    if (flags < 0)
+        return -1;
+
+    fcntl(sockfd, F_SETFL, flags | O_NONBLOCK);
+
+    int err = 0;
+
+    do {
+        int n = 0;
+        if ( (n = connect(sockfd, sa, salen)) < 0)
+            if (errno != EINPROGRESS)
+                return -1;
+        if (n == 0)
+            break;
+
+        fd_set rset, wset;
+        FD_ZERO(&rset);
+        FD_SET(sockfd, &rset);
+        wset = rset;
+        struct timeval tv;
+        tv.tv_sec = timeout / 1000;
+        tv.tv_usec = timeout * 1000;
+        if ( (n = select(sockfd + 1, &rset, &wset, NULL,
+                         timeout < 0? NULL: &tv)) == 0) {
+            close(sockfd);
+            errno = ETIMEDOUT;
+            return -1;
+        }
+
+        if (FD_ISSET(sockfd, &rset) || FD_ISSET(sockfd, &wset)) {
+            socklen_t len = sizeof(err);
+            if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &err, &len) < 0)
+                return -1;
+        }
+
+    } while (false);
+
+    fcntl(sockfd, F_SETFL, flags);
+    if (err) {
+        close(sockfd);
+        errno = err;
+        return -1;
+    }
+    return 0;
+}
+
 ssize_t Readn(int fd, void *buff, size_t len) {
     ssize_t rn = 0;
     size_t nleft = len;

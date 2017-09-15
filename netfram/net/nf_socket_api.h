@@ -22,6 +22,8 @@ namespace nf {
 
 int SetBlockStat(int fd, bool is_block);
 
+int ConnectNonb(int sockfd, const struct sockaddr *sa, socklen_t salen, int timeout);
+
 ssize_t Readn(int fd, void *buff, size_t len);
 
 ssize_t Writen(int fd, const void *buff, size_t len);

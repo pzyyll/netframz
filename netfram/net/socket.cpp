@@ -121,7 +121,22 @@ int Socket::Accept(Endpoint *peerend) {
 
 int Socket::Connect(const Endpoint &ep) {
     const struct sockaddr_storage *ssp = ep.GetSA();
-    return connect(sock_, (const struct sockaddr *)ssp, sizeof(*ssp));
+    if (connect(sock_, (const struct sockaddr *)ssp, sizeof(*ssp)) < 0) {
+        snprintf(err_msg_, sizeof(err_msg_), "%s", strerror(errno));
+        return FAIL;
+    }
+    return SUCCESS;
+}
+
+int Socket::Connect(const Endpoint &ep, int timeout) {
+    const struct sockaddr_storage *ssp = ep.GetSA();
+
+    if (ConnectNonb(sock_, (const struct sockaddr *)ssp,
+                sizeof(*ssp), timeout) < 0) {
+        snprintf(err_msg_, sizeof(err_msg_), "%s", strerror(errno));
+        return FAIL;
+    }
+    return SUCCESS;
 }
 
 ssize_t Socket::Send(const void *buf, size_t len) {
