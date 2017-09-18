@@ -18,8 +18,10 @@ public:
     int         timeout;
     int         daemon;
     int         max_fds;
-    int         log_level;
+    int         syslog_level;
     int         zone_num;
+    int         log_level;
+    std::string log_path;
 };
 
 typedef nf::singleton <ServerConfig> svr_cfg;

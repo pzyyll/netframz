@@ -4,6 +4,7 @@ project(zonesvr)
 include_directories(E:\\linux_inc\\include)
 include_directories(../netfram/net/)
 include_directories(../netfram/utils/)
+include_directories(../netfram/glog/)
 
 option(MEM_CHECK "Enable memory check." OFF)
 
@@ -11,6 +12,7 @@ add_definitions(
         -W -Wall
         -DLINUX_EPOLL
         -DNF_TIMER_WHEEL
+        -DLOG_DEF
         )
 
 set(CMAKE_CXX_STANDARD 11)
@@ -18,6 +20,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
  
 find_library(NFLIB libnf.a ../netfram/lib/)
+find_library(GLOGLIB libglog.a ../netfram/lib/)
 
 set(SOURCE_FILES
         main.cpp
@@ -43,5 +46,4 @@ add_executable(zonesvr ${SOURCE_FILES} ${NFSOURCE_FILES} ${PROTO_FILES})
 
 #target_link_libraries(netframz -lboostsystem)
 #target_link_libraries(test_svr -lglog)
-target_link_libraries(zonesvr -lprotobuf)
-target_link_libraries(zonesvr ${NFLIB})
+target_link_libraries(zonesvr -lprotobuf -lpthread ${NFLIB} ${GLOGLIB})

@@ -7,6 +7,7 @@
 #include "server_config.h"
 #include "log.h"
 #include "mem_check.h"
+#include "log_def.h"
 
 #include <iostream>
 
@@ -35,7 +36,11 @@ int Server::Init(int argc, char **argv) {
         return FAIL;
     }
 
-    log_init(argv[0], svr_cfg::get_const_instance().log_level);
+    log_init(argv[0], svr_cfg::get_const_instance().syslog_level);
+
+    InitLog(argv[0],
+            svr_cfg::get_const_instance().log_level,
+            svr_cfg::get_const_instance().log_path.c_str());
 
     if (svr_cfg::get_const_instance().daemon &&
         Daemon() == FAIL) {

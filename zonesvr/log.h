@@ -3,7 +3,7 @@
 
 #include <syslog.h>
 
-extern int log_level;
+extern int syslog_level;
 
 #define LOG_LV_DEBUG 4
 #define LOG_LV_INFO 3
@@ -12,7 +12,7 @@ extern int log_level;
 
 #define log_init(name, level) \
     do { \
-        log_level = level; \
+        syslog_level = level; \
         openlog(name, LOG_NDELAY|LOG_PID, LOG_USER); \
     } while (0)
 
@@ -20,7 +20,7 @@ extern int log_level;
 
 #define log_pet(level, dlv, format, args ...) \
     do { \
-        if (log_level >= level) \
+        if (syslog_level >= level) \
             syslog(dlv, "<%s:%d:%s> " format, __FILE__, __LINE__, __FUNCTION__, ##args); \
     } while (0)
 

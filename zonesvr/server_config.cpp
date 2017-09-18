@@ -13,8 +13,10 @@ int ServerConfig::Init(const char *cfg_file) {
     cfg.GetInt(timeout, "timeout", 30000);
     cfg.GetInt(daemon, "daemon", 0);
     cfg.GetInt(max_fds, "max_fds", 65536);
-    cfg.GetInt(log_level, "log_level", 2);
+    cfg.GetInt(syslog_level, "syslog_level", 2);
     cfg.GetInt(zone_num, "zone_num", 10);
+    cfg.GetInt(log_level, "log_level", 0);
+    cfg.GetString(log_path, "log_path", "./");
 
     return 0;
 }
