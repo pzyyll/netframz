@@ -76,16 +76,16 @@ int Server::StartListen() {
 
     int listen_fd = acceptor_.Bind(ipv4, port);
     if (listen_fd < 0) {
-        log_err("Acceptor bind addr fail. %s", acceptor_.GetErrMsg());
+        LogErr("Acceptor bind addr fail. %s", acceptor_.GetErrMsg());
         return FAIL;
     }
 
     if (acceptor_.Listen(std::bind(&Server::OnAccept, this, _1, _2)) < 0) {
-        log_err("Acceptor Listen fail. %s", acceptor_.GetErrMsg());
+        LogErr("Acceptor Listen fail. %s", acceptor_.GetErrMsg());
         return FAIL;
     }
 
-    log_debug("Start Listen.");
+    LogInfo("Start Listen.");
     return listen_fd;
 }
 
@@ -93,7 +93,7 @@ int Server::StartTick() {
     int tick_interval =  svr_cfg::get_const_instance().tick;
     tick_ = new TimerTask(es_, tick_interval, 1);
     if (NULL == tick_) {
-        log_err("New fail.");
+        LogErr("New fail.");
         return FAIL;
     }
     tick_->Bind(std::bind(&Server::OnTick, this, _1, _2, _3));
@@ -102,7 +102,7 @@ int Server::StartTick() {
 
     tick_->Start();
 
-    log_debug("Tick start.");
+    LogInfo("Tick start.");
     return SUCCESS;
 }
 
@@ -116,7 +116,7 @@ void Server::OnAccept(int fd, ErrCode &err) {
 }
 
 void Server::Do(int fd) {
-    log_debug("Do fd|%d", fd);
+    LogInfo("Do fd|%d", fd);
 
     if (MakeNonblock(fd) < 0) {
         return;
@@ -160,7 +160,7 @@ void Server::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
 
     ConnectorPtr conn = FindConn(cid);
     if (!conn) {
-        log_warn("Can't find conn for cid %lu in map.", cid);
+        LogWarn("Can't find conn for cid %lu in map.", cid);
         return;
     }
 
@@ -169,7 +169,6 @@ void Server::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
 }
 
 void Server::Parse(Connector &conn) {
-    log_debug("Do");
     conn.SetLastActTimeToNow();
     while (conn.GetRecvBuff().UsedSize() > 0) {
         Cmd cmd;
@@ -177,24 +176,24 @@ void Server::Parse(Connector &conn) {
         unsigned long len = conn.GetRecvBuff().UsedSize();
         int nr = cmd.Parse(buff, len);
         if (nr < 0) {
-            log_warn("Parse cli %lu msg fail. %s", conn.GetCID(), cmd.GetErr().c_str());
+            LogWarn("Parse cli %lu msg fail. %s", conn.GetCID(), cmd.GetErr().c_str());
             CloseConn(conn.GetCID());
             return;
         }
         if (nr == 0) {
-            log_debug("%s", cmd.GetErr().c_str());
+            LogInfo("%s", cmd.GetErr().c_str());
             break;
         }
 
         conn.GetRecvBuff().FrontAdvancing(nr);
-        log_debug("cli data size: %u", (unsigned)cmd.GetMsgData().size());
+        //LogInfo("cli data size: %u", (unsigned)cmd.GetMsgData().size());
 
         ProcessCmd(cmd, conn.GetCID());
     }
 }
 
 void Server::ProcessCmd(Cmd &cmd, const unsigned long cid) {
-    log_debug("ProcessCmd");
+    LogInfo("ProcessCmd");
 
     //Echo Test
     Response(cmd, cid);
@@ -202,24 +201,23 @@ void Server::ProcessCmd(Cmd &cmd, const unsigned long cid) {
 
 void Server::Tick(unsigned long now) {
     UNUSE(now);
-    //log_debug("Tick: %lu", now);
+    //LogInfo("Tick: %lu", now);
     //Do tick task;
 }
 
 int Server::Response(proto::Cmd &cmd, unsigned long cid) {
     std::string sndstr;
     cmd.SerializeTo(sndstr);
-    log_debug("snd: %li", (long int)sndstr.size());
 
     return Response(sndstr.c_str(), sndstr.size(), cid);
 }
 
 int Server::Response(const char *buff, unsigned long size, unsigned long cid) {
-    log_debug("Response: %lu, size: %lu", cid, size);
+    LogInfo("Response cid: %lu, size: %lu", cid, size);
 
     ConnectorPtr conn = FindConn(cid);
     if (!conn) {
-        log_warn("Can't find conn for cid %lu in map.", cid);
+        LogWarn("Can't find conn for cid %lu in map.", cid);
         return FAIL;
     }
 
@@ -235,14 +233,14 @@ void Server::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
     UNUSE(lenth);
     unsigned long cid = data.data.id;
     if (err.get_ret() != ErrCode::SUCCESS) {
-        log_warn("%s", err.get_err_msg().c_str());
+        LogWarn("%s", err.get_err_msg().c_str());
         CloseConn(cid);
         return;
     }
 }
 
 void Server::OnTick(EventService *es, task_data_t data, int mask) {
-    //log_debug("OnTick");
+    //LogInfo("OnTick");
     UNUSE(es);
     UNUSE(data);
     UNUSE(mask);
@@ -254,7 +252,7 @@ void Server::OnTick(EventService *es, task_data_t data, int mask) {
 }
 
 void Server::OnTimerOut(EventService *es, task_data_t data, int mask) {
-    log_debug("OnTimerOut.");
+    LogInfo("OnTimerOut.");
     UNUSE(es);
     UNUSE(mask);
 
@@ -262,18 +260,18 @@ void Server::OnTimerOut(EventService *es, task_data_t data, int mask) {
 
     ConnectorPtr conn = FindConn(cid);
     if (!conn) {
-        log_warn("Connector for cid %lu not find.", cid);
+        LogWarn("Connector for cid %lu not find.", cid);
         DelTimerTask(cid);
         return;
     }
 
     if (conn->IsTimeOut(svr_cfg::get_const_instance().timeout / 1000)) {
-        log_debug("Close cid %lu this long time not act.", cid);
+        LogInfo("Close cid %lu this long time not act.", cid);
         CloseConn(cid);
         return;
     }
 
-    log_debug("Resume timer.");
+    LogInfo("Resume timer.");
     TimerTaskPtr timer = FindTimer(cid);
     timer->Restart();
 }
@@ -328,12 +326,12 @@ int Server::GetOption(int argc, char **argv) {
 int Server::MakeNonblock(int fd) {
     int val = 0;
     if ((val = fcntl(fd, F_GETFL, 0)) < 0) {
-        log_warn("Get fd(%d) stat fail. %s", fd, strerror(errno));
+        LogWarn("Get fd(%d) stat fail. %s", fd, strerror(errno));
     }
 
     val |= O_NONBLOCK;
     if (fcntl(fd, F_SETFL, val) < 0) {
-        log_warn("Set fd(%d) non-block fail. %s", fd, strerror(errno));
+        LogWarn("Set fd(%d) non-block fail. %s", fd, strerror(errno));
         return FAIL;
     }
 
@@ -348,20 +346,20 @@ int Server::SetCliOpt(int fd) {
 
     if (::setsockopt(fd, SOL_SOCKET, SO_SNDBUF,
                      (void *) &send_buff_size, sizeof(send_buff_size)) < 0) {
-        log_warn("setsockopt to send buff size fail. %s", strerror(errno));
+        LogWarn("setsockopt to send buff size fail. %s", strerror(errno));
         return FAIL;
     }
 
     if (::setsockopt(fd, SOL_SOCKET, SO_RCVBUF,
                      (void *) &recv_buff_size, sizeof(recv_buff_size)) < 0) {
-        log_warn("setsockopt to recv buff size fail. %s", strerror(errno));
+        LogWarn("setsockopt to recv buff size fail. %s", strerror(errno));
         return FAIL;
     }
 
     int nodelay = 1;
     if (::setsockopt(fd, IPPROTO_TCP, TCP_NODELAY,
                      (void *) &nodelay, sizeof(nodelay))) {
-        log_warn("setsockopt to disabling Nagle's algorithm. %s", strerror(errno));
+        LogWarn("setsockopt to disabling Nagle's algorithm. %s", strerror(errno));
         return FAIL;
     }
 
@@ -369,10 +367,10 @@ int Server::SetCliOpt(int fd) {
 }
 
 int Server::SetMaxFds(int max_fds) {
-    log_debug("SetMaxFds max_fds|%d", max_fds);
+    LogInfo("SetMaxFds max_fds|%d", max_fds);
 
     if (max_fds < 0) {
-        log_err("SetMaxFds num invaild|%d", max_fds);
+        LogErr("SetMaxFds num invaild|%d", max_fds);
         return FAIL;
     }
 
@@ -381,12 +379,12 @@ int Server::SetMaxFds(int max_fds) {
     maxfdrl.rlim_max = max_fds;
 
     if (setrlimit(RLIMIT_NOFILE, &maxfdrl) < 0) {
-        log_err("set rlimit err|%s", strerror(errno));
+        LogErr("set rlimit err|%s", strerror(errno));
         return FAIL;
     }
 
     if (getrlimit(RLIMIT_NOFILE, &maxfdrl) < 0) {
-        log_err("get rlimit err|%s", strerror(errno));
+        LogErr("get rlimit err|%s", strerror(errno));
         return FAIL;
     }
     log_info("The maximum fds|%d", (int)maxfdrl.rlim_cur);
@@ -405,17 +403,17 @@ Server::ConnectorPtr Server::FindConn(unsigned long cid) {
 
 int Server::CheckMask(int mask) {
     if (mask & EV_RDHUP) {
-        log_debug("Connect already closed by foreign.");
+        LogInfo("Connect already closed by foreign.");
         return FAIL;
     }
 
     if (mask & EV_HUP) {
-        log_warn("Connect close cause hup.");
+        LogWarn("Connect close cause hup.");
         return FAIL;
     }
 
     if (mask & EV_ERR) {
-        log_err("Connect close cause happen err.");
+        LogErr("Connect close cause happen err.");
         return FAIL;
     }
 
@@ -423,17 +421,17 @@ int Server::CheckMask(int mask) {
 }
 
 Server::ConnectorPtr Server::CreateConn(int fd) {
-    log_debug("Create Connector for fd %d.", fd);
+    LogInfo("Create Connector for fd %d.", fd);
 
     ConnectorPtr cli = new Connector(es_, fd);
     if (NULL == cli) {
-        log_err("New a Connector fail.");
+        LogErr("New a Connector fail.");
         return NULL;
     }
 
     unsigned long cid = cli->GetCID();
     if (!conn_map_.insert(std::make_pair(cid, cli)).second) {
-        log_err("Add cli connector to map fail, fd|%d", fd);
+        LogErr("Add cli connector to map fail, fd|%d", fd);
         if (cli)
             delete cli;
         return NULL;
@@ -443,11 +441,11 @@ Server::ConnectorPtr Server::CreateConn(int fd) {
 }
 
 void Server::DelConn(unsigned long cid) {
-    log_debug("Connect cid %lu will be closed and del.", cid);
+    LogInfo("Connect cid %lu will be closed and del.", cid);
 
     ConnectorPtr conn = FindConn(cid);
     if (!conn) {
-        log_warn("Can't find conn for cid %lu in map.", cid);
+        LogWarn("Can't find conn for cid %lu in map.", cid);
         return;
     }
 
@@ -463,13 +461,13 @@ void Server::DelConn(ConnectorPtr conn) {
 }
 
 Server::TimerTaskPtr Server::CreateTimerTask(unsigned long cid) {
-    log_debug("Create timer task for cid %lu.", cid);
+    LogInfo("Create timer task for cid %lu.", cid);
 
     int timeout = svr_cfg::get_const_instance().timeout;
     TimerTaskPtr timer = new TimerTask(es_, timeout, 0);
     if (NULL == timer
         || !timer_map_.insert(make_pair(cid, timer)).second) {
-        log_warn("Create timer fail for cid %lu.", cid);
+        LogWarn("Create timer fail for cid %lu.", cid);
         if (timer)
             delete timer;
         return NULL;
@@ -479,11 +477,11 @@ Server::TimerTaskPtr Server::CreateTimerTask(unsigned long cid) {
 }
 
 void Server::DelTimerTask(unsigned long cid) {
-    log_debug("DelTimerTask cid %lu", cid);
+    LogInfo("DelTimerTask cid %lu", cid);
 
     TimerTaskPtr timer = FindTimer(cid);
     if (!timer) {
-        log_warn("Not find timer task for cid %lu.", cid);
+        LogWarn("Not find timer task for cid %lu.", cid);
         return;
     }
 

@@ -6,6 +6,7 @@
 #include <cassert>
 #include "zonesvr.h"
 #include "log.h"
+#include "log_def.h"
 
 using namespace proto;
 
@@ -27,7 +28,7 @@ int ZoneSvr::Init(int argc, char **argv) {
 }
 
 void ZoneSvr::ProcessCmd(proto::Cmd &cmd, const unsigned long cid) {
-    log_debug("ProcessCmd");
+    LogInfo("CmdType|%u|cid|%lu", (unsigned)cmd.GetType(), cid);
     switch (cmd.GetType()) {
         case MsgCmd::LOGIN_REQ:
             ProcessLogin(cmd.GetMsgData(), cid);
@@ -39,7 +40,7 @@ void ZoneSvr::ProcessCmd(proto::Cmd &cmd, const unsigned long cid) {
             ProcessChat(cmd.GetMsgData(), cid);
             break;
         default:
-            log_warn("Cmd Type Err. Type(%u)", (unsigned)cmd.GetType());
+            LogWarn("Cmd Type Err. Type(%u)", (unsigned)cmd.GetType());
             break;
     }
 }
@@ -63,7 +64,7 @@ void ZoneSvr::CloseConn(unsigned long cid) {
 }
 
 void ZoneSvr::ProcessLogin(const std::string &buff, const unsigned long cid) {
-    log_debug("ProcessLogin. cid|%lu", cid);
+    LogInfo("ProcessLogin. cid|%lu", cid);
 
     LoginReq req;
     LoginRsp rsp;
@@ -103,7 +104,7 @@ void ZoneSvr::ProcessLogin(const std::string &buff, const unsigned long cid) {
 }
 
 void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long cid) {
-    log_debug("ProcessPositionSyn. cid|%lu", cid);
+    LogInfo("ProcessPositionSyn. cid|%lu", cid);
 
     ZoneSynReq req;
     ZoneSynRsp rsp;
@@ -150,7 +151,7 @@ void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long ci
 }
 
 void ZoneSvr::ProcessChat(const std::string &buff, const unsigned long cid) {
-    log_debug("ProcessChat");
+    LogInfo("ProcessChat. cid|%lu", cid);
 
     ChatReq req;
     ChatRsp rsp;
@@ -249,7 +250,7 @@ void ZoneSvr::FillZoneStat(ZoneStat &stat, const std::vector<Player *> &vec_play
 void ZoneSvr::SendToClient(const ::google::protobuf::Message &msg,
                            const unsigned int type,
                            const unsigned long cid) {
-    log_debug("SendToClient|%s|cid %lu|", msg.ShortDebugString().c_str(), cid);
+    LogInfo("SendToClient|%s|cid|%lu|type|%u", msg.ShortDebugString().c_str(), cid, type);
 
     std::string msg_data;
     msg.SerializeToString(&msg_data);
@@ -262,13 +263,11 @@ void ZoneSvr::SendToClient(const ::google::protobuf::Message &msg,
 }
 
 int ZoneSvr::Parse(::google::protobuf::Message &msg, const std::string &buff) {
-    log_debug("Buff|%u", (unsigned)buff.size());
-
     if (!msg.ParseFromString(buff)) {
-        log_warn("Decode msg fail|%s", msg.GetTypeName().c_str());
+        LogWarn("Decode msg fail|%s", msg.GetTypeName().c_str());
         return MsgRet::FAIL;
     }
 
-    log_debug("Parse|%s", msg.ShortDebugString().c_str());
+    LogInfo("Parse|%s", msg.ShortDebugString().c_str());
     return MsgRet::SUCCESS;
 }

@@ -73,12 +73,14 @@ inline int InitLog(const char *name, int level, const char *path) {
     warn_path.append("log_");
     err_path.append("log_");
 
-    iniglog("server");
+    iniglog(name);
     set_log_infopath(info_path.c_str());
     set_log_warnpath(warn_path.c_str());
     set_log_errorpath(err_path.c_str());
     set_logbufsecs(0);
     set_minloglevel(level);
+
+    return ret;
 }
 
 #define LogInfo(str, args...) \

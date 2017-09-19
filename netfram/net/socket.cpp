@@ -9,6 +9,7 @@
 using namespace nf;
 
 Socket::Socket() : sock_(-1) {
+    sock_ = socket(AF_INET, SOL_SOCKET, 0);
     err_msg_[0] = '\0';
 }
 

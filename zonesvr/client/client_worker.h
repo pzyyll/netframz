@@ -5,7 +5,7 @@
 #include <string>
 #include <map>
 #include <deque>
-#include <function>
+#include <functional>
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
@@ -17,6 +17,8 @@
 #include <signal.h>
 
 #include "nf_thread.h"
+#include "nf_event.h"
+#include "nf_event_iotask.h"
 #include "socket.h"
 #include "proto.h"
 #include "proto/zonesvr.pb.h"
@@ -29,7 +31,7 @@ struct Pos {
 };
 
 class ClientWorker {
-    const static kBuffMaxLen = 1024 * 1024;
+    const static int kBuffMaxLen = 1024 * 1024;
 public:
     ClientWorker();
 
@@ -39,6 +41,8 @@ public:
 
     int SendMsgToSvr(::google::protobuf::Message &msg, unsigned int type);
 
+    int CheckMask(int mask);
+    void RcvCb(EventService *es, task_data_t data, int mask);
     void RcvHandler(void *args);
 
     void SndHandler(void *args);
@@ -60,8 +64,8 @@ public:
     int InputOption();
 
 private:
-    Thread snd_;
-    Thread rcv_;
+    nf::Thread snd_;
+    nf::Thread rcv_;
 
     Socket socket_;
     Endpoint ep_;
@@ -71,8 +75,8 @@ private:
 
     Persion self_info_;
 
-//    EventService es_;
-//    IOTask *rcv_task_;
+    EventService es_;
+    IOTask *rcv_task_;
 
     std::string name_;
 };

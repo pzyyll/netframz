@@ -5,7 +5,7 @@ using namespace std::placeholders;
 using namespace std;
 using namespace nf;
 
-ClientWorker::ClientWorker() : rv_len_(0), login_wait_(0), rcv_task_(NULL) {
+ClientWorker::ClientWorker() : rv_len_(0), login_wait_(0) {
 
 }
 
@@ -16,10 +16,10 @@ ClientWorker::~ClientWorker() {
 
 void ClientWorker::Start(const Endpoint &ep, const std::string &name) {
     //todo
-    name = name_;
+    name_ = name;
     ep_ = ep;
 
-    snd_.SetHandler(std::bind(&ClientWorker::SndHandler, this, _1));
+    snd_.SetHandle(std::bind(&ClientWorker::SndHandler, this, _1));
     snd_.Run(NULL);
 }
 
@@ -44,42 +44,77 @@ int ClientWorker::SendMsgToSvr(::google::protobuf::Message &msg, unsigned int ty
     return 0;
 }
 
+int ClientWorker::CheckMask(int mask) {
+    if (mask & EV_RDHUP) {
+        return -1;
+    }
+
+    if (mask & EV_HUP) {
+        return -1;
+    }
+
+    if (mask & EV_ERR) {
+        return -1;
+    }
+
+    return 0;
+}
+
+void ClientWorker::RcvCb(EventService *es, task_data_t data, int mask) {
+    if (CheckMask(mask) < 0) {
+        std::cout << "close" << std::endl;
+        rcv_task_->Stop();
+        return;
+    }
+
+    int nr = socket_.Recv(rv_buff_ + rv_len_, sizeof(rv_buff_) - rv_len_);
+    if (nr < 0) {
+        std::cout << "Recv err" << std::endl;
+        return;
+    } else if (nr == 0) {
+        std::cout << "close by peer." << std::endl;
+        return;
+    }
+
+    rv_len_ += nr;
+
+    int np = ParseBuff(rv_buff_, rv_len_);
+    if (np < 0) {
+        std::cout << "parse err" << std::endl;
+        rcv_task_->Stop();
+        return;
+    }
+
+    rv_len_ -= np;
+    memmove(rv_buff_, rv_buff_ + np, rv_len_);
+}
+
 void ClientWorker::RcvHandler(void *args) {
     (void)(args);
+    std::cout << "Start Rcv" << std::endl;
 
-    while (true) {
-        int nr = socket_.Recv(rv_buff_ + rv_len_, sizeof(rv_buff_) - rv_len_);
-        if (nr < 0) {
-            std::cout << "Recv err" << std::endl;
-            break;
-        } else if (nr == 0) {
-            std::cout << "close by peer." << std::endl;
-            break;
-        }
+    socket_.SetNonBlock(true);
+    es_.Init();
+    rcv_task_ = new IOTask(es_, socket_.GetSock(), EVSTAT::EV_READABLE,
+                           std::bind(&ClientWorker::RcvCb, this, _1, _2, _3));
+    rcv_task_->Start();
 
-        rv_len_ += nr;
-
-        int np = ParseBuff(rv_buff_, rv_len_);
-        if (np < 0) {
-            std::cout << "parse err" << std::endl;
-            break;
-        }
-
-        rv_len_ -= np;
-        memmove(rv_buff_, rv_buff_ + np, rv_len_);
-    }
+    es_.Run();
 
     pthread_exit(NULL);
 }
 
 void ClientWorker::SndHandler(void *args) {
-    if (socket.Connect(ep_, 5000)) {
-        std::cout << "Connect fail." << std::endl;
+    std::cout << ep_.GetIP() << endl;
+    if (socket_.Connect(ep_, 5000)) {
+        std::cout << "Connect fail. " << socket_.GetErrMsg() << std::endl;
         return;
     }
 
-    rcv_.SetHandler(std::bind(&ClientWorker::RcvHandler, this, _1);
+    rcv_.SetHandle(std::bind(&ClientWorker::RcvHandler, this, _1));
     rcv_.Run(NULL);
+
+    Login(name_);
 
     while (true) {
         if (InputOption() < 0) break;
@@ -145,8 +180,9 @@ int ClientWorker::ProcessLoginRsp(const std::string &data) {
     //    const Persion &persion = rsp.zone_stat().persion_list(i);
     //    persions_map[persion.name()] = persion;
     //}
+    //std::cout << rsp.ShortDebugString() << std::endl;
 
-    login_wait = 1;
+    login_wait_ = 1;
 
     return 0;
 }
@@ -161,6 +197,8 @@ int ClientWorker::ProcessZoneSynRsp(const std::string &data) {
         std::cout << rsp.err_msg() << std::endl;
         return -1;
     }
+
+    //std::cout << rsp.ShortDebugString() << std::endl;
 
     //persions_map.clear();
     //for (int i = 0; i < rsp.show_stat().persion_list_size(); ++i) {
@@ -185,6 +223,10 @@ int ClientWorker::ProcessZoneSyn(const std::string &data) {
         return -1;
     }
 
+    //std::cout << syn.ShortDebugString() << std::endl;
+
+
+
     //for (int i = 0; i < syn.zone_stat().persion_list_size(); ++i) {
     //    const Persion &persion = syn.zone_stat().persion_list(i);
     //    persions_map[persion.name()] = persion;
@@ -193,7 +235,7 @@ int ClientWorker::ProcessZoneSyn(const std::string &data) {
     return 0;
 }
 
-int ProcessZoneUserRemove(const std::string &data) {
+int ClientWorker::ProcessZoneUserRemove(const std::string &data) {
     ZoneUserRemove logout_info;
 
     if (!logout_info.ParseFromString(data)) {
@@ -204,7 +246,7 @@ int ProcessZoneUserRemove(const std::string &data) {
     return 0;
 }
 
-int ProcessChatRsp(const std::string &data) {
+int ClientWorker::ProcessChatRsp(const std::string &data) {
     ChatRsp rsp;
 
     if (!rsp.ParseFromString(data)) {
@@ -216,15 +258,21 @@ int ProcessChatRsp(const std::string &data) {
         return -1;
     }
 
+    //std::cout << rsp.ShortDebugString() << std::endl;
+
+
     return 0;
 }
 
-int ProcessChatStat(const std::string &data) {
+int ClientWorker::ProcessChatStat(const std::string &data) {
     ChatStat cs;
 
     if (!cs.ParseFromString(data)) {
         return -1;
     }
+
+    //std::cout << cs.ShortDebugString() << std::endl;
+
 
     //std::string speaker_name = cs.speaker().name();
     //time_t speaker_time = cs.time();
@@ -239,9 +287,9 @@ int ProcessChatStat(const std::string &data) {
 }
 
 int ClientWorker::Login(const std::string &name) {
-    persion.set_name(name);
-    persion.mutable_point()->set_x(0);
-    persion.mutable_point()->set_y(0);
+    self_info_.set_name(name);
+    self_info_.mutable_point()->set_x(0);
+    self_info_.mutable_point()->set_y(0);
 
     LoginReq req;
     req.set_name(name);
@@ -251,7 +299,7 @@ int ClientWorker::Login(const std::string &name) {
         return -1;
 
     std::cout << "loging..." << std::endl;
-    while (!login_wait) usleep(100);
+    while (!login_wait_) usleep(100);
 
     return 0;
 }
@@ -271,7 +319,7 @@ int ClientWorker::Move(Pos mv_direct) {
     self_info_.mutable_point()->set_y(y);
 
     ZoneSynReq req;
-    req.mutable_persion()->CopyFrom(persion);
+    req.mutable_persion()->CopyFrom(self_info_);
 
     return SendMsgToSvr(req, MsgCmd::ZONE_SYN_REQ);;
 }
@@ -279,7 +327,7 @@ int ClientWorker::Move(Pos mv_direct) {
 int ClientWorker::Chat() {
     std::string content = "robot-test";
     ChatReq req;
-    req.set_name(persion.name());
+    req.set_name(self_info_.name());
     req.set_content(content);
 
     return SendMsgToSvr(req, MsgCmd::CHAT_REQ);
@@ -296,6 +344,8 @@ int ClientWorker::InputOption() {
     char option;
 
     RandOption(option);
+
+    //std::cin >> option;
 
     struct Pos pos = { 0, 0 };
     switch (option) {

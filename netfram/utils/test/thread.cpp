@@ -50,6 +50,13 @@ private:
     int n_;
 };
 
+class Runv2 {
+public:
+    void Run(void *args) {
+        cout << "Runv2" << endl;
+    }
+};
+
 int main() {
     Run run;
     Thread thread(std::bind(&Run::run, &run, _1));
@@ -66,6 +73,12 @@ int main() {
 
     wthread.Run();
 
+    Thread thread4;
+    Runv2 runv2;
+    thread4.SetHandle(std::bind(&Runv2::Run, &runv2, _1));
+    thread4.Run();
+    thread4.Join();
+
     wthread.Join();
 
     thread.Join();
@@ -73,6 +86,7 @@ int main() {
     thread3.Join();
 
     cout << run.i_ << endl;
+
 
     return 0;
 }

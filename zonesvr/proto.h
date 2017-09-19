@@ -25,6 +25,10 @@ public:
     ~Cmd() { }
 
     int Parse(const char *data, unsigned long lenth) {
+        if (data == NULL) {
+            return -1;
+        }
+
         unsigned int head_len = sizeof(struct MsgHeader);
         if (lenth < head_len) {
             return 0;
