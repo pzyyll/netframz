@@ -41,6 +41,4 @@ set(NET_FILES
 
 add_library(nf STATIC  ${UTILS_FILES} ${NET_FILES})
 
-
 #target_link_libraries(netframz -lboostsystem)
-

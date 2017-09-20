@@ -39,7 +39,9 @@ int main(int argc, char *argv[]) {
         worker->Start(Endpoint(atoi(argv[2]), argv[1]), iname.str());
     }
 
-    pause();
+    for (auto x: vec_workers) {
+        x->Wait();
+    }
 
     return 0;
 }

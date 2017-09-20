@@ -171,6 +171,7 @@ void Server::OnRead(unsigned long lenth, task_data_t data, ErrCode err) {
 void Server::Parse(Connector &conn) {
     conn.SetLastActTimeToNow();
     while (conn.GetRecvBuff().UsedSize() > 0) {
+        LogInfo("Parse cid|%lu", conn.GetCID());
         Cmd cmd;
         char *buff = conn.GetRecvBuff().FrontPos();
         unsigned long len = conn.GetRecvBuff().UsedSize();

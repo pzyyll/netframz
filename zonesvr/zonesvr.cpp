@@ -33,6 +33,9 @@ void ZoneSvr::ProcessCmd(proto::Cmd &cmd, const unsigned long cid) {
         case MsgCmd::LOGIN_REQ:
             ProcessLogin(cmd.GetMsgData(), cid);
             break;
+        case MsgCmd::LOGOUT_REQ:
+            ProcessLogout(cmd.GetMsgData(), cid);
+            break;
         case MsgCmd::ZONE_SYN_REQ:
             ProcessPositionSyn(cmd.GetMsgData(), cid);
             break;
@@ -42,24 +45,6 @@ void ZoneSvr::ProcessCmd(proto::Cmd &cmd, const unsigned long cid) {
         default:
             LogWarn("Cmd Type Err. Type(%u)", (unsigned)cmd.GetType());
             break;
-    }
-}
-
-void ZoneSvr::CloseConn(unsigned long cid) {
-    Server::CloseConn(cid);
-
-    //Send Leave info to other online users
-    Player *player = PlayerMngS.GetPlayerByCid(cid);
-    if (player) {
-        std::vector<unsigned long> noti_ids;
-        aoi_manage_.DelPos(cid, noti_ids);
-
-        std::vector<Player *> noti_players;
-        PlayerMngS.GetPlayersByCid(noti_players, noti_ids);
-
-        SynPlayerLeave(*player, noti_players);
-
-        PlayerMngS.DelPlayerByCid(cid);
     }
 }
 
@@ -101,6 +86,29 @@ void ZoneSvr::ProcessLogin(const std::string &buff, const unsigned long cid) {
 
     rsp.set_ret(ret);
     SendToClient(rsp, MsgCmd::LOGIN_RSP, cid);
+}
+
+void ZoneSvr::ProcessLogout(const std::string &buff, const unsigned long cid) {
+    LogInfo("ProcessLogout. cid|%lu", cid);
+
+    LogoutReq req;
+
+    if (Parse(req, buff) != MsgRet::SUCCESS)
+        return;
+
+    //Send Leave info to other online users
+    Player *player = PlayerMngS.GetPlayerByCid(cid);
+    if (player) {
+        std::vector<unsigned long> noti_ids;
+        aoi_manage_.DelPos(cid, noti_ids);
+
+        std::vector<Player *> noti_players;
+        PlayerMngS.GetPlayersByCid(noti_players, noti_ids);
+
+        SynPlayerLeave(*player, noti_players);
+
+        PlayerMngS.DelPlayerByCid(cid);
+    }
 }
 
 void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long cid) {

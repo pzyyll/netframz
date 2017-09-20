@@ -5,13 +5,15 @@ using namespace std::placeholders;
 using namespace std;
 using namespace nf;
 
-ClientWorker::ClientWorker() : rv_len_(0), login_wait_(0) {
+ClientWorker::ClientWorker() : rv_len_(0), login_wait_(0), rcv_task_(NULL) {
 
 }
 
 ClientWorker::~ClientWorker() {
-    snd_.Join();
-    rcv_.Join();
+    if (rcv_task_) {
+        delete rcv_task_;
+        rcv_task_ = NULL;
+    }
 }
 
 void ClientWorker::Start(const Endpoint &ep, const std::string &name) {
@@ -21,6 +23,11 @@ void ClientWorker::Start(const Endpoint &ep, const std::string &name) {
 
     snd_.SetHandle(std::bind(&ClientWorker::SndHandler, this, _1));
     snd_.Run(NULL);
+}
+
+void ClientWorker::Wait() {
+    snd_.Join();
+    rcv_.Join();
 }
 
 int ClientWorker::SendMsgToSvr(::google::protobuf::Message &msg, unsigned int type) {
@@ -35,7 +42,6 @@ int ClientWorker::SendMsgToSvr(::google::protobuf::Message &msg, unsigned int ty
     cmd.SerializeTo(str);
 
     int ns = socket_.Send((void *)str.c_str(), str.size());
-    //Writen(sock_fd, (void *)str.c_str(), str.size());
     if (ns < 0) {
         std::cout << "Send err." << std::endl;
         return -1;
@@ -120,6 +126,7 @@ void ClientWorker::SndHandler(void *args) {
         if (InputOption() < 0) break;
         sleep(1);
     }
+    es_.Stop();
 }
 
 int ClientWorker::ParseBuff(const char *buff, const unsigned int lenth) {
@@ -180,7 +187,6 @@ int ClientWorker::ProcessLoginRsp(const std::string &data) {
     //    const Persion &persion = rsp.zone_stat().persion_list(i);
     //    persions_map[persion.name()] = persion;
     //}
-    //std::cout << rsp.ShortDebugString() << std::endl;
 
     login_wait_ = 1;
 
@@ -304,6 +310,13 @@ int ClientWorker::Login(const std::string &name) {
     return 0;
 }
 
+void ClientWorker::Logout() {
+    LogoutReq req;
+    req.set_name(self_info_.name());
+
+    SendMsgToSvr(req, MsgCmd::LOGOUT_REQ);
+}
+
 int ClientWorker::Move(Pos mv_direct) {
     int x = self_info_.point().x();
     int y = self_info_.point().y();
@@ -369,6 +382,7 @@ int ClientWorker::InputOption() {
             Chat();
             break;
         case 'q':
+            Logout();
             ret = -1;
             break;
         default:

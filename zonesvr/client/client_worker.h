@@ -39,6 +39,8 @@ public:
 
     void Start(const Endpoint &ep, const std::string &name);
 
+    void Wait();
+
     int SendMsgToSvr(::google::protobuf::Message &msg, unsigned int type);
 
     int CheckMask(int mask);
@@ -57,6 +59,7 @@ public:
     int ProcessChatStat(const std::string &data);
 
     int Login(const std::string &name);
+    void Logout();
     int Move(Pos mv_direct);
     int Chat();
 
