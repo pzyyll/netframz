@@ -30,6 +30,8 @@ class LoginReqDefaultTypeInternal : public ::google::protobuf::internal::Explici
 } _LoginReq_default_instance_;
 class LoginRspDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<LoginRsp> {
 } _LoginRsp_default_instance_;
+class LogoutReqDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<LogoutReq> {
+} _LogoutReq_default_instance_;
 class ZoneSynReqDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ZoneSynReq> {
 } _ZoneSynReq_default_instance_;
 class ZoneSynRspDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ZoneSynRsp> {
@@ -50,7 +52,7 @@ namespace protobuf_zonesvr_2eproto {
 
 namespace {
 
-::google::protobuf::Metadata file_level_metadata[14];
+::google::protobuf::Metadata file_level_metadata[15];
 const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors[2];
 
 }  // namespace
@@ -66,6 +68,7 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::AuxillaryParseTableField
 };
 PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
     TableStruct::schema[] = {
+  { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
@@ -129,6 +132,12 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginRsp, err_msg_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginRsp, zone_stat_),
   ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LogoutReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LogoutReq, name_),
+  ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ZoneSynReq, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -187,13 +196,14 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] = {
   { 25, -1, sizeof(ZoneStat)},
   { 31, -1, sizeof(LoginReq)},
   { 37, -1, sizeof(LoginRsp)},
-  { 45, -1, sizeof(ZoneSynReq)},
-  { 51, -1, sizeof(ZoneSynRsp)},
-  { 60, -1, sizeof(ZoneSyn)},
-  { 66, -1, sizeof(ZoneUserRemove)},
-  { 72, -1, sizeof(ChatReq)},
-  { 79, -1, sizeof(ChatRsp)},
-  { 86, -1, sizeof(ChatStat)},
+  { 45, -1, sizeof(LogoutReq)},
+  { 51, -1, sizeof(ZoneSynReq)},
+  { 57, -1, sizeof(ZoneSynRsp)},
+  { 66, -1, sizeof(ZoneSyn)},
+  { 72, -1, sizeof(ZoneUserRemove)},
+  { 78, -1, sizeof(ChatReq)},
+  { 85, -1, sizeof(ChatRsp)},
+  { 92, -1, sizeof(ChatStat)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -204,6 +214,7 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneStat_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_LoginReq_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_LoginRsp_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&_LogoutReq_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneSynReq_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneSynRsp_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ZoneSyn_default_instance_),
@@ -231,7 +242,7 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 14);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 15);
 }
 
 }  // namespace
@@ -251,20 +262,22 @@ void TableStruct::Shutdown() {
   delete file_level_metadata[5].reflection;
   _LoginRsp_default_instance_.Shutdown();
   delete file_level_metadata[6].reflection;
-  _ZoneSynReq_default_instance_.Shutdown();
+  _LogoutReq_default_instance_.Shutdown();
   delete file_level_metadata[7].reflection;
-  _ZoneSynRsp_default_instance_.Shutdown();
+  _ZoneSynReq_default_instance_.Shutdown();
   delete file_level_metadata[8].reflection;
-  _ZoneSyn_default_instance_.Shutdown();
+  _ZoneSynRsp_default_instance_.Shutdown();
   delete file_level_metadata[9].reflection;
-  _ZoneUserRemove_default_instance_.Shutdown();
+  _ZoneSyn_default_instance_.Shutdown();
   delete file_level_metadata[10].reflection;
-  _ChatReq_default_instance_.Shutdown();
+  _ZoneUserRemove_default_instance_.Shutdown();
   delete file_level_metadata[11].reflection;
-  _ChatRsp_default_instance_.Shutdown();
+  _ChatReq_default_instance_.Shutdown();
   delete file_level_metadata[12].reflection;
-  _ChatStat_default_instance_.Shutdown();
+  _ChatRsp_default_instance_.Shutdown();
   delete file_level_metadata[13].reflection;
+  _ChatStat_default_instance_.Shutdown();
+  delete file_level_metadata[14].reflection;
 }
 
 void TableStruct::InitDefaultsImpl() {
@@ -278,6 +291,7 @@ void TableStruct::InitDefaultsImpl() {
   _ZoneStat_default_instance_.DefaultConstruct();
   _LoginReq_default_instance_.DefaultConstruct();
   _LoginRsp_default_instance_.DefaultConstruct();
+  _LogoutReq_default_instance_.DefaultConstruct();
   _ZoneSynReq_default_instance_.DefaultConstruct();
   _ZoneSynRsp_default_instance_.DefaultConstruct();
   _ZoneSyn_default_instance_.DefaultConstruct();
@@ -310,30 +324,32 @@ void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] = {
       "\n\rzonesvr.proto\"3\n\006MsgRet\")\n\007ErrCode\022\013\n\007"
-      "SUCCESS\020\000\022\021\n\004FAIL\020\377\377\377\377\377\377\377\377\377\001\"\271\001\n\006MsgCmd\""
-      "\256\001\n\005MsgId\022\013\n\007MSGINIT\020\000\022\016\n\tLOGIN_REQ\020\201 \022\016"
-      "\n\tLOGIN_RSP\020\202 \022\021\n\014ZONE_SYN_REQ\020\201@\022\021\n\014ZON"
-      "E_SYN_RSP\020\202@\022\r\n\010ZONE_SYN\020\203@\022\025\n\020ZONE_USER"
-      "_REMOVE\020\204@\022\r\n\010CHAT_REQ\020\201`\022\r\n\010CHAT_RSP\020\202`"
-      "\022\016\n\tCHAT_STAT\020\203`\"a\n\007Persion\022\014\n\004name\030\001 \001("
-      "\014\022\035\n\005point\030\002 \001(\0132\016.Persion.Point\022\n\n\002id\030\003"
-      " \001(\r\032\035\n\005Point\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\"*\n\010Z"
-      "oneStat\022\036\n\014persion_list\030\001 \003(\0132\010.Persion\""
-      "\030\n\010LoginReq\022\014\n\004name\030\001 \001(\014\"F\n\010LoginRsp\022\013\n"
-      "\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\034\n\tzone_stat"
-      "\030\003 \001(\0132\t.ZoneStat\"\'\n\nZoneSynReq\022\031\n\007persi"
-      "on\030\001 \001(\0132\010.Persion\"h\n\nZoneSynRsp\022\013\n\003ret\030"
-      "\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\034\n\tshow_stat\030\003 \001("
-      "\0132\t.ZoneStat\022\036\n\013unshow_stat\030\004 \001(\0132\t.Zone"
-      "Stat\"\'\n\007ZoneSyn\022\034\n\tzone_stat\030\001 \001(\0132\t.Zon"
-      "eStat\"\036\n\016ZoneUserRemove\022\014\n\004name\030\001 \001(\014\"(\n"
-      "\007ChatReq\022\014\n\004name\030\001 \001(\014\022\017\n\007content\030\002 \001(\014\""
-      "\'\n\007ChatRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014"
-      "\"D\n\010ChatStat\022\031\n\007speaker\030\001 \001(\0132\010.Persion\022"
-      "\017\n\007content\030\002 \001(\014\022\014\n\004time\030\003 \001(\rb\006proto3"
+      "SUCCESS\020\000\022\021\n\004FAIL\020\377\377\377\377\377\377\377\377\377\001\"\312\001\n\006MsgCmd\""
+      "\277\001\n\005MsgId\022\013\n\007MSGINIT\020\000\022\016\n\tLOGIN_REQ\020\201 \022\016"
+      "\n\tLOGIN_RSP\020\202 \022\017\n\nLOGOUT_REQ\020\203 \022\021\n\014ZONE_"
+      "SYN_REQ\020\201@\022\021\n\014ZONE_SYN_RSP\020\202@\022\r\n\010ZONE_SY"
+      "N\020\203@\022\025\n\020ZONE_USER_REMOVE\020\204@\022\r\n\010CHAT_REQ\020"
+      "\201`\022\r\n\010CHAT_RSP\020\202`\022\016\n\tCHAT_STAT\020\203`\"a\n\007Per"
+      "sion\022\014\n\004name\030\001 \001(\014\022\035\n\005point\030\002 \001(\0132\016.Pers"
+      "ion.Point\022\n\n\002id\030\003 \001(\r\032\035\n\005Point\022\t\n\001x\030\001 \001("
+      "\005\022\t\n\001y\030\002 \001(\005\"*\n\010ZoneStat\022\036\n\014persion_list"
+      "\030\001 \003(\0132\010.Persion\"\030\n\010LoginReq\022\014\n\004name\030\001 \001"
+      "(\014\"F\n\010LoginRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002"
+      " \001(\014\022\034\n\tzone_stat\030\003 \001(\0132\t.ZoneStat\"\031\n\tLo"
+      "goutReq\022\014\n\004name\030\001 \001(\014\"\'\n\nZoneSynReq\022\031\n\007p"
+      "ersion\030\001 \001(\0132\010.Persion\"h\n\nZoneSynRsp\022\013\n\003"
+      "ret\030\001 \001(\005\022\017\n\007err_msg\030\002 \001(\014\022\034\n\tshow_stat\030"
+      "\003 \001(\0132\t.ZoneStat\022\036\n\013unshow_stat\030\004 \001(\0132\t."
+      "ZoneStat\"\'\n\007ZoneSyn\022\034\n\tzone_stat\030\001 \001(\0132\t"
+      ".ZoneStat\"\036\n\016ZoneUserRemove\022\014\n\004name\030\001 \001("
+      "\014\"(\n\007ChatReq\022\014\n\004name\030\001 \001(\014\022\017\n\007content\030\002 "
+      "\001(\014\"\'\n\007ChatRsp\022\013\n\003ret\030\001 \001(\005\022\017\n\007err_msg\030\002"
+      " \001(\014\"D\n\010ChatStat\022\031\n\007speaker\030\001 \001(\0132\010.Pers"
+      "ion\022\017\n\007content\030\002 \001(\014\022\014\n\004time\030\003 \001(\rb\006prot"
+      "o3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 878);
+      descriptor, 922);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "zonesvr.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -383,6 +399,7 @@ bool MsgCmd_MsgId_IsValid(int value) {
     case 0:
     case 4097:
     case 4098:
+    case 4099:
     case 8193:
     case 8194:
     case 8195:
@@ -400,6 +417,7 @@ bool MsgCmd_MsgId_IsValid(int value) {
 const MsgCmd_MsgId MsgCmd::MSGINIT;
 const MsgCmd_MsgId MsgCmd::LOGIN_REQ;
 const MsgCmd_MsgId MsgCmd::LOGIN_RSP;
+const MsgCmd_MsgId MsgCmd::LOGOUT_REQ;
 const MsgCmd_MsgId MsgCmd::ZONE_SYN_REQ;
 const MsgCmd_MsgId MsgCmd::ZONE_SYN_RSP;
 const MsgCmd_MsgId MsgCmd::ZONE_SYN;
@@ -2434,6 +2452,286 @@ void LoginRsp::set_allocated_zone_stat(::ZoneStat* zone_stat) {
     
   }
   // @@protoc_insertion_point(field_set_allocated:LoginRsp.zone_stat)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int LogoutReq::kNameFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+LogoutReq::LogoutReq()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_zonesvr_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:LogoutReq)
+}
+LogoutReq::LogoutReq(const LogoutReq& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.name().size() > 0) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  // @@protoc_insertion_point(copy_constructor:LogoutReq)
+}
+
+void LogoutReq::SharedCtor() {
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+LogoutReq::~LogoutReq() {
+  // @@protoc_insertion_point(destructor:LogoutReq)
+  SharedDtor();
+}
+
+void LogoutReq::SharedDtor() {
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void LogoutReq::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* LogoutReq::descriptor() {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const LogoutReq& LogoutReq::default_instance() {
+  protobuf_zonesvr_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+LogoutReq* LogoutReq::New(::google::protobuf::Arena* arena) const {
+  LogoutReq* n = new LogoutReq;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void LogoutReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:LogoutReq)
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+bool LogoutReq::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:LogoutReq)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // bytes name = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_name()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:LogoutReq)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:LogoutReq)
+  return false;
+#undef DO_
+}
+
+void LogoutReq::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:LogoutReq)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bytes name = 1;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      1, this->name(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:LogoutReq)
+}
+
+::google::protobuf::uint8* LogoutReq::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:LogoutReq)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bytes name = 1;
+  if (this->name().size() > 0) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        1, this->name(), target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:LogoutReq)
+  return target;
+}
+
+size_t LogoutReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:LogoutReq)
+  size_t total_size = 0;
+
+  // bytes name = 1;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->name());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void LogoutReq::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:LogoutReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  const LogoutReq* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const LogoutReq>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:LogoutReq)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:LogoutReq)
+    MergeFrom(*source);
+  }
+}
+
+void LogoutReq::MergeFrom(const LogoutReq& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:LogoutReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.name().size() > 0) {
+
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+}
+
+void LogoutReq::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:LogoutReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void LogoutReq::CopyFrom(const LogoutReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:LogoutReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool LogoutReq::IsInitialized() const {
+  return true;
+}
+
+void LogoutReq::Swap(LogoutReq* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void LogoutReq::InternalSwap(LogoutReq* other) {
+  name_.Swap(&other->name_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata LogoutReq::GetMetadata() const {
+  protobuf_zonesvr_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_zonesvr_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// LogoutReq
+
+// bytes name = 1;
+void LogoutReq::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& LogoutReq::name() const {
+  // @@protoc_insertion_point(field_get:LogoutReq.name)
+  return name_.GetNoArena();
+}
+void LogoutReq::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:LogoutReq.name)
+}
+#if LANG_CXX11
+void LogoutReq::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:LogoutReq.name)
+}
+#endif
+void LogoutReq::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:LogoutReq.name)
+}
+void LogoutReq::set_name(const void* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:LogoutReq.name)
+}
+::std::string* LogoutReq::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:LogoutReq.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* LogoutReq::release_name() {
+  // @@protoc_insertion_point(field_release:LogoutReq.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void LogoutReq::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:LogoutReq.name)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

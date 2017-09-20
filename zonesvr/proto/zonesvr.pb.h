@@ -46,6 +46,9 @@ extern LoginReqDefaultTypeInternal _LoginReq_default_instance_;
 class LoginRsp;
 class LoginRspDefaultTypeInternal;
 extern LoginRspDefaultTypeInternal _LoginRsp_default_instance_;
+class LogoutReq;
+class LogoutReqDefaultTypeInternal;
+extern LogoutReqDefaultTypeInternal _LogoutReq_default_instance_;
 class MsgCmd;
 class MsgCmdDefaultTypeInternal;
 extern MsgCmdDefaultTypeInternal _MsgCmd_default_instance_;
@@ -113,6 +116,7 @@ enum MsgCmd_MsgId {
   MsgCmd_MsgId_MSGINIT = 0,
   MsgCmd_MsgId_LOGIN_REQ = 4097,
   MsgCmd_MsgId_LOGIN_RSP = 4098,
+  MsgCmd_MsgId_LOGOUT_REQ = 4099,
   MsgCmd_MsgId_ZONE_SYN_REQ = 8193,
   MsgCmd_MsgId_ZONE_SYN_RSP = 8194,
   MsgCmd_MsgId_ZONE_SYN = 8195,
@@ -308,6 +312,8 @@ class MsgCmd : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
     MsgCmd_MsgId_LOGIN_REQ;
   static const MsgId LOGIN_RSP =
     MsgCmd_MsgId_LOGIN_RSP;
+  static const MsgId LOGOUT_REQ =
+    MsgCmd_MsgId_LOGOUT_REQ;
   static const MsgId ZONE_SYN_REQ =
     MsgCmd_MsgId_ZONE_SYN_REQ;
   static const MsgId ZONE_SYN_RSP =
@@ -827,6 +833,94 @@ class LoginRsp : public ::google::protobuf::Message /* @@protoc_insertion_point(
 };
 // -------------------------------------------------------------------
 
+class LogoutReq : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:LogoutReq) */ {
+ public:
+  LogoutReq();
+  virtual ~LogoutReq();
+
+  LogoutReq(const LogoutReq& from);
+
+  inline LogoutReq& operator=(const LogoutReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const LogoutReq& default_instance();
+
+  static inline const LogoutReq* internal_default_instance() {
+    return reinterpret_cast<const LogoutReq*>(
+               &_LogoutReq_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    7;
+
+  void Swap(LogoutReq* other);
+
+  // implements Message ----------------------------------------------
+
+  inline LogoutReq* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  LogoutReq* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const LogoutReq& from);
+  void MergeFrom(const LogoutReq& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(LogoutReq* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // bytes name = 1;
+  void clear_name();
+  static const int kNameFieldNumber = 1;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_name(::std::string&& value);
+  #endif
+  void set_name(const char* value);
+  void set_name(const void* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
+  // @@protoc_insertion_point(class_scope:LogoutReq)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
+  mutable int _cached_size_;
+  friend struct protobuf_zonesvr_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class ZoneSynReq : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ZoneSynReq) */ {
  public:
   ZoneSynReq();
@@ -847,7 +941,7 @@ class ZoneSynReq : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_ZoneSynReq_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    8;
 
   void Swap(ZoneSynReq* other);
 
@@ -930,7 +1024,7 @@ class ZoneSynRsp : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_ZoneSynRsp_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    9;
 
   void Swap(ZoneSynRsp* other);
 
@@ -1045,7 +1139,7 @@ class ZoneSyn : public ::google::protobuf::Message /* @@protoc_insertion_point(c
                &_ZoneSyn_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    10;
 
   void Swap(ZoneSyn* other);
 
@@ -1128,7 +1222,7 @@ class ZoneUserRemove : public ::google::protobuf::Message /* @@protoc_insertion_
                &_ZoneUserRemove_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    11;
 
   void Swap(ZoneUserRemove* other);
 
@@ -1216,7 +1310,7 @@ class ChatReq : public ::google::protobuf::Message /* @@protoc_insertion_point(c
                &_ChatReq_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    12;
 
   void Swap(ChatReq* other);
 
@@ -1319,7 +1413,7 @@ class ChatRsp : public ::google::protobuf::Message /* @@protoc_insertion_point(c
                &_ChatRsp_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    13;
 
   void Swap(ChatRsp* other);
 
@@ -1414,7 +1508,7 @@ class ChatStat : public ::google::protobuf::Message /* @@protoc_insertion_point(
                &_ChatStat_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    14;
 
   void Swap(ChatStat* other);
 
@@ -1850,6 +1944,63 @@ inline void LoginRsp::set_allocated_zone_stat(::ZoneStat* zone_stat) {
     
   }
   // @@protoc_insertion_point(field_set_allocated:LoginRsp.zone_stat)
+}
+
+// -------------------------------------------------------------------
+
+// LogoutReq
+
+// bytes name = 1;
+inline void LogoutReq::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& LogoutReq::name() const {
+  // @@protoc_insertion_point(field_get:LogoutReq.name)
+  return name_.GetNoArena();
+}
+inline void LogoutReq::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:LogoutReq.name)
+}
+#if LANG_CXX11
+inline void LogoutReq::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:LogoutReq.name)
+}
+#endif
+inline void LogoutReq::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:LogoutReq.name)
+}
+inline void LogoutReq::set_name(const void* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:LogoutReq.name)
+}
+inline ::std::string* LogoutReq::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:LogoutReq.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* LogoutReq::release_name() {
+  // @@protoc_insertion_point(field_release:LogoutReq.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void LogoutReq::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:LogoutReq.name)
 }
 
 // -------------------------------------------------------------------
@@ -2436,6 +2587,8 @@ inline void ChatStat::set_time(::google::protobuf::uint32 value) {
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

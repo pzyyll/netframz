@@ -12,6 +12,7 @@ message MsgCmd {
         MSGINIT           = 0X0;
         LOGIN_REQ         = 0X1001;
         LOGIN_RSP         = 0X1002;
+        LOGOUT_REQ        = 0X1003;
         ZONE_SYN_REQ      = 0X2001;
         ZONE_SYN_RSP      = 0X2002;
         ZONE_SYN          = 0X2003;
@@ -46,6 +47,11 @@ message LoginRsp {
     int32 ret = 1;
     bytes err_msg = 2;
     ZoneStat zone_stat = 3;
+}
+
+// LOGOUT_REQ = 0X1003;
+message LogoutReq {
+    bytes name = 1;
 }
 
 // ZONE_SYN_REQ = 0X2001;
