@@ -24,10 +24,13 @@ int main(int argc, char *argv[]) {
     }
 
     int num;
+    string name/* = "foo"*/;
+    cout << "prefix name:";
+    cin >> name;
+    cout << "thread num:"
     cin >> num;
 
     vector<ClientWorker *> vec_workers;
-    string name = "foo";
     for (int i = 1; i <= num; ++i) {
         srand(time(NULL) + i);
         ostringstream iname;
