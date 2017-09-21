@@ -438,6 +438,7 @@ Server::ConnectorPtr Server::CreateConn(int fd) {
         return NULL;
     }
 
+    LogWarn("Debug: Connectsize|%lu", conn_map_.size());
     return cli;
 }
 
