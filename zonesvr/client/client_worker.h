@@ -82,6 +82,8 @@ private:
     IOTask *rcv_task_;
 
     std::string name_;
+
+    bool is_close_;
 };
 
 #endif //NF_ZONESVR_CLIENT_CLIENT_WORKER_H

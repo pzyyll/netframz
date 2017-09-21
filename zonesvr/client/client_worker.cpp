@@ -5,11 +5,17 @@ using namespace std::placeholders;
 using namespace std;
 using namespace nf;
 
-ClientWorker::ClientWorker() : rv_len_(0), login_wait_(0), rcv_task_(NULL) {
+ClientWorker::ClientWorker()
+    : rv_len_(0),
+      login_wait_(0),
+      rcv_task_(NULL),
+      is_close_(true) {
 
 }
 
 ClientWorker::~ClientWorker() {
+    Logout();
+
     if (rcv_task_) {
         delete rcv_task_;
         rcv_task_ = NULL;
@@ -116,6 +122,8 @@ void ClientWorker::SndHandler(void *args) {
         std::cout << "Connect fail. " << socket_.GetErrMsg() << std::endl;
         return;
     }
+
+    is_close_ = 0;
 
     rcv_.SetHandle(std::bind(&ClientWorker::RcvHandler, this, _1));
     rcv_.Run(NULL);
@@ -311,6 +319,9 @@ int ClientWorker::Login(const std::string &name) {
 }
 
 void ClientWorker::Logout() {
+    if (is_close_)
+        return;
+
     LogoutReq req;
     req.set_name(self_info_.name());
 

@@ -234,8 +234,8 @@ void Server::OnWriteErr(unsigned long lenth, task_data_t data, ErrCode err) {
     UNUSE(lenth);
     unsigned long cid = data.data.id;
     if (err.get_ret() != ErrCode::SUCCESS) {
-        LogWarn("%s", err.get_err_msg().c_str());
-        CloseConn(cid);
+        LogWarn("cid|%lu, err|%s", cid, err.get_err_msg().c_str());
+        //CloseConn(cid);
         return;
     }
 }

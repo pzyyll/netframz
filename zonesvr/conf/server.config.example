@@ -26,7 +26,7 @@ log_path ./log
 
 # local log level
 # glog level (0=INFO, 1=WARNING, 2=ERROR)
-log_level 0
+log_level 1
 
 # zone num
 #zone_num 10
