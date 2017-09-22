@@ -63,7 +63,7 @@ void ZoneSvr::ProcessLogin(const std::string &buff, const unsigned long cid) {
         }
 
         //Init player
-        Player *player = PlayerMngS.AddPlayer(req.name(), cid);
+        Player *player = PlayerMgrS.AddPlayer(req.name(), cid);
         if (!player) {
             ret = MsgRet::FAIL;
             rsp.set_err_msg("Player already exist or unkonw.");
@@ -76,7 +76,7 @@ void ZoneSvr::ProcessLogin(const std::string &buff, const unsigned long cid) {
                            interest_ids);
 
         std::vector<Player *> inter_players;
-        PlayerMngS.GetPlayersByCid(inter_players, interest_ids);
+        PlayerMgrS.GetPlayersByCid(inter_players, interest_ids);
 
         SynPlayerPos(*player, inter_players);
 
@@ -97,17 +97,17 @@ void ZoneSvr::ProcessLogout(const std::string &buff, const unsigned long cid) {
         return;
 
     //Send Leave info to other online users
-    Player *player = PlayerMngS.GetPlayerByCid(cid);
+    Player *player = PlayerMgrS.GetPlayerByCid(cid);
     if (player) {
         std::vector<unsigned long> noti_ids;
         aoi_manage_.DelPos(cid, noti_ids);
 
         std::vector<Player *> noti_players;
-        PlayerMngS.GetPlayersByCid(noti_players, noti_ids);
+        PlayerMgrS.GetPlayersByCid(noti_players, noti_ids);
 
         SynPlayerLeave(*player, noti_players);
 
-        PlayerMngS.DelPlayerByCid(cid);
+        PlayerMgrS.DelPlayerByCid(cid);
     }
 }
 
@@ -125,7 +125,7 @@ void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long ci
             break;
         }
 
-        Player *player = PlayerMngS.GetPlayer(req.persion().name());
+        Player *player = PlayerMgrS.GetPlayer(req.persion().name());
         if (!player) {
             ret = MsgRet::FAIL;
             rsp.set_err_msg("player is not exist.");
@@ -144,8 +144,8 @@ void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long ci
 
         std::vector<Player *> notify_rms, notify_inters;
 
-        PlayerMngS.GetPlayersByCid(notify_rms, rm_ids);
-        PlayerMngS.GetPlayersByCid(notify_inters, inter_ids);
+        PlayerMgrS.GetPlayersByCid(notify_rms, rm_ids);
+        PlayerMgrS.GetPlayersByCid(notify_inters, inter_ids);
 
         SynPlayerLeave(*player, notify_rms);
         SynPlayerPos(*player, notify_inters);
@@ -172,7 +172,7 @@ void ZoneSvr::ProcessChat(const std::string &buff, const unsigned long cid) {
             break;
         }
 
-        Player *player = PlayerMngS.GetPlayer(req.name());
+        Player *player = PlayerMgrS.GetPlayer(req.name());
         if (!player) {
             ret = MsgRet::FAIL;
             rsp.set_err_msg("player is not exist.");
@@ -201,8 +201,8 @@ void ZoneSvr::ProcessChat(const std::string &buff, const unsigned long cid) {
 }
 
 void ZoneSvr::GetOnlinePlayers(std::vector<Player *> &vec_players) {
-    PlayerManage::PlayerMapConstItr itr = PlayerMngS.begin();
-    for ( ; itr != PlayerMngS.end(); ++itr) {
+    PlayerManage::PlayerMapConstItr itr = PlayerMgrS.begin();
+    for ( ; itr != PlayerMgrS.end(); ++itr) {
         Player *pry_player = itr->second;
         assert(pry_player != NULL);
 
