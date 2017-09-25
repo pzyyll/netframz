@@ -132,7 +132,10 @@ void Server::Do(int fd) {
         return;
     }
 
-    TimerTaskPtr timer = CreateTimerTask(conn->GetCID());
+    TimerTaskPtr timer = timer_mgr_.AddTimerTask(
+                                        es_,
+                                        conn->GetCID(),
+                                        svr_cfg::get_const_instance().timeout);//CreateTimerTask(conn->GetCID());
     if (!timer) {
         DelConn(conn);
         return;
@@ -262,7 +265,7 @@ void Server::OnTimerOut(EventService *es, task_data_t data, int mask) {
     ConnectorPtr conn = FindConn(cid);
     if (!conn) {
         LogWarn("Connector for cid %lu not find.", cid);
-        DelTimerTask(cid);
+        timer_mgr_.DelTimerTask(cid);
         return;
     }
 
@@ -273,7 +276,7 @@ void Server::OnTimerOut(EventService *es, task_data_t data, int mask) {
     }
 
     LogInfo("Resume timer.");
-    TimerTaskPtr timer = FindTimer(cid);
+    TimerTaskPtr timer = timer_mgr_.FindTimerTask(cid);
     timer->Restart();
 }
 
@@ -462,45 +465,6 @@ void Server::DelConn(ConnectorPtr conn) {
     }
 }
 
-Server::TimerTaskPtr Server::CreateTimerTask(unsigned long cid) {
-    LogInfo("Create timer task for cid %lu.", cid);
-
-    int timeout = svr_cfg::get_const_instance().timeout;
-    TimerTaskPtr timer = new TimerTask(es_, timeout, 0);
-    if (NULL == timer
-        || !timer_map_.insert(make_pair(cid, timer)).second) {
-        LogWarn("Create timer fail for cid %lu.", cid);
-        if (timer)
-            delete timer;
-        return NULL;
-    }
-
-    return timer;
-}
-
-void Server::DelTimerTask(unsigned long cid) {
-    LogInfo("DelTimerTask cid %lu", cid);
-
-    TimerTaskPtr timer = FindTimer(cid);
-    if (!timer) {
-        LogWarn("Not find timer task for cid %lu.", cid);
-        return;
-    }
-
-    timer->Stop();
-    timer_map_.erase(cid);
-    delete timer;
-}
-
-Server::TimerTaskPtr Server::FindTimer(unsigned long cid) {
-    timer_map_t::iterator itr = timer_map_.find(cid);
-    if (itr == timer_map_.end()) {
-        return NULL;
-    }
-
-    return itr->second;
-}
-
 bool Server::CheckConnect(unsigned long cid) {
     if (FindConn(cid))
         return true;
@@ -509,7 +473,7 @@ bool Server::CheckConnect(unsigned long cid) {
 
 void Server::CloseConn(unsigned long cid) {
     DelConn(cid);
-    DelTimerTask(cid);
+    timer_mgr_.DelTimerTask(cid);
 }
 
 int Server::Daemon() {

@@ -33,6 +33,7 @@ set(SOURCE_FILES
         player_manage.cpp
         aoi_manage.cpp
         xml/tinyxml2.cpp
+        timer_task_mgr.cpp
         )
 
 set(PROTO_FILES proto/zonesvr.pb.cc)

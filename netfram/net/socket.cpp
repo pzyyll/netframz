@@ -201,3 +201,12 @@ int Socket::SetSendBuff(int size) {
     }
     return SUCCESS;
 }
+
+int Socket::SetOption(int level, int optname, const void *optval, socklen_t optlen) {
+    if (setsockopt(sock_, level, optname, optval, optlen) < 0) {
+        snprintf(err_msg_, sizeof(err_msg_), "%s", strerror(errno));
+        return FAIL;
+    }
+
+    return SUCCESS;
+}

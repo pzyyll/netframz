@@ -95,6 +95,8 @@ public:
 
     int SetSendBuff(int size);
 
+    int SetOption(int level, int optname, const void *optval, socklen_t optlen);
+
 private:
     int sock_;
     char err_msg_[kMaxErrLen];

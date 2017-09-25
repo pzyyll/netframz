@@ -32,6 +32,7 @@
 #include "connector.h"
 #include "acceptor.h"
 #include "proto.h"
+#include "timer_task_mgr.h"
 
 class Server {
 public:
@@ -95,12 +96,6 @@ protected:
 
     int CheckMask(int mask);
 
-    TimerTaskPtr CreateTimerTask(unsigned long cid);
-
-    void DelTimerTask(unsigned long cid);
-
-    TimerTaskPtr FindTimer(unsigned long cid);
-
     bool CheckConnect(unsigned long cid);
 
     int Daemon();
@@ -122,7 +117,7 @@ private:
     TimerTaskPtr tick_;
     EventService    es_;
     conn_map_t   conn_map_;
-    timer_map_t  timer_map_;
+    TimerTaskMgr timer_mgr_;
 
     Acceptor     acceptor_;
 };
