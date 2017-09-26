@@ -45,4 +45,3 @@ extern int syslog_level;
     } while (0)
 
 #endif //NF_TESTSVR_NOR_H
-

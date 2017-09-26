@@ -72,8 +72,6 @@ int Server::StartListen() {
     std::string ipv4 = svr_cfg::get_const_instance().ipv4;
     int port = svr_cfg::get_const_instance().port;
 
-    log_info("Bind addr: %s, port: %d", ipv4.c_str(), port);
-
     int listen_fd = acceptor_.Bind(ipv4, port);
     if (listen_fd < 0) {
         LogErr("Acceptor bind addr fail. %s", acceptor_.GetErrMsg());
@@ -391,7 +389,6 @@ int Server::SetMaxFds(int max_fds) {
         LogErr("get rlimit err|%s", strerror(errno));
         return FAIL;
     }
-    log_info("The maximum fds|%d", (int)maxfdrl.rlim_cur);
 
     return SUCCESS;
 }
