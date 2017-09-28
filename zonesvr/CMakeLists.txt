@@ -34,6 +34,7 @@ set(SOURCE_FILES
         aoi_manage.cpp
         xml/tinyxml2.cpp
         timer_task_mgr.cpp
+        proto.cpp
         )
 
 set(PROTO_FILES proto/zonesvr.pb.cc)

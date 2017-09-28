@@ -16,6 +16,10 @@ struct MsgHeader {
 };
 #pragma pack()
 
+int ReadMsgHeader(struct MsgHeader *msg_header, const char *buffer);
+
+int WriteMsgHeader(const struct MsgHeader *msg_header, char *buffer);
+
 #define MAX_CMD_LEN (1024 * 1024)
 
 class Cmd {

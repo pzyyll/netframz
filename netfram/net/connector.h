@@ -17,6 +17,7 @@
 #include "nf_event_iotask.h"
 #include "nf_mutex.h"
 #include "err_code.h"
+#include "socket.h"
 
 static const unsigned long DEFAULT_BUFF_SIZE = 1024 * 1024;
 
@@ -115,12 +116,6 @@ protected:
 
     Connector &operator=(const Connector &);
 
-    int MakeNonBlock(int fd);
-
-    ssize_t InnerRead(void *buff, size_t size);
-
-    ssize_t InnerWrite(const void *buff, const size_t size);
-
     void OnRead(EventService *es, task_data_t data, int mask);
 
     void OnWriteRemain(EventService *es, task_data_t data, int mask);
@@ -142,9 +137,11 @@ protected:
     IOTask         *task_;
     ConnCbData     rdata_, wdata_;
     char           err_msg_[256];
-    nf::Mutex      mutex_;
+
+    Socket         socket_;
 
     static unsigned long id_cnt_;
+    static unsigned long GetIdCnt();
 };
 
 #endif //NF_TEST_CONNETOR_H

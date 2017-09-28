@@ -14,12 +14,13 @@ using namespace nf;
 unsigned long Connector::id_cnt_ = 1;
 
 Connector::Connector(EventService &es, int fd)
-        : cid_(id_cnt_++),
+        : cid_(GetIdCnt()),
           is_close_(0),
           last_act_time_(0),
           recv_buf_(DEFAULT_BUFF_SIZE),
           send_buf_(DEFAULT_BUFF_SIZE),
-          task_(new IOTask(es, fd, 0)) {
+          task_(new IOTask(es, fd, 0)),
+          socket_(fd) {
     SetLastActTimeToNow();
 }
 
@@ -88,8 +89,9 @@ void Connector::OnRead(EventService *es, task_data_t data, int mask) {
         }
 
         char *base = recv_buf_.TailPos();
-        nr = InnerRead(base, remain);
+        nr = socket_.Recv(base, remain); //InnerRead(base, remain);
         if (nr < 0) {
+            snprintf(err_msg_, sizeof(err_msg_), "%s", socket_.GetErrMsg());
             err_code.set_ret(ErrCode::FAIL);
             err_code.set_err_msg(err_msg_);
             nr = 0;
@@ -172,8 +174,9 @@ Connector::size_t Connector::Recv(void *buff, const size_t size) {
 }
 
 Connector::ssize_t Connector::Send(const void *buff, const size_t size) {
-    ssize_t nw = InnerWrite(buff, size);
+    ssize_t nw = socket_.Send(buff, size);//InnerWrite(buff, size);
     if (nw < 0) {
+        snprintf(err_msg_, sizeof(err_msg_), "%s", socket_.GetErrMsg());
         return FAIL;
     }
 
@@ -205,8 +208,9 @@ Connector::ssize_t Connector::SendRemain() {
 
     void *buff = send_buf_.FrontPos();
     size_t lenth = send_buf_.UsedSize();
-    ssize_t nw = InnerWrite(buff, lenth);
+    ssize_t nw = socket_.Send(buff, lenth);//InnerWrite(buff, lenth);
     if (nw < 0) {
+        snprintf(err_msg_, sizeof(err_msg_), "%s", socket_.GetErrMsg());
         return FAIL;
     }
     send_buf_.FrontAdvancing(nw);
@@ -220,9 +224,7 @@ void Connector::Close() {
 
     //To make close operate
     task_->Stop();
-    int fd = task_->GetFd();
-    if (fd > 0)
-        ::close(fd);
+    socket_.Close();
 
     is_close_ = true;
 }
@@ -255,77 +257,6 @@ std::string Connector::GetErrMsg() {
     return std::string(err_msg_);
 }
 
-int Connector::MakeNonBlock(int fd) {
-    int val = ::fcntl(fd, F_GETFL, 0);
-    if (val < 0) {
-        snprintf(err_msg_, sizeof(err_msg_),
-                 "get fd(%d) status fail. %s", fd, strerror(errno));
-        return FAIL;
-    }
-
-    val |= O_NONBLOCK;
-    if (::fcntl(fd, F_SETFL, val) < 0) {
-        snprintf(err_msg_, sizeof(err_msg_),
-                 "set fd(%d) status fail. %s", fd, strerror(errno));
-        return FAIL;
-    }
-
-    return SUCCESS;
-}
-
-Connector::ssize_t Connector::InnerRead(void *buff, size_t size) {
-    int fd = task_->GetFd();
-    ssize_t nread = 0;
-    size_t nleft = size;
-    char *ptr = (char *) buff;
-
-    while (nleft > 0) {
-        nread = ::read(fd, ptr, nleft);
-        if (nread < 0) {
-            if (EINTR == errno) {
-                continue;
-            }
-            if (EAGAIN != errno) {
-                snprintf(err_msg_, sizeof(err_msg_), "read(%d) happen error. %s",
-                         fd, strerror(errno));
-                return FAIL;
-            }
-            break;
-        } else if (nread == 0) {
-            break;
-        }
-
-        nleft -= nread;
-        ptr += nread;
-    }
-
-    return (ssize_t)(size - nleft);
-}
-
-Connector::ssize_t Connector::InnerWrite(const void *buff, const size_t size) {
-    int fd = task_->GetFd();
-    ssize_t nwriten = 0;
-    size_t nleft = size;
-    const char *ptr = (const char *) buff;
-
-    while (nleft > 0) {
-        nwriten = ::write(fd, ptr, nleft);
-        if (nwriten <= 0) {
-            if (EINTR == errno) {
-                continue;
-            }
-            if (EAGAIN != errno) {
-                snprintf(err_msg_, sizeof(err_msg_), "write(%d) happen err. %s",
-                         fd, strerror(errno));
-                return FAIL;
-            }
-
-            break;
-        }
-
-        nleft -= nwriten;
-        ptr += nwriten;
-    }
-
-    return (ssize_t)(size - nleft);
+unsigned long Connector::GetIdCnt() {
+    return id_cnt_++;
 }
