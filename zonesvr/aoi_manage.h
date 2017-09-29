@@ -18,7 +18,6 @@ struct Vec2 {
     Vec2(int xt = 0, int yt = 0) : x(xt), y(yt) { }
     ~Vec2() { }
 
-    //提供 set 值排序
     bool operator < (const Vec2 &a) const {
         if (x < a.x)
             return true;
