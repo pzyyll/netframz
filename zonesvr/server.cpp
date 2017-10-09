@@ -116,6 +116,7 @@ void Server::OnAccept(int fd, ErrCode &err) {
 void Server::Do(int fd) {
     LogInfo("Do fd|%d", fd);
 
+    /*
     if (MakeNonblock(fd) < 0) {
         return;
     }
@@ -123,6 +124,7 @@ void Server::Do(int fd) {
     if (SetCliOpt(fd) < 0) {
         return;
     }
+    */
 
     ConnectorPtr conn = CreateConn(fd);
     if (!conn) {
@@ -142,7 +144,7 @@ void Server::Do(int fd) {
     struct ConnCbData cb_data;
     cb_data.pri_data.data.id = conn->GetCID();
     cb_data.handler = std::bind(&Server::OnRead, this, _1, _2, _3);
-    conn->BeginRecv(cb_data);
+    conn->Open(cb_data);
 
     task_data_t data = {.data = {.id = conn->GetCID()}};
     timer->SetPrivateData(data);
@@ -325,49 +327,6 @@ int Server::GetOption(int argc, char **argv) {
     return ret;
 }
 
-int Server::MakeNonblock(int fd) {
-    int val = 0;
-    if ((val = fcntl(fd, F_GETFL, 0)) < 0) {
-        LogWarn("Get fd(%d) stat fail. %s", fd, strerror(errno));
-    }
-
-    val |= O_NONBLOCK;
-    if (fcntl(fd, F_SETFL, val) < 0) {
-        LogWarn("Set fd(%d) non-block fail. %s", fd, strerror(errno));
-        return FAIL;
-    }
-
-    return SUCCESS;
-}
-
-int Server::SetCliOpt(int fd) {
-    //一般实际缓冲区大小是设置的2倍
-    //path:/proc/sys/net/core/w(r)mem_max
-    int send_buff_size = 2 * 65536;
-    int recv_buff_size = 2 * 65536;
-
-    if (::setsockopt(fd, SOL_SOCKET, SO_SNDBUF,
-                     (void *) &send_buff_size, sizeof(send_buff_size)) < 0) {
-        LogWarn("setsockopt to send buff size fail. %s", strerror(errno));
-        return FAIL;
-    }
-
-    if (::setsockopt(fd, SOL_SOCKET, SO_RCVBUF,
-                     (void *) &recv_buff_size, sizeof(recv_buff_size)) < 0) {
-        LogWarn("setsockopt to recv buff size fail. %s", strerror(errno));
-        return FAIL;
-    }
-
-    int nodelay = 1;
-    if (::setsockopt(fd, IPPROTO_TCP, TCP_NODELAY,
-                     (void *) &nodelay, sizeof(nodelay))) {
-        LogWarn("setsockopt to disabling Nagle's algorithm. %s", strerror(errno));
-        return FAIL;
-    }
-
-    return SUCCESS;
-}
-
 int Server::SetMaxFds(int max_fds) {
     LogInfo("SetMaxFds max_fds|%d", max_fds);
 
@@ -429,6 +388,11 @@ Server::ConnectorPtr Server::CreateConn(int fd) {
         LogErr("New a Connector fail.");
         return NULL;
     }
+
+    cli->GetSocket().SetNonBlock(true);
+    cli->GetSocket().SetNoDelay(true);
+    cli->GetSocket().SetRecvBuff(2 * 65536);
+    cli->GetSocket().SetSendBuff(2 * 65536);
 
     unsigned long cid = cli->GetCID();
     if (!conn_map_.insert(std::make_pair(cid, cli)).second) {

@@ -14,6 +14,6 @@ public:
 
 private:
     //TODO(@Caizhili)
-}
+};
 
 #endif

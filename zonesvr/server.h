@@ -80,10 +80,6 @@ protected:
 
     int GetOption(int argc, char **argv);
 
-    int MakeNonblock(int fd);
-
-    int SetCliOpt(int fd);
-
     int SetMaxFds(int max_fds);
 
     ConnectorPtr CreateConn(int fd);

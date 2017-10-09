@@ -91,7 +91,7 @@ public:
 
     ~Connector();
 
-    void BeginRecv(const ConnCbData &cb_data);
+    void Open(const ConnCbData &cb_data);
 
     size_t Recv(void *buff, const size_t size);
 
@@ -108,6 +108,8 @@ public:
     struct Buffer &GetRecvBuff();
 
     unsigned long GetCID();
+
+    Socket &GetSocket();
 
     std::string GetErrMsg();
 

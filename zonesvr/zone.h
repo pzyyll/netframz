@@ -14,6 +14,6 @@ public:
 
 private:
     //TODO(@Caizhili)
-}
+};
 
 #endif //NF_ZONESVR_ZONE_H

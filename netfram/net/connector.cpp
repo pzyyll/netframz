@@ -31,7 +31,7 @@ Connector::~Connector() {
     task_ = NULL;
 }
 
-void Connector::BeginRecv(const ConnCbData &cb_data) {
+void Connector::Open(const ConnCbData &cb_data) {
     rdata_ = cb_data;
 
     task_->SetMask(EV_READABLE);
@@ -251,6 +251,10 @@ struct Buffer &Connector::GetRecvBuff() {
 
 unsigned long Connector::GetCID() {
     return cid_;
+}
+
+Socket &Connector::GetSocket() {
+    return socket_;
 }
 
 std::string Connector::GetErrMsg() {
