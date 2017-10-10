@@ -44,26 +44,35 @@ void Connector::Send(const char *buff,
                      const ConnCbData &cb_data) {
     ErrCode err_code(ErrCode::SUCCESS);
 
+    wdata_ = cb_data;
+
     ssize_t ns = Send((void *)buff, lenth);
     if (ns < 0) {
         err_code.set_ret(ErrCode::FAIL);
         err_code.set_err_msg(err_msg_);
-        if (cb_data.handler)
-            cb_data.handler(0, cb_data.pri_data, err_code);
+        HandleOutput(err_code);
         return;
     }
 
     //Socket 缓冲区满
     if ((size_t) ns < lenth) {
-        wdata_ = cb_data;
         task_->SetMask(EV_WRITEABLE);
         task_->Bind(std::bind(&Connector::OnWriteRemain, this, _1, _2, _3));
         task_->Restart();
         return;
     }
 
-    if (cb_data.handler)
-        cb_data.handler(0, cb_data.pri_data, err_code);
+    HandleOutput(err_code);
+}
+
+void Connector::HandleInput(ErrCode &err_code) {
+    if (rdata_.handler)
+        rdata_.handler(recv_buf_.UsedSize(), rdata_.pri_data, err_code);
+}
+
+void Connector::HandleOutput(ErrCode &err_code) {
+    if (wdata_.handler)
+        wdata_.handler(0, wdata_.pri_data, err_code);
 }
 
 void Connector::OnRead(EventService *es, task_data_t data, int mask) {
@@ -100,8 +109,7 @@ void Connector::OnRead(EventService *es, task_data_t data, int mask) {
 
     recv_buf_.TailAdvancing(nr);
 
-    if (rdata_.handler)
-        rdata_.handler(recv_buf_.UsedSize(), rdata_.pri_data, err_code);
+    HandleInput(err_code);
 }
 
 void Connector::OnWriteRemain(EventService *es, task_data_t data, int mask) {
@@ -237,6 +245,10 @@ bool Connector::IsTimeOut(const unsigned long time_limit) {
     }
 
     return false;
+}
+
+bool Connector::IsClose() {
+    return is_close_;
 }
 
 void Connector::SetLastActTimeToNow() {

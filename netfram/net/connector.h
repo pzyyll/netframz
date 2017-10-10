@@ -89,9 +89,9 @@ public:
 public:
     Connector(EventService &es, int fd);
 
-    ~Connector();
+    virtual ~Connector();
 
-    void Open(const ConnCbData &cb_data);
+    void Open(const ConnCbData &cb_data = ConnCbData());
 
     size_t Recv(void *buff, const size_t size);
 
@@ -103,6 +103,8 @@ public:
 
     bool IsTimeOut(const unsigned long time_limit);
 
+    bool IsClose();
+
     void SetLastActTimeToNow();
 
     struct Buffer &GetRecvBuff();
@@ -112,6 +114,11 @@ public:
     Socket &GetSocket();
 
     std::string GetErrMsg();
+
+protected:
+    virtual void HandleInput(ErrCode &err_code);
+
+    virtual void HandleOutput(ErrCode &err_code);
 
 protected:
     Connector(const Connector &);
