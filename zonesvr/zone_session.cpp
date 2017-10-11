@@ -14,7 +14,7 @@ ZoneSession::~ZoneSession() {
 
 }
 
-void ZoneSession::AddCmdToQueue(Cmd *cmd) {
+void ZoneSession::QueueCmd(Cmd *cmd) {
     cmd_queue_.Push(cmd);
 }
 

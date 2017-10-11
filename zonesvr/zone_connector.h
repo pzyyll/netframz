@@ -8,6 +8,9 @@
 
 #include "nf_event.h"
 #include "connector.h"
+#include "proto.h"
+
+class ZoneSession;
 
 class ZoneConnector : public Connector {
 public:
@@ -20,8 +23,11 @@ protected:
 
     void HandleOutput(ErrCode &err_code) /*override*/;
 
+    int ProcessCmd(Cmd *cmd);
+
 private:
     //TODO
+    ZoneSession *session_;
 };
 
 #endif //NF_SVR_ZONE_CONNECTOR_H
