@@ -24,16 +24,16 @@ bool ZoneSession::Update() {
     while (!conn_->IsClose() && cmd_queue_.Next(cmd)) {
         switch (cmd->GetType()) {
             case MsgCmd::LOGIN_REQ:
-                ProcessLogin(cmd);
+                ProcessLogin(*cmd);
                 break;
             case MsgCmd::LOGOUT_REQ:
-                ProcessLogout(cmd);
+                ProcessLogout(*cmd);
                 break;
             case MsgCmd::ZONE_SYN_REQ:
-                ProcessPositionSyn(cmd);
+                ProcessPositionSyn(*cmd);
                 break;
             case MsgCmd::CHAT_REQ:
-                ProcessChat(cmd);
+                ProcessChat(*cmd);
                 break;
             default:
                 LogWarn("Cmd Type Err. Type(%u)", (unsigned)cmd->GetType());
@@ -47,6 +47,10 @@ bool ZoneSession::Update() {
         return false;
 
     return true;
+}
+
+void ZoneSession::ProcessLogin(Cmd &cmd) {
+
 }
 
 unsigned long ZoneSession::Get_id() const {

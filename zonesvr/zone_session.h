@@ -20,18 +20,18 @@ public:
 
     ~ZoneSession();
 
-    void AddCmdToQueue(Cmd *cmd);
+    void QueueCmd(Cmd *cmd);
 
-    //TODO
     bool Update();
 
-    void ProcessLogin(Cmd *cmd);
+    //TODO
+    void ProcessLogin(Cmd &cmd);
 
-    void ProcessLogout(Cmd *cmd);
+    void ProcessLogout(Cmd &cmd);
 
-    void ProcessPositionSyn(Cmd *cmd);
+    void ProcessPositionSyn(Cmd &cmd);
 
-    void ProcessChat(Cmd *cmd);
+    void ProcessChat(Cmd &cmd);
     //
 
     unsigned long Get_id() const;

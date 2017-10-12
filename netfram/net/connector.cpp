@@ -181,8 +181,8 @@ Connector::size_t Connector::Recv(void *buff, const size_t size) {
     return take_size;
 }
 
-Connector::ssize_t Connector::Send(const void *buff, const size_t size) {
-    ssize_t nw = socket_.Send(buff, size);//InnerWrite(buff, size);
+Connector::ssize_t Connector::SendIn(const void *buff, const size_t size) {
+    ssize_t nw = socket_.Send(buff, size);
     if (nw < 0) {
         snprintf(err_msg_, sizeof(err_msg_), "%s", socket_.GetErrMsg());
         return FAIL;

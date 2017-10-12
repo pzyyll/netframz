@@ -57,10 +57,6 @@ public:
 
     void Stop();
 
-    //void OnIdle();
-
-    //void OnExit();
-
 protected:
     int StartListen();
 

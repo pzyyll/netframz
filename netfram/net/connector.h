@@ -131,7 +131,7 @@ protected:
 
     int CheckMask(int mask);
 
-    ssize_t Send(const void *buff, const size_t size);
+    ssize_t SendIn(const void *buff, const size_t size);
 
     ssize_t SendRemain();
 

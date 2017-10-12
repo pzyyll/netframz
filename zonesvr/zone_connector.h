@@ -18,10 +18,12 @@ public:
 
     ~ZoneConnector();
 
+    void SendCmd(Cmd *cmd);
+
 protected:
     void HandleInput(ErrCode &err_code) /*override*/;
 
-    void HandleOutput(ErrCode &err_code) /*override*/;
+    //void HandleOutput(ErrCode &err_code) /*override*/;
 
     int ProcessCmd(Cmd *cmd);
 

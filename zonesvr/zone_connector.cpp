@@ -3,11 +3,15 @@
 // @Brief
 //
 
+#include <string>
+#include <cassert>
+
 #include "zone_connector.h"
 #include "log_def.h"
 #include "zone_session.h"
+#include "zone.h"
 
-#include <cassert>
+using namespace std;
 
 ZoneConnector::ZoneConnector(EventService &es, int fd)
     : Connector(es, fd), session_(NULL) {
@@ -17,8 +21,6 @@ ZoneConnector::ZoneConnector(EventService &es, int fd)
 ZoneConnector::~ZoneConnector() {
 
 }
-
-//TODO
 
 void ZoneConnector::HandleInput(ErrCode &err_code) {
     if (err_code.get_ret() != ErrCode::SUCCESS) {
@@ -59,9 +61,35 @@ void ZoneConnector::HandleInput(ErrCode &err_code) {
 int ZoneConnector::ProcessCmd(Cmd *cmd) {
     LogInfo("CmdType|%u|cid|%lu", (unsigned)cmd->GetType(), GetCID());
 
-    if (cmd->GetType() == MsgCmd::LOGIN_REQ) {
+    switch (cmd->GetType()) {
+        case MsgCmd::LOGIN_REQ : {
+            if (session_) {
+                LogWarn("Repeat login req, session handler is exist.");
+                return -1;
+            }
 
+            session_ = new ZoneSession(GetCID(), this);
+            assert(session_ != NULL);
+
+            ZoneS.QueueSession(session_);
+            return 0;
+        }
+        default: {
+            if (session_ == NULL) {
+                LogWarn("Cli not auth session.");
+                return -1;
+            }
+            session_.QueueCmd(cmd);
+            return 0;
+        }
     }
+
+    return 0;
 }
 
+int ZoneConnector::SendCmd(Cmd *cmd) {
+    string sndstr;
+    cmd->SerializeTo(sndstr);
 
+    this->Send(sndstr.c_str(), sndstr.size());
+}
