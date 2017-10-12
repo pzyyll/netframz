@@ -50,9 +50,28 @@ bool ZoneSession::Update() {
 }
 
 void ZoneSession::ProcessLogin(Cmd &cmd) {
-
+    //TODO
 }
 
 unsigned long ZoneSession::Get_id() const {
     return id_;
+}
+
+int ZoneSession::SendMsg(const ::google::protobuf::Message &msg,
+                         const unsigned int type) {
+    LogInfo("SendMsg|%s|id|%lu|type|%u",
+            msg.ShortDebugString().c_str(), id_, type);
+
+    if (conn_->IsClose()) {
+        LogWarn("Connect is closed.");
+        return -1;
+    }
+
+    proto::Cmd cmd;
+    cmd.SetType(type);
+    cmd.SetMsgData(msg);
+
+    conn_->SendCmd(&cmd);
+
+    return 0;
 }

@@ -36,6 +36,9 @@ public:
 
     unsigned long Get_id() const;
 
+    int SendMsg(const ::google::protobuf::Message &msg,
+                const unsigned int type);
+
 private:
     //TODO
     unsigned long id_;

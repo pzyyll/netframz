@@ -7,6 +7,7 @@
 #include <cstdint>
 
 #include <arpa/inet.h>
+#include <google/protobuf/message.h>
 
 namespace proto {
 #pragma pack(1)
@@ -80,6 +81,10 @@ public:
     std::string &GetMsgData() { return msg_data_; }
 
     void SetMsgData(const std::string &msg_data) { msg_data_ = msg_data; }
+
+    void SetMsgData(const ::google::protobuf::Message &msg) {
+        msg.SerializeToString(&msg_data_);
+    }
 
 protected:
     unsigned int type_;
