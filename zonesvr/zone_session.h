@@ -39,6 +39,8 @@ public:
     int SendMsg(const ::google::protobuf::Message &msg,
                 const unsigned int type);
 
+    void Kick();
+
 private:
     //TODO
     unsigned long id_;

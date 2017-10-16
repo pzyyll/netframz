@@ -75,3 +75,9 @@ int ZoneSession::SendMsg(const ::google::protobuf::Message &msg,
 
     return 0;
 }
+
+int ZoneSession::Kick() {
+    if (conn_) {
+        cond_->Close();
+    }
+}

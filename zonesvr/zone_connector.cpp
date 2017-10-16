@@ -72,6 +72,9 @@ int ZoneConnector::ProcessCmd(Cmd *cmd) {
             assert(session_ != NULL);
 
             ZoneS.QueueSession(session_);
+
+            session_.QueueCmd(cmd);
+
             return 0;
         }
         default: {

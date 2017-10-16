@@ -31,6 +31,13 @@ public:
 
     void MsgBroadcast(const std::vector<unsigned long> &ids, Cmd *cmd);
 
+    ZoneSession *FindSession(unsigned long id);
+
+    int RemoveSession(unsigned long id);
+
+private:
+    void AddSession(ZoneSession *session);
+
 private:
     //TODO(@Caizhili)
 
