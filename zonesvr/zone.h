@@ -33,10 +33,12 @@ public:
 
     ZoneSession *FindSession(unsigned long id);
 
-    int RemoveSession(unsigned long id);
+    bool RemoveSession(unsigned long id);
 
 private:
     void AddSession(ZoneSession *session);
+
+    void UpdateSession();
 
 private:
     //TODO(@Caizhili)

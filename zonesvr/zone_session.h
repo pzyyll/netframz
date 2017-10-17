@@ -39,6 +39,8 @@ public:
     int SendMsg(const ::google::protobuf::Message &msg,
                 const unsigned int type);
 
+    int SendCmd(Cmd &cmd);
+
     void Kick();
 
 private:

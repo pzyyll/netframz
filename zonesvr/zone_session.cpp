@@ -76,6 +76,17 @@ int ZoneSession::SendMsg(const ::google::protobuf::Message &msg,
     return 0;
 }
 
+int ZoneSession::SendCmd(Cmd &cmd) {
+
+    if (conn_->IsClose()) {
+        LogWarn("Connect is closed.");
+        return -1;
+    }
+
+    conn_->SendCmd(&cmd);
+    return 0;
+}
+
 int ZoneSession::Kick() {
     if (conn_) {
         cond_->Close();

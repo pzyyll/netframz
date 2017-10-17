@@ -9,24 +9,26 @@
 #include <unordered_map>
 #include "connector.h"
 #include "nf_event.h"
+#include "singleton.h"
 
 class ZoneConnectMgr {
 public:
-    typedef Connector *ConnectorPtr;
-    typedef std::unordered_map<unsigned long, ConnectorPtr> ConnMap;
+    typedef std::unordered_map<unsigned long, Connector *> ConnMap;
 
     ZoneConnectMgr();
 
     ~ZoneConnectMgr();
 
-    ConnectorPtr AddConnector(EventService *es_, int fd);
+    Connector *AddConnector(EventService *es_, int fd);
 
-    //TODO
-    ConnectorPtr FindConn(unsigned long cid);
+    Connector *FindConn(unsigned long cid);
 
+    bool RemoveConn(unsigned long cid);
 
 private:
     ConnMap conn_map_;
 };
+
+#define nf::singleton<ZoneConnectMgr>::get_mutable_instance() ZoneConnectMgrS
 
 #endif //NF_SVR_ZONE_CONNECT_MGR_H

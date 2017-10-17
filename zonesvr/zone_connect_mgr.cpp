@@ -13,13 +13,19 @@ ZoneConnectMgr::ZoneConnectMgr() {
 }
 
 ZoneConnectMgr::~ZoneConnectMgr() {
-
+    ConnMap::iterator itr;
+    for (itr = conn_map_.begin(); itr != conn_map_.end(); ++itr) {
+        if (itr->second) {
+            itr->second->Close();
+            delete itr->second;
+        }
+    }
 }
 
-ZoneConnectMgr::ConnectorPtr ZoneConnectMgr::AddConnector(EventService *es_, int fd) {
+Connector *ZoneConnectMgr::AddConnector(EventService *es_, int fd) {
     LogInfo("Add Connector for fd %d.", fd);
 
-    ConnectorPtr cli = new Connector(*es_, fd);
+    Connector *cli = new Connector(*es_, fd);
 
     if (NULL == cli) {
         LogErr("New a Connector fail.");
@@ -40,4 +46,23 @@ ZoneConnectMgr::ConnectorPtr ZoneConnectMgr::AddConnector(EventService *es_, int
     }
 
     return cli;
+}
+
+Connector *ZoneConnectMgr::FindConn(unsigned long cid) {
+    ConnMap::iterator itr = conn_map_.find(cid);
+    if (itr != conn_map_.end() && itr->second) {
+        return itr->second;
+    } else {
+        return NULL;
+    }
+}
+
+bool ZoneConnectMgr::RemoveConn(unsigned long cid) {
+    ConnMap::iterator itr = conn_map_.find(cid);
+    if (itr != conn_map_.end() && itr->second) {
+        delete itr->second;
+        conn_map_.erase(itr);
+    }
+
+    return false;
 }
