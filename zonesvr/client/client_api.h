@@ -51,6 +51,7 @@ int ProcessChatStat(const std::string &data);
 void FreshShow();
 
 int Login();
+void Logout();
 int Move(Pos mv_direct);
 int Chat();
 

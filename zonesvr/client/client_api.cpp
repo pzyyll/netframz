@@ -105,7 +105,6 @@ EventService es;
 IOTask *recv_task;
 
 int InputOption() {
-    //todo
     int ret = 0;
     std::string option;
 
@@ -137,6 +136,7 @@ int InputOption() {
             Chat();
             break;
         case 'q':
+            Logout();
             ret = -1;
             break;
         default:
@@ -184,9 +184,6 @@ void recv_cb(EventService *es, task_data_t data, int mask) {
 
     rv_len += nr;
 
-    //std::cout << "nr: " << nr;
-    //std::cout << ", rv_len: " << rv_len << endl;
-    //todo process buff
     int np = ProcessBuff(rv_buff, rv_len);
 
     if (np < 0) {
@@ -450,6 +447,13 @@ int Login() {
     return 0;
 }
 
+void Logout() {
+    LogoutReq req;
+    req.set_name(persion.name());
+
+    SendMsgToSvr(req, MsgCmd::LOGOUT_REQ);
+}
+
 int Move(Pos mv_direct) {
     int x = persion.point().x();
     int y = persion.point().y();
@@ -494,7 +498,6 @@ int SendMsgToSvr(::google::protobuf::Message &msg, unsigned int type) {
 
     str.clear();
     cmd.SerializeTo(str);
-    //std::cout << "snd: " << str.size() << endl;
     int ns = Writen(sock_fd, (void *)str.c_str(), str.size());
     if (ns < 0) {
         std::cout << "Send err." << std::endl;
@@ -514,8 +517,6 @@ void CliRun(Client *cli) {
 
     Thread recv_thread(RecvHandler);
     recv_thread.Run(NULL);
-    //pthread_t tid;
-    //pthread_create(&tid, NULL, RecvHandler, NULL);
 
     Login();
 
