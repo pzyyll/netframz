@@ -1,0 +1,31 @@
+digraph main {
+    node [shape="record",style=filled,color="#eecc80"]
+    edge [color="sienna" dir=both arrowtail=diamond arrowhead=vee]
+    
+    main -> ZoneSvr [dir=normal]
+    ZoneSvr -> Server [dir=normal arrowhead=empty]
+    
+    Server -> {EventService, Connector, Acceptor, TimerTask}
+
+    Connector -> IOTask
+    Acceptor -> IOTask
+    IOTask -> EventService [dir=normal]
+    TimerTask -> EventService [dir=normal]
+
+    ProcessCmds [shape="oval"]
+    ZoneSvr -> ProcessCmds
+
+    CBNode [shape=oval label="Completion\nCallback"]
+    Server -> CBNode
+
+    System [shape=oval style=solid]
+    System -> EventService [label=1 dir=normal color=grey style=dashed]
+    EventService -> IOTask [label=2 dir=normal color=grey style=dashed]
+    IOTask -> Acceptor [label=3 dir=normal color=grey style=dashed]
+    Acceptor -> CBNode [label=4 dir=normal color=grey style=dashed]
+
+    {rank=same;Connector;Acceptor}
+    {rank=same;IOTask;TimerTask}
+    {rank=same;ZoneSvr;ProcessCmds}
+    {rank=same;Server;CBNode}
+}

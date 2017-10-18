@@ -1,0 +1,19 @@
+digraph main {
+    node [shape="record",style=filled,color="#eecc80"]
+    edge [color="sienna" dir=both arrowtail=diamond arrowhead=vee]
+    
+    main -> ZoneSvr [dir=normal]
+    ZoneSvr -> Server [dir=normal arrowhead=empty]
+    
+    Server -> EventService
+    Server -> Connector
+    Server -> Acceptor
+    Server -> TimerTask
+    Connector -> IOTask
+    Acceptor -> IOTask
+    IOTask -> EventService [dir=normal]
+    TimerTask -> EventService [dir=normal]
+
+    ProcessCmds [shape="oval"]
+    ZoneSvr -> ProcessCmds
+}
