@@ -20,6 +20,8 @@ public:
 protected:
     virtual void ProcessCmd(proto::Cmd &cmd, const unsigned long cid) /*override*/;
 
+    virtual void CloseConn(unsigned long cid);
+
     void ProcessLogin(const std::string &buff, const unsigned long cid);
 
     void ProcessLogout(const std::string &buff, const unsigned long cid);

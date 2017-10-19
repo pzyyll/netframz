@@ -48,6 +48,23 @@ void ZoneSvr::ProcessCmd(proto::Cmd &cmd, const unsigned long cid) {
     }
 }
 
+void ZoneSvr::CloseConn(unsigned long cid) {
+    Server::CloseConn(cid);
+
+    Player *player = PlayerMgrS.GetPlayerByCid(cid);
+    if (player) {
+        std::vector<unsigned long> noti_ids;
+        aoi_manage_.DelPos(cid, noti_ids);
+
+        std::vector<Player *> noti_players;
+        PlayerMgrS.GetPlayersByCid(noti_players, noti_ids);
+
+        SynPlayerLeave(*player, noti_players);
+
+        PlayerMgrS.DelPlayerByCid(cid);
+    }
+}
+
 void ZoneSvr::ProcessLogin(const std::string &buff, const unsigned long cid) {
     LogInfo("ProcessLogin. cid|%lu", cid);
 
