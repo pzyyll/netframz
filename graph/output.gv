@@ -28,4 +28,5 @@ digraph main {
 {rank=same;Connector;Acceptor} 
 {rank=same;IOTask;TimerTask}
 {rank=same;ZoneSvr;ProcessCmds}
+{rank=max;System;EventService}
 }
