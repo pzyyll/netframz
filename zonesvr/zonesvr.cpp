@@ -260,12 +260,9 @@ void ZoneSvr::SendToClient(const ::google::protobuf::Message &msg,
                            const unsigned long cid) {
     LogInfo("SendToClient|%s|cid|%lu|type|%u", msg.ShortDebugString().c_str(), cid, type);
 
-    std::string msg_data;
-    msg.SerializeToString(&msg_data);
-
     proto::Cmd cmd;
     cmd.SetType(type);
-    cmd.SetMsgData(msg_data);
+    cmd.SetMsgData(msg);
 
     Response(cmd, cid);
 }
