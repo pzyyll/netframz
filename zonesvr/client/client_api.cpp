@@ -451,6 +451,8 @@ void Logout() {
     LogoutReq req;
     req.set_name(persion.name());
 
+    MakeBlockStatus(sock_fd, true);
+
     SendMsgToSvr(req, MsgCmd::LOGOUT_REQ);
 }
 
