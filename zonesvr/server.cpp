@@ -483,6 +483,7 @@ int Server::Daemon() {
     else if (pid)
         _exit(0);
 
+    //设置会话，脱离控制终端
     if (setsid() < 0)
         return FAIL;
 
@@ -492,6 +493,7 @@ int Server::Daemon() {
     if (sigaction(SIGHUP, &sa, NULL) < 0)
         return FAIL;
 
+    //再次 fork 退出父进程，避免再次获取控制终端
     if ( (pid = fork()) < 0)
         return FAIL;
     else if (pid)
