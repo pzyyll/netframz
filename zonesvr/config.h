@@ -29,11 +29,11 @@ public:
 
     int Init(const char *path);
 
-    void GetString(std::string &val, const char *name, std::string default_val = "");
+    int GetString(std::string &val, const char *name, std::string default_val = "");
 
-    void GetInt(int &val, const char *name, int default_val = 0);
+    int GetInt(int &val, const char *name, int default_val = 0);
 
-    void GetULL(unsigned long long &val, const char *name, unsigned long long default_val = 0);
+    int GetULL(unsigned long long &val, const char *name, unsigned long long default_val = 0);
 
     void GetStringArray(std::vector<std::string> &strvec, const char *name);
 

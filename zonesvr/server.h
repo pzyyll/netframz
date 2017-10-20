@@ -111,7 +111,7 @@ protected:
 private:
     char         *conf_file_;
     TimerTaskPtr tick_;
-    EventService    es_;
+    EventService es_;
     conn_map_t   conn_map_;
     TimerTaskMgr timer_mgr_;
 

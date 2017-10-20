@@ -22,6 +22,8 @@ protected:
 
     virtual void CloseConn(unsigned long cid);
 
+    void NotifyLeave(unsigned long cid);
+
     void ProcessLogin(const std::string &buff, const unsigned long cid);
 
     void ProcessLogout(const std::string &buff, const unsigned long cid);

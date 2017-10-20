@@ -198,6 +198,7 @@ Connector::ssize_t Connector::Send(const void *buff, const size_t size) {
         send_buf_.TailAdvancing(nleft);
     }
 
+    //TODO send 挪到这里。
     return nw;
 }
 

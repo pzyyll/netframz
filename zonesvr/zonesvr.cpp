@@ -51,6 +51,11 @@ void ZoneSvr::ProcessCmd(proto::Cmd &cmd, const unsigned long cid) {
 void ZoneSvr::CloseConn(unsigned long cid) {
     Server::CloseConn(cid);
 
+    NotifyLeave(cid);
+}
+
+void ZoneSvr::NotifyLeave(unsigned long cid) {
+    //Send Leave info to other online users
     Player *player = PlayerMgrS.GetPlayerByCid(cid);
     if (player) {
         std::vector<unsigned long> noti_ids;
@@ -64,6 +69,7 @@ void ZoneSvr::CloseConn(unsigned long cid) {
         PlayerMgrS.DelPlayerByCid(cid);
     }
 }
+
 
 void ZoneSvr::ProcessLogin(const std::string &buff, const unsigned long cid) {
     LogInfo("ProcessLogin. cid|%lu", cid);
@@ -113,19 +119,7 @@ void ZoneSvr::ProcessLogout(const std::string &buff, const unsigned long cid) {
     if (Parse(req, buff) != MsgRet::SUCCESS)
         return;
 
-    //Send Leave info to other online users
-    Player *player = PlayerMgrS.GetPlayerByCid(cid);
-    if (player) {
-        std::vector<unsigned long> noti_ids;
-        aoi_manage_.DelPos(cid, noti_ids);
-
-        std::vector<Player *> noti_players;
-        PlayerMgrS.GetPlayersByCid(noti_players, noti_ids);
-
-        SynPlayerLeave(*player, noti_players);
-
-        PlayerMgrS.DelPlayerByCid(cid);
-    }
+    NotifyLeave(cid);
 }
 
 void ZoneSvr::ProcessPositionSyn(const std::string &buff, const unsigned long cid) {
@@ -225,9 +219,7 @@ void ZoneSvr::GetOnlinePlayers(std::vector<Player *> &vec_players) {
 
         if (CheckConnect(pry_player->conn_id())) {
             vec_players.push_back(pry_player);
-        } else {
-            //todo detach offline player, but not here.
-        }
+        } 
     }
 }
 

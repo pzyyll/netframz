@@ -78,36 +78,43 @@ int CConfig::Init(const char *path) {
     return SUCCESS;
 }
 
-void CConfig::GetString(std::string &val, const char *name, std::string default_val) {
-    val = default_val;
-
+int CConfig::GetString(std::string &val, const char *name, std::string default_val) {
     dict_t::iterator find = dict_.find(name);
-    if (find == dict_.end())
-        return;
+    if (find == dict_.end()) {
+        val = default_val;
+        return -1;
+    }
 
     std::vector<std::string> strvec;
     StrSplit(strvec, find->second, "\t ");
     if (strvec.size() < 2) {
-        return;
+        val = default_val;
+        return -1;
     }
 
     val = strvec[1];
+
+    return 0;
 }
 
-void CConfig::GetInt(int &val, const char *name, int default_val) {
-    char cstr_int[32];
-    snprintf(cstr_int, sizeof(cstr_int), "%d", default_val);
+int CConfig::GetInt(int &val, const char *name, int default_val) {
     std::string strval;
-    GetString(strval, name, std::string(cstr_int));
+    if (GetString(strval, name) < 0) {
+        val = default_val;
+        return -1;
+    }
     val = atoi(strval.c_str());
+    return 0;
 }
 
-void CConfig::GetULL(unsigned long long &val, const char *name, unsigned long long default_val) {
-    char cstr_ull[32];
-    snprintf(cstr_ull, sizeof(cstr_ull), "%llu", default_val);
+int CConfig::GetULL(unsigned long long &val, const char *name, unsigned long long default_val) {
     std::string strval;
-    GetString(strval, name, std::string(cstr_ull));
+    if (GetString(strval, name) < 0) {
+        val = default_val;
+        return -1
+    }
     val = strtoull(strval.c_str(), NULL, 10);
+    return 0;
 }
 
 void CConfig::GetStringArray(std::vector<std::string> &strvec, const char *name) {
