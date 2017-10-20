@@ -1,5 +1,6 @@
 #include <map>
 #include <iostream>
+#include <string>
 #include <cstdio>
 #include <cstring>
 #include <unistd.h>
@@ -9,9 +10,14 @@
 #include <fcntl.h>
 #include <sys/epoll.h>
 
-using namespace std;
+#include "nf_socket_api.h"
 
-char sbuff[1024000];
+using namespace std;
+using namespace nf;
+
+const unsigned kMaxLen = 10240000;
+char send_buff[kMaxLen];
+unsigned sfpos, stpos;
 
 int MakeFdBlockIs(bool is_block, int fd) {
     int val = fcntl(fd, F_GETFL, 0);
@@ -142,17 +148,39 @@ int main(int argc, char **argv) {
                     continue;
                 }
 
-                int i = 0;
                 if (pev->events & EPOLLIN) {
                     char buff[1024] = {0};
-                    int nr = read(pev->data.fd, buff, sizeof(buff));
+                    int nr = Readn(pev->data.fd, buff, sizeof(buff));
                     cout << "cli " << pev->data.fd;
                     cout << ", read n=" << nr;
                     cout << ", " << buff << endl;
 
-                    memset(sbuff, 'a', sizeof(sbuff));
-                    int nw = write(pev->data.fd, sbuff, sizeof(sbuff));
-                    if (nw < 0 && EAGAIN == errno) {
+                    if (string(buff) == "send") {
+                        //Schedule send
+                        struct epoll_event mev;
+                        mev.events = EPOLLIN | EPOLLOUT | EPOLLET | EPOLLRDHUP;
+                        mev.data.fd = pev->data.fd;
+                        if (epoll_ctl(epoll_fd, EPOLL_CTL_MOD, pev->data.fd, &mev) < 0) {
+                            perror("epoll_ctl mod");
+                            return -1;
+                        }
+
+                    } else if (string(buff) == "append") {
+                        cout << "append" << endl;
+                        string sendstr(102400, 't');
+                        if (stpos + sendstr.size() < kMaxLen) {
+                            memcpy(send_buff + stpos, sendstr.c_str(), sendstr.size());
+                            stpos += sendstr.size();
+
+                            cout << "remain size: " << stpos - sfpos << endl;
+                        }
+                    } else {
+                        cout << buff << endl;
+                    }
+
+                    /*
+                    int nw = Writen(pev->data.fd, buff, nr);
+                    if (nw != nr && EAGAIN == errno) {
                         struct epoll_event mev;
                         mev.events = EPOLLIN | EPOLLOUT | EPOLLET | EPOLLRDHUP;
                         mev.data.fd = pev->data.fd;
@@ -162,38 +190,39 @@ int main(int argc, char **argv) {
                         }
                         cout << "EPOLLIN -> EAGAIN" << endl;
                     }
+
                     cout << "EPOLLIN: ";
                     cout << nw << " bytes had send to cli " << pev->data.fd << endl;
-                    ++i;
+                    */
                 }
 
                 if (pev->events & EPOLLOUT) {
-                    if (1 == i) {
-                        cout << "EPOLLOUT: with EPOLLIN event" << endl;
-                    } else {
-                        char buff[1024];
-                        memset(buff, 'a', sizeof(buff));
-                        int nw = write(pev->data.fd, buff, sizeof(buff));
-                        if (nw < 0 && EAGAIN == errno) {
-                            cout << "EPOLLOUT -> EAGANIN" << endl;
-                        }
-
-                        cout << "EPOLLOUT: ";
-                        cout << nw << " byes had send to cli " << pev->data.fd << endl;
+                    unsigned send_size = stpos - sfpos;
+                    int nw = Writen(pev->data.fd, send_buff + sfpos, send_size);
+                    if (nw < 0) {
+                        perror("send:");
                     }
-/*
-                    struct epoll_event mev;
+                    if (nw != send_size && EAGAIN == errno) {
+                        cout << "EPOLLOUT -> EAGANIN" << endl;
+                    }
+
+                    cout << "EPOLLOUT: ";
+                    cout << nw << " byes had send to cli " << pev->data.fd << endl;
+                    sfpos += nw;
+
+                    cout << "remain size" << stpos - sfpos << endl;
+                    if (stpos - sfpos == 0) {
+                        struct epoll_event mev;
                         mev.events = EPOLLIN | EPOLLET | EPOLLRDHUP;
                         mev.data.fd = pev->data.fd;
                         if (epoll_ctl(epoll_fd, EPOLL_CTL_MOD, pev->data.fd, &mev) < 0) {
                             perror("epoll_ctl mod");
                             return -1;
                         }
-*/
-                    ++i;
+                        cout << "remove EPOLLOUT flag" << endl;
+                        stpos = sfpos = 0;
+                    }
                 }
-
-                cout << "======== i cnt " << i << "=======" << endl;
             }
         }
     }
