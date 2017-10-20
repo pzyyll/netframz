@@ -24,10 +24,9 @@ int main(int argc, char *argv[]) {
 
     memset(sendbuff, 'a', sizeof(sendbuff));
 
-    //string a;
-    int a;
+    string a;
     while (cin >> a) {
-        if (0 == a) {
+        if ("recv" == a) {
             unsigned int len = sizeof(recvbuff);
             cli.recv((void *)recvbuff, len);
             recvbuff[len] = '\0';
@@ -35,16 +34,23 @@ int main(int argc, char *argv[]) {
             //cout << "str: " << recvbuff << endl;
             continue;
         }
+        /*
         int n = a;
         int ns = 0;
         while (n--) {
-            ns = cli.send((void *)sendbuff, sizeof(sendbuff));
+            ns = cli.send((void *)sendbuff, 1);
             if (ns < 0)
                 return 0;
             cout << "send size = " << ns << endl;
             //sleep(1);
         }
+        */
         //cout << "send " << a << endl;
+        string cmdstr = a;
+        int ns = 0;
+        if ( (ns = cli.send((void *)cmdstr.c_str(), cmdstr.size())) < 0)
+            return 0;
+        cout << "send size = " << ns << endl;
     }
 
     return 0;
