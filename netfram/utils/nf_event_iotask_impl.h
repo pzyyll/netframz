@@ -21,12 +21,15 @@ public:
 public:
     IOTaskImpl();
 
-    IOTaskImpl(const int fd, const int mask);
-
-    IOTaskImpl(const int fd, const int mask, handle_t op);
+    IOTaskImpl(const int fd, const int mask,
+               handle_t read_op_ = handle_t(),
+               handle_t write_op_ = handle_t());
 
     ~IOTaskImpl();
 
+    /*
+     * @Brief prepare depression
+     */
     void Bind(handle_t handle);
 
     void Process(EventService *es, int mask);
@@ -43,10 +46,22 @@ public:
 
     task_data_t get_data();
 
+    /*
+     * @Brief Add todo
+     */
+    void AddMask(int mask);
+
+    void RemoveMask(int mask);
+
+    void SetWriteHandle(handle_t write_op);
+
+    void SetReadHandle(handle_t read_op);
+
 private:
     int fd_;
     int mask_;
-    handle_t op_;
+    handle_t read_op_;
+    handle_t write_op_;
     task_data_t data_;
 };
 

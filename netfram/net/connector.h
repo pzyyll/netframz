@@ -95,9 +95,9 @@ public:
 
     size_t Recv(void *buff, const size_t size);
 
-    void Send(const char *buff,
-              const size_t lenth,
-              const ConnCbData &cb_data = ConnCbData());
+    ssize_t Send(const char *buff,
+                 const size_t lenth,
+                 const ConnCbData &cb_data = ConnCbData());
 
     void Close();
 
@@ -121,8 +121,6 @@ protected:
     void OnWriteRemain(EventService *es, task_data_t data, int mask);
 
     int CheckMask(int mask);
-
-    ssize_t Send(const void *buff, const size_t size);
 
     ssize_t SendRemain();
 

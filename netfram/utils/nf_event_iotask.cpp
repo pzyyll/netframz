@@ -14,13 +14,10 @@ IOTask::IOTask(EventService &es, const int fd)
 
 }
 
-IOTask::IOTask(EventService &es, const int fd, const int mask)
-        : es_(es), pimpl_(new IOTaskImpl(fd, mask)) {
-
-}
-
-IOTask::IOTask(EventService &es, const int fd, const int mask, handle_t op)
-        : es_(es), pimpl_(new IOTaskImpl(fd, mask, op)) {
+IOTask::IOTask(EventService &es, const int fd, const int mask,
+               handle_t read_op,
+               handle_t write_op)
+        : es_(es), pimpl_(new IOTaskImpl(fd, mask, read_op, write_op)) {
 
 }
 
@@ -70,4 +67,23 @@ int IOTask::GetFd() {
 
 std::string IOTask::GetErr() {
     return es_.get_err_msg();
+}
+
+/*
+ * @Brief New
+ */
+void IOTask::AddMask(int mask) {
+    pimpl_->AddMask(mask);
+}
+
+void IOTask::RemoveMask(int mask) {
+    pimpl_->RemoveMask(mask);
+}
+
+void IOTask::SetReadHandle(handle_t read_op) {
+    pimpl_->SetReadHandle(read_op);
+}
+
+void IOTask::SetWriteHandle(handle_t write_op) {
+    pimpl_->SetWriteHandle(write_op);
 }

@@ -36,34 +36,9 @@ void Connector::BeginRecv(const ConnCbData &cb_data) {
 
     task_->SetMask(EV_READABLE);
     task_->Bind(std::bind(&Connector::OnRead, this, _1, _2, _3));
+    task_->SetReadHandle(std::bind(&Connector::OnRead, this, _1, _2, _3));
+    task_->SetWriteHandle(std::bind(&Connector::OnWriteRemain, this, _1, _2, _3));
     task_->Start();
-}
-
-void Connector::Send(const char *buff,
-                     const size_t lenth,
-                     const ConnCbData &cb_data) {
-    ErrCode err_code(ErrCode::SUCCESS);
-
-    ssize_t ns = Send((void *)buff, lenth);
-    if (ns < 0) {
-        err_code.set_ret(ErrCode::FAIL);
-        err_code.set_err_msg(err_msg_);
-        if (cb_data.handler)
-            cb_data.handler(0, cb_data.pri_data, err_code);
-        return;
-    }
-
-    //Socket 缓冲区满
-    if ((size_t) ns < lenth) {
-        wdata_ = cb_data;
-        task_->SetMask(EV_WRITEABLE);
-        task_->Bind(std::bind(&Connector::OnWriteRemain, this, _1, _2, _3));
-        task_->Restart();
-        return;
-    }
-
-    if (cb_data.handler)
-        cb_data.handler(0, cb_data.pri_data, err_code);
 }
 
 void Connector::OnRead(EventService *es, task_data_t data, int mask) {
@@ -105,38 +80,27 @@ void Connector::OnRead(EventService *es, task_data_t data, int mask) {
 }
 
 void Connector::OnWriteRemain(EventService *es, task_data_t data, int mask) {
-    ErrCode err_code(ErrCode::FAIL);
     ssize_t ns = 0;
     UNUSE(es);
     UNUSE(data);
 
-    do {
-        if (CheckMask(mask) < 0) {
-            err_code.set_err_msg(err_msg_);
-            break;
-        }
-
-        ns = SendRemain();
-        if (ns < 0) {
-            err_code.set_err_msg(err_msg_);
-            ns = 0;
-            break;
-        }
-
-        if (send_buf_.UsedSize() == 0) {
-            err_code.set_ret(ErrCode::SUCCESS);
-            task_->SetMask(EV_READABLE);
-            task_->Bind(std::bind(&Connector::OnRead, this, _1, _2, _3));
-            task_->Restart();
-            break;
-        }
-
+    if (CheckMask(mask) < 0) {
+        Close();
         return;
-    } while (false);
+    }
 
-    if (wdata_.handler)
-            wdata_.handler(ns, wdata_.pri_data, err_code);
-    //todo
+    ns = SendRemain();
+    if (ns < 0) {
+        Close();
+        return;
+    }
+
+    //cancel writebale
+    if (send_buf_.UsedSize() == 0) {
+        task_->RemoveMask(EV_WRITEABLE);
+        task_->Restart();
+        return;
+    }
 }
 
 int Connector::CheckMask(int mask) {
@@ -173,33 +137,24 @@ Connector::size_t Connector::Recv(void *buff, const size_t size) {
     return take_size;
 }
 
-Connector::ssize_t Connector::Send(const void *buff, const size_t size) {
-    ssize_t nw = socket_.Send(buff, size);//InnerWrite(buff, size);
-    if (nw < 0) {
-        snprintf(err_msg_, sizeof(err_msg_), "%s", socket_.GetErrMsg());
-        return FAIL;
+Connector::ssize_t Connector::Send(const char *buff,
+                                   const size_t lenth,
+                                   const ConnCbData &cb_data) {
+    ErrCode err_code(ErrCode::SUCCESS);
+
+    send_buf_.MemoryMove2Left();
+    // Check buff remain size
+    if (send_buf_.RemainSize() < lenth) {
+        snprintf(err_msg_, sizeof(err_msg_), "send buff full.");
+        return -1;
     }
 
-    //nw = 0 或 nw 小于要求写的大小，说明 socket 缓冲区满了。
-    //缓存下未发送的数据
-    if ((size_t) nw < size) {
-        //检查用户缓存是否足够存放现场
-        send_buf_.MemoryMove2Left();
-        int snd_buf_size = send_buf_.RemainSize();
-        int nleft = size - nw;
-        if (snd_buf_size < nleft) {
-            snprintf(err_msg_, sizeof(err_msg_),
-                     "user buff is not enough. size(%d) < rsize(%d)",
-                     snd_buf_size, nleft);
-            return FAIL;
-        }
+    memcpy(send_buf_.TailPos(), (char *) buff, lenth);
+    send_buf_.TailAdvancing(lenth);
 
-        memcpy(send_buf_.TailPos(), (char *) buff + nw, nleft);
-        send_buf_.TailAdvancing(nleft);
-    }
-
-    //TODO send 挪到这里。
-    return nw;
+    //schedule send
+    task_->AddMask(EVSTAT::EV_WRITEABLE);
+    task_->Restart();
 }
 
 Connector::ssize_t Connector::SendRemain() {
@@ -209,7 +164,7 @@ Connector::ssize_t Connector::SendRemain() {
 
     void *buff = send_buf_.FrontPos();
     size_t lenth = send_buf_.UsedSize();
-    ssize_t nw = socket_.Send(buff, lenth);//InnerWrite(buff, lenth);
+    ssize_t nw = socket_.Send(buff, lenth);
     if (nw < 0) {
         snprintf(err_msg_, sizeof(err_msg_), "%s", socket_.GetErrMsg());
         return FAIL;

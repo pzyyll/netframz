@@ -11,8 +11,13 @@
 #include "nf_event.h"
 #include "nf_event_iotask.h"
 #include "nf_event_timer_task.h"
+#include "nf_socket_api.h"
 
 using namespace std;
+using namespace nf;
+
+typedef map<unsigned long, IOTask *> TaskMap;
+TaskMap task_map;
 
 int MakeFdBlockIs(bool is_block, int fd) {
     int val = fcntl(fd, F_GETFL, 0);
@@ -68,11 +73,15 @@ static int InitServers() {
     return listen_fd;
 }
 
+const unsigned kMaxBuffLen = 10240000;
+char send_buff[kMaxBuffLen];
+unsigned buf_fpos, buf_tpos;
+
 void read_cb(EventService *es, task_data_t data, int mask) {
     int cli_fd = data.data.fd;
+    IOTask *cli_task = task_map[cli_fd];
     cout <<  "hah" << endl;
 
-    //MakeFdBlockIs(false, cli_fd);
 
     char buff[1024] = {0};
     int nr = read(cli_fd, buff, sizeof(buff));
@@ -85,20 +94,50 @@ void read_cb(EventService *es, task_data_t data, int mask) {
     }
     cout << buff << endl;
 
-    char str[] = "abc\n";
-    int n = ::write(cli_fd, str, 0);
-    if (n < 0) {
-        cout << "errno : " << errno << " msg: ";
-        cout << strerror(errno) << endl;
-    } else if (n == 0) {
-        cout << "n = 0" << endl;
+    if (string(buff) == "send") {
+        cli_task->AddMask(EVSTAT::EV_WRITEABLE);
+        cli_task->Restart();
+        return;
     }
 
-    cout << "end" << endl;
+
+    string appstr(102400, buff[0]);
+    if (buf_tpos + appstr.size() >= kMaxBuffLen) {
+        cout << "buff full." << endl;
+        return ;
+    }
+
+    memcpy(send_buff + buf_tpos, appstr.c_str(), appstr.size());
+    buf_tpos += appstr.size();
+
+    cout << "contain size : " << (buf_tpos - buf_fpos) << endl;
 }
 
-void write_cb(EventService *es, task_data_t *task, int mask) {
+void write_cb(EventService *es, task_data_t data, int mask) {
+    int cli_fd = data.data.fd;
+    IOTask *cli_task = task_map[cli_fd];
 
+    unsigned send_size = buf_tpos - buf_fpos;
+    int nw = Writen(cli_fd, send_buff + buf_fpos, send_size);
+    if (nw < 0) {
+        perror("write err ");
+    }
+
+    if (nw != send_size && EAGAIN == errno) {
+        perror("write err ");
+    }
+
+    cout << "WRITEABLE: ";
+    cout << nw << " bytes hads sent to cli." << endl;
+    buf_fpos += nw;
+    if (buf_fpos == buf_tpos) {
+        buf_fpos = buf_tpos = 0;
+        cli_task->RemoveMask(EVSTAT::EV_WRITEABLE);
+        cli_task->Restart();
+        cout << "complete write" << endl;
+    }
+
+    cout << "remain size : " << (buf_tpos - buf_fpos) << endl;
 }
 
 void accept_cb(EventService *es, task_data_t data, int mask) {
@@ -113,23 +152,38 @@ void accept_cb(EventService *es, task_data_t data, int mask) {
         return;
     }
 
+    int sendbuff = 512;
+    if (setsockopt(cli_fd, SOL_SOCKET, SO_SNDBUF, (void *)&sendbuff, sizeof(sendbuff)) < 0) {
+        perror("setsockopt");
+        return;
+    }
+
+    MakeFdBlockIs(false, cli_fd);
+
     printf("cli fd : %d \n", cli_fd);
     IOTask *cli_task = new IOTask(*es, cli_fd, EVSTAT::EV_READABLE);
     task_data_t iodata = { .data = { .fd = cli_fd } };
     cli_task->SetPrivateData(iodata);
-    cli_task->Bind(read_cb);
+    cli_task->SetReadHandle(read_cb);
+    cli_task->SetWriteHandle(write_cb);
     cli_task->Start();
+
+    task_map[cli_fd] = cli_task;
 }
 
 int main(int argc, char **argv) {
     int fd = InitServers();
     if (fd < 0) {
+        perror("err ");
         printf("err %d\n", fd);
+        return -1;
     }
+    cout << "listend " << fd << endl;
 
     HookSig();
 
     EventService es;
+    es.Init();
     IOTask accept_task(es, fd, EVSTAT::EV_READABLE);
     task_data_t data = { .data = { .ptr = &accept_task } };
     accept_task.SetPrivateData(data);

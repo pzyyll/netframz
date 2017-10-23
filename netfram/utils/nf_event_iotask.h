@@ -22,12 +22,15 @@ public:
 public:
     IOTask(EventService &es, const int fd);
 
-    IOTask(EventService &es, const int fd, const int mask);
-
-    IOTask(EventService &es, const int fd, const int mask, handle_t op);
+    IOTask(EventService &es, const int fd, const int mask,
+           handle_t read_op = handle_t(),
+           handle_t write_op = handle_t());
 
     ~IOTask();
 
+    /*
+     * @Brief prepare depression
+     */
     void Bind(handle_t handle);
 
     int Start();
@@ -47,6 +50,17 @@ public:
     int GetFd();
 
     std::string GetErr();
+
+    /*
+     * @Brief new for add/remove mask
+     */
+    void AddMask(int mask);
+
+    void RemoveMask(int mask);
+
+    void SetReadHandle(handle_t read_op);
+
+    void SetWriteHandle(handle_t write_op);
 
 private:
     EventService &es_;

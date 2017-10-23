@@ -28,6 +28,20 @@ class Cb {
      int i;
 };
 
+void readcb(EventService *es, task_data_t data, int mask) {
+    IOTask &task = *((IOTask *)data.data.ptr);
+
+    std::cout << "read cb." << std::endl;
+    task.Stop();
+}
+
+void writecb(EventService *es, task_data_t data,  int mask) {
+    IOTask &task = *((IOTask *)data.data.ptr);
+
+    std::cout << "write cb" << std::endl;
+    task.Stop();
+}
+
 int main() {
   EventService es;
   IOTask task(es, STDIN_FILENO, EV_POLLIN);
@@ -44,6 +58,8 @@ int main() {
   taskout.SetPrivateData(data);
   taskout.Bind(std::bind(&Cb::CbFunc, cb, _1, _2, _3));
   taskout.Start();
+
   es.Run();
+
   return 0;
 }
