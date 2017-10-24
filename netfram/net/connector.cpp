@@ -140,7 +140,7 @@ Connector::size_t Connector::Recv(void *buff, const size_t size) {
 Connector::ssize_t Connector::Send(const char *buff,
                                    const size_t lenth,
                                    const ConnCbData &cb_data) {
-    ErrCode err_code(ErrCode::SUCCESS);
+    //ErrCode err_code(ErrCode::SUCCESS);
 
     send_buf_.MemoryMove2Left();
     // Check buff remain size
@@ -155,6 +155,8 @@ Connector::ssize_t Connector::Send(const char *buff,
     //schedule send
     task_->AddMask(EVSTAT::EV_WRITEABLE);
     task_->Restart();
+
+    return 0;
 }
 
 Connector::ssize_t Connector::SendRemain() {
